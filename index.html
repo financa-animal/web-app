@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Creator 3D | Versão Oficial</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --gold: #f59e0b;
+            --bg-body: #f8fafc;
+        }
+
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: var(--bg-body); 
+            color: #1e293b;
+            padding: 20px 10px 80px; /* Ajustado conforme log de alterações */
+        }
+
+        /* Tipografia Work Sans para Títulos */
+        h1, h2, .font-title { 
+            font-family: 'Work Sans', sans-serif; 
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        /* Cards Mestres com border-radius de 45px */
+        .main-card { 
+            background: white; 
+            border-radius: 45px; 
+            padding: 40px; 
+            max-width: 900px; 
+            margin: 0 auto 40px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.03); 
+            border: 1px solid #f1f5f9; 
+        }
+
+        /* BARRA DE STATUS (GAMIFICAÇÃO E MOEDAS) */
+        .status-bar {
+            position: sticky; top: 15px; z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 30px; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 900px; margin: 0 auto 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+            border: 2px solid #fff;
+        }
+
+        /* ESTÚDIO PET */
+        .pet-stage { 
+            width: 340px; height: 340px; margin: 0 auto 35px; 
+            background: radial-gradient(circle, #ffffff, #f1f5f9); 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; border: 15px solid white; 
+            box-shadow: 0 20px 45px rgba(0,0,0,0.04); 
+        }
+        .pet-display { font-size: 150px; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: grayscale(100%); }
+
+        /* CURIOSIDADES (CARTAS QUE VIRAM) */
+        .flip-card { perspective: 1000px; height: 320px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
+        .flip-card.is-flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+        .flip-card-front { background: white; border: 2px solid #f1f5f9; }
+        .flip-card-back { background: linear-gradient(135deg, var(--primary), #6366f1); color: white; transform: rotateY(180deg); }
+
+        @keyframes coinPop { 0% { transform: scale(1); } 50% { transform: scale(1.5); color: var(--gold); } 100% { transform: scale(1); } }
+        .coin-animate { animation: coinPop 0.4s ease-out; }
+    </style>
+</head>
+<body>
+
+    <div class="status-bar">
+        <div class="flex items-center gap-3">
+            <span class="text-3xl">💰</span>
+            <span id="coinCount" class="text-3xl font-black text-slate-800">0</span>
+        </div>
+        <div class="flex-1 mx-10">
+            <div class="flex justify-between text-[10px] font-bold uppercase mb-1.5 text-slate-400">
+                <span>Descobertas</span>
+                <span id="progText">0/3</span>
+            </div>
+            <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                <div id="progBar" class="bg-indigo-500 h-full transition-all duration-1000" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="hidden sm:block"><span class="bg-amber-100 text-amber-700 px-5 py-2 rounded-2xl text-xs font-bold">PREMIUM</span></div>
+    </div>
+
+    <section class="main-card text-center">
+        <h1 class="text-5xl mb-3">Pet Creator 3D</h1>
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-12">Dê vida ao seu amigo realista</p>
+        
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+            <button onclick="setPet('🐱')" class="w-16 h-16 bg-slate-50 rounded-2xl hover:shadow-lg transition-all text-3xl">🐱</button>
+            <button onclick="setPet('🐶')" class="w-16 h-16 bg-slate-50 rounded-2xl hover:shadow-lg transition-all text-3xl">🐶</button>
+            <button onclick="setPet('🐢')" class="w-16 h-16 bg-slate-50 rounded-2xl hover:shadow-lg transition-all text-3xl">🐢</button>
+        </div>
+
+        <div class="pet-stage"><div id="petView" class="pet-display">🐱</div></div>
+
+        <div class="flex justify-center gap-5">
+            <div onclick="paint('#fda4af')" class="w-11 h-11 rounded-full border-4 border-white shadow-md cursor-pointer" style="background:#fda4af"></div>
+            <div onclick="paint('#7dd3fc')" class="w-11 h-11 rounded-full border-4 border-white shadow-md cursor-pointer" style="background:#7dd3fc"></div>
+            <div onclick="paint('reset')" class="w-11 h-11 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center text-[10px] cursor-pointer">🚫</div>
+        </div>
+    </section>
+
+    <section class="main-card">
+        <h2 class="text-3xl mb-12 text-center">Nossa Jornada Real</h2>
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="flex flex-col items-center">
+                <div class="w-72 h-72 rounded-full bg-slate-50 border-4 border-dashed border-slate-200 flex items-center justify-center overflow-hidden relative">
+                    <img id="realImg" class="w-full h-full object-cover hidden">
+                    <label for="up" class="cursor-pointer text-slate-400 font-bold text-xs uppercase px-10 text-center">Clique para subir a foto</label>
+                    <input type="file" id="up" class="hidden" onchange="preview(this)">
+                </div>
+            </div>
+            <div class="space-y-8">
+                <input type="text" placeholder="Nome do seu Pet..." class="w-full text-3xl font-black text-indigo-600 border-b-4 border-slate-50 p-2 outline-none">
+                <textarea placeholder="Conte sua história aqui..." class="w-full h-40 p-6 bg-slate-50 rounded-[35px] outline-none resize-none italic"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <section class="main-card bg-slate-950 text-white border-none">
+        <h2 class="text-3xl mb-12 text-center">Você Sabia?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-slate-800">
+            <div class="flip-card" onclick="flip(this, 1)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"><span class="text-5xl mb-6">🐱</span><p class="font-bold">Gatos e Caixas</p></div>
+                    <div class="flip-card-back text-sm">As caixas reduzem o estresse e dão segurança! <br><br><b>+50 MOEDAS</b></div>
+                </div>
+            </div>
+            <div class="flip-card" onclick="flip(this, 2)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"><span class="text-5xl mb-6">🐶</span><p class="font-bold">Nariz Único</p></div>
+                    <div class="flip-card-back text-sm">A impressão do focinho é única como a digital! <br><br><b>+50 MOEDAS</b></div>
+                </div>
+            </div>
+            <div class="flip-card" onclick="flip(this, 3)">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"><span class="text-5xl mb-6">🐢</span><p class="font-bold">Casco Sensível</p></div>
+                    <div class="flip-card-back text-sm">O casco possui nervos e elas sentem carinhos! <br><br><b>+50 MOEDAS</b></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="main-card">
+        <h2 class="text-3xl mb-12 text-center">Central de Finanças Pet</h2>
+        <div class="grid lg:grid-cols-2 gap-12">
+            <div class="space-y-5 bg-slate-50 p-8 rounded-[40px]">
+                <input type="number" id="v1" oninput="calc()" class="w-full p-4 rounded-2xl outline-none" placeholder="Alimentação">
+                <input type="number" id="v2" oninput="calc()" class="w-full p-4 rounded-2xl outline-none" placeholder="Saúde">
+                <input type="number" id="v3" oninput="calc()" class="w-full p-4 rounded-2xl outline-none" placeholder="Mimos">
+            </div>
+            <div class="text-center flex flex-col justify-center">
+                <div class="bg-indigo-600 p-10 rounded-[45px] text-white">
+                    <p class="text-xs uppercase font-bold opacity-60 mb-2">Gasto Total Estimado</p>
+                    <p class="text-5xl font-black">R$ <span id="res">0,00</span></p>
+                </div>
+                <div id="p-box" class="mt-6 hidden text-indigo-600 font-bold" id="p-msg"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let coins = 0, discovered = new Set();
+        function flip(card, id) {
+            card.classList.toggle('is-flipped');
+            if (!discovered.has(id)) {
+                discovered.add(id);
+                coins += 50;
+                document.getElementById('coinCount').innerText = coins;
+                document.getElementById('coinCount').classList.add('coin-animate');
+                setTimeout(() => document.getElementById('coinCount').classList.remove('coin-animate'), 400);
+                document.getElementById('progBar').style.width = (discovered.size / 3) * 100 + '%';
+                document.getElementById('progText').innerText = discovered.size + '/3';
+            }
+        }
+        function setPet(e) { document.getElementById('petView').innerText = e; }
+        function paint(c) {
+            const v = document.getElementById('petView');
+            if(c === 'reset') { v.style.filter = 'grayscale(100%)'; v.style.color = 'initial'; }
+            else { v.style.filter = `grayscale(0%) drop-shadow(0 0 20px ${c})`; v.style.color = c; }
+        }
+        function preview(i) {
+            if (i.files && i.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { 
+                    const img = document.getElementById('realImg');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                }
+                reader.readAsDataURL(i.files[0]);
+            }
+        }
+        function calc() {
+            const n1 = parseFloat(document.getElementById('v1').value) || 0, n2 = parseFloat(document.getElementById('v2').value) || 0, n3 = parseFloat(document.getElementById('v3').value) || 0;
+            const total = n1 + n2 + n3;
+            document.getElementById('res').innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        }
+    </script>
+</body>
+</html>
