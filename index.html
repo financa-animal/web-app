@@ -14,22 +14,30 @@
         }
         body { font-family: 'Georgia', serif; background-color: var(--bg-safari); color: var(--earth-brown); margin: 0; padding-bottom: 50px; }
         
-        /* HEADER COM TÍTULO ORIGINAL */
         .hero { height: 45vh; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1519098901909-b1553a1190af?q=80&w=2000'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; border-bottom: 5px solid var(--accent-gold); }
+        .hero h1 { font-size: 3rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.7); margin: 0; }
 
         .container { max-width: 1100px; margin: -40px auto 20px; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
         .card { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--accent-gold); }
         
-        /* TERMÔMETRO INTEGRADO AO PLANEJAMENTO */
-        .emergencia-box { background: #fdf8f3; border-left: 5px solid var(--accent-gold); padding: 15px; border-radius: 5px; margin-top: 15px; }
+        /* ESTILO DAS CARTAS QUE GIRAM (RESTAURADO) */
+        .flip-card { background-color: transparent; width: 100%; height: 160px; perspective: 1000px; cursor: pointer; margin-top: 10px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
+        .flip-card-front { background-color: var(--earth-brown); color: white; border: 2px solid var(--accent-gold); }
+        .flip-card-back { background-color: var(--accent-gold); color: white; transform: rotateY(180deg); font-size: 0.9rem; line-height: 1.4; }
 
-        /* DICA DO DIA DINÂMICA */
-        .dica-card { background: var(--earth-brown); color: white; padding: 25px; border-radius: 12px; min-height: 180px; display: flex; flex-direction: column; justify-content: center; }
+        /* DICA DINÂMICA */
+        .dica-card { background: var(--earth-brown); color: white; padding: 25px; border-radius: 12px; margin-top: 20px; border-left: 8px solid var(--accent-gold); }
 
-        /* MURAL COM NOVO TÍTULO */
-        .mural-container { grid-column: 1 / -1; background: var(--card-bg); padding: 30px; border-radius: 12px; border-top: 6px solid var(--earth-brown); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        /* TERMÔMETRO INTEGRADO */
+        .emergencia-box { background: #fdf8f3; border-left: 5px solid #d32f2f; padding: 12px; border-radius: 5px; margin-top: 15px; display: flex; align-items: center; gap: 10px; }
+
+        /* MURAL */
+        .mural-container { grid-column: 1 / -1; background: var(--card-bg); padding: 35px; border-radius: 12px; border-top: 6px solid var(--earth-brown); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .mural-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
-        .post-pet { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .post-pet { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 8px; text-align: center; }
         .post-pet img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
 
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px; font-family: inherit; box-sizing: border-box; }
@@ -40,7 +48,7 @@
 <body>
 
 <header class="hero">
-    <h1 style="font-size: 3rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.7);">FINANÇA ANIMAL</h1>
+    <h1>FINANÇA ANIMAL</h1>
 </header>
 
 <div class="container">
@@ -52,37 +60,44 @@
         <button onclick="calcularTudo()">CALCULAR E ANALISAR</button>
         <div id="chart_div" style="height: 200px; margin-top: 15px;"></div>
         <div class="emergencia-box">
-            <h4 style="margin: 0; color: var(--earth-brown);">🛡️ Termômetro de Emergência</h4>
-            <div id="valor-reserva" style="font-weight: bold; color: var(--accent-gold); font-size: 1.2rem;">R$ 0,00</div>
+            <span style="font-size: 1.2rem;">🛡️</span>
+            <div>
+                <strong style="font-size: 0.8rem; display: block;">Termômetro de Emergência</strong>
+                <span id="valor-reserva" style="color: #d32f2f; font-weight: bold; font-size: 1.1rem;">R$ 0,00</span>
+            </div>
         </div>
     </section>
 
     <div>
-        <section class="card" style="margin-bottom: 20px;">
+        <section class="card">
             <h2>💡 Você Sabia?</h2>
-            <p style="font-size: 0.9rem;">Toque para descobrir:</p>
-            <div style="background: var(--earth-brown); color: white; padding: 15px; border-radius: 8px; text-align: center;">
-                🐘 Os elefantes têm excelente memória para recursos importantes.
+            <p style="font-size: 0.8rem; margin-top: -10px;">Passe o mouse ou toque na carta:</p>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <strong>🐘 Elefante</strong>
+                    </div>
+                    <div class="flip-card-back">
+                        Eles nunca esquecem rotas de recursos importantes. Uma aula de gestão para nós!
+                    </div>
+                </div>
             </div>
         </section>
 
         <section class="dica-card">
-            <h3 id="titulo-dica" style="margin-top: 0; color: var(--accent-gold);">🌿 Dica de Saúde</h3>
-            <p id="texto-dica" style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 0;"></p>
+            <h3 id="titulo-dica" style="margin-top: 0; color: var(--accent-gold); font-size: 1.1rem;"></h3>
+            <p id="texto-dica" style="font-size: 0.9rem; margin-bottom: 0;"></p>
         </section>
     </div>
 
     <section class="mural-container">
-        <h2 style="color: var(--earth-brown); text-align: center; margin-bottom: 30px;">📖 Conte-nos quando a sua história com seu pet começou</h2>
-        
-        <div style="background: #f9f6f2; padding: 25px; border-radius: 8px; border: 1px solid #e0d7cc;">
+        <h2 style="text-align: center; color: var(--earth-brown);">📖 Conte-nos quando a sua história com seu pet começou</h2>
+        <div style="background: #fdfbf7; padding: 25px; border-radius: 10px; border: 1px dashed var(--accent-gold); max-width: 600px; margin: 0 auto;">
             <input type="text" id="nomePet" placeholder="Nome do seu Pet">
             <textarea id="relato" placeholder="Como tudo começou? Conte esse momento especial..."></textarea>
-            <label style="display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9rem;">Foto do Pet:</label>
             <input type="file" id="fotoPet" accept="image/*">
             <button onclick="salvarHistoria()">REGISTRAR NO MURAL</button>
         </div>
-
         <div id="muralGrid" class="mural-grid"></div>
     </section>
 </div>
@@ -90,23 +105,17 @@
 <script>
     google.charts.load('current', {'packages':['corechart']});
 
-    // Banco de Dados de Dicas
-    const dicasDiarias = [
-        { t: "🌿 Saúde (Geral)", m: "Check-ups anuais previnem doenças e gastos altos com tratamentos emergenciais." },
-        { t: "🧠 Comportamento", m: "Cães precisam de rotina. Horários fixos para comer e passear reduzem a ansiedade do animal." },
-        { t: "🌿 Saúde (Felinos)", m: "Mantenha várias fontes de água pela casa. Gatos hidratados têm menos problemas renais." },
-        { t: "🧠 Comportamento", m: "O enriquecimento ambiental (brinquedos e desafios) é vital para o bem-estar mental de aves e roedores." },
-        { t: "🌿 Saúde (Vacinas)", m: "Manter o cartão de vacinas em dia é o investimento mais barato para a longevidade do seu pet." }
+    const dicas = [
+        { t: "🌿 Saúde (Geral)", m: "Check-ups anuais detectam problemas precocemente e evitam gastos altos." },
+        { t: "🧠 Comportamento", m: "Cães precisam de rotina. Horários fixos para comer reduzem a ansiedade." },
+        { t: "🌿 Saúde (Felinos)", m: "Gatos precisam de água corrente. Fontes ajudam a evitar problemas renais caros." },
+        { t: "🧠 Comportamento", m: "O enriquecimento ambiental é vital para o bem-estar mental de aves e pequenos roedores." }
     ];
 
-    function carregarDica() {
-        const sorteio = dicasDiarias[Math.floor(Math.random() * dicasDiarias.length)];
-        document.getElementById('titulo-dica').innerText = sorteio.t;
-        document.getElementById('texto-dica').innerText = sorteio.m;
-    }
-
     window.onload = function() {
-        carregarDica();
+        const d = dicas[Math.floor(Math.random() * dicas.length)];
+        document.getElementById('titulo-dica').innerText = d.t;
+        document.getElementById('texto-dica').innerText = d.m;
         exibirHistorias();
     };
 
@@ -114,14 +123,13 @@
         const ali = parseFloat(document.getElementById('ali').value) || 0;
         const sau = parseFloat(document.getElementById('sau').value) || 0;
         const mim = parseFloat(document.getElementById('mim').value) || 0;
-        
         document.getElementById('valor-reserva').innerText = `R$ ${(sau * 4).toFixed(2)}`;
-
+        
         const data = google.visualization.arrayToDataTable([
             ['Gasto', 'R$'], ['Alimentação', ali], ['Saúde', sau], ['Mimos', mim]
         ]);
         new google.visualization.PieChart(document.getElementById('chart_div')).draw(data, {
-            pieHole: 0.4, colors: ['#3e2723', '#c68642', '#8d6e63'], chartArea: {width:'95%', height:'80%'}, legend: 'none'
+            pieHole: 0.4, colors: ['#3e2723', '#c68642', '#8d6e63'], chartArea: {width:'95%', height:'85%'}, legend: 'none'
         });
     }
 
@@ -129,8 +137,7 @@
         const nome = document.getElementById('nomePet').value;
         const texto = document.getElementById('relato').value;
         const fotoInput = document.getElementById('fotoPet');
-
-        if (!nome || !texto || !fotoInput.files[0]) return alert("Preencha todos os campos e escolha uma foto!");
+        if (!nome || !texto || !fotoInput.files[0]) return alert("Preencha tudo!");
 
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -138,8 +145,6 @@
             historias.push({ nome, relato: texto, foto: e.target.result });
             localStorage.setItem('muralPets', JSON.stringify(historias));
             exibirHistorias();
-            document.getElementById('nomePet').value = '';
-            document.getElementById('relato').value = '';
         };
         reader.readAsDataURL(fotoInput.files[0]);
     }
@@ -148,11 +153,7 @@
         const grid = document.getElementById('muralGrid');
         const historias = JSON.parse(localStorage.getItem('muralPets')) || [];
         grid.innerHTML = historias.map(h => `
-            <div class="post-pet">
-                <img src="${h.foto}">
-                <h3 style="color: var(--accent-gold);">${h.nome}</h3>
-                <p style="font-style: italic; font-size: 0.9rem;">"${h.relato}"</p>
-            </div>
+            <div class="post-pet"><img src="${h.foto}"><h3 style="color:var(--accent-gold);">${h.nome}</h3><p>"${h.relato}"</p></div>
         `).join('');
     }
 </script>
