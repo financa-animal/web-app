@@ -20,14 +20,14 @@
             line-height: 1.6;
         }
 
-        /* TENTATIVA DEFINITIVA PARA MOSTRAR OS ANIMAIS */
+        /* CABEÇALHO COM FOCO NOS ANIMAIS */
         .hero {
-            height: 65vh;
-            /* Usando uma imagem estável do Unsplash com animais de Safari juntos */
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000');
+            height: 70vh;
+            /* Nova imagem focada em animais (Girafa e fauna) */
+            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), 
+                        url('https://images.unsplash.com/photo-1547407139-3c921a66005c?q=80&w=2000');
             background-size: cover;
-            background-position: center 30%; /* Foca na linha dos animais */
+            background-position: center 40%; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -39,18 +39,19 @@
         }
 
         .hero h1 { 
-            font-size: clamp(2rem, 8vw, 4rem);
-            text-shadow: 3px 3px 10px rgba(0,0,0,0.8); 
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            text-shadow: 3px 3px 12px rgba(0,0,0,0.9); 
             margin: 0;
-            letter-spacing: 5px;
+            letter-spacing: 4px;
         }
 
         .hero p { 
             font-size: 1.2rem; 
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-            background: rgba(0,0,0,0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+            background: rgba(62, 39, 35, 0.4);
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin-top: 15px;
         }
 
         .coin {
