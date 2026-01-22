@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finança Animal | Safari</title>
+    <title>Finança Animal | Mural da Fauna</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         :root {
@@ -12,114 +12,142 @@
             --earth-brown: #3e2723;
             --card-bg: #ffffff;
         }
-        body { font-family: 'Georgia', serif; background-color: var(--bg-safari); color: var(--earth-brown); margin: 0; line-height: 1.6; }
+        body { font-family: 'Georgia', serif; background-color: var(--bg-safari); color: var(--earth-brown); margin: 0; padding-bottom: 50px; }
         
-        .hero {
-            height: 50vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1547407139-3c921a66005c?q=80&w=2000');
-            background-size: cover;
-            background-position: center 40%; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            border-bottom: 5px solid var(--accent-gold);
-        }
+        .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1547407139-3c921a66005c?q=80&w=2000'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; border-bottom: 5px solid var(--accent-gold); }
 
-        .container { max-width: 1100px; margin: -50px auto 50px; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 15px 35px rgba(62, 39, 35, 0.15); border-top: 6px solid var(--accent-gold); }
+        .container { max-width: 1100px; margin: -30px auto 20px; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--accent-gold); }
         
-        /* ESTILO DAS CARTAS QUE GIRAM */
-        .flip-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
-        .flip-card { background-color: transparent; width: 280px; height: 180px; perspective: 1000px; cursor: pointer; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
-        .flip-card:active .flip-card-inner, .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
-        .flip-card-front { background-color: var(--earth-brown); color: white; border: 2px solid var(--accent-gold); }
-        .flip-card-back { background-color: var(--accent-gold); color: white; transform: rotateY(180deg); font-size: 0.9rem; }
-
-        input { width: 100%; padding: 10px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { background: var(--earth-brown); color: white; border: none; padding: 15px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s; }
+        /* ESTILO DO MURAL */
+        .mural-container { grid-column: 1 / -1; background: var(--card-bg); padding: 30px; border-radius: 12px; border-top: 6px solid var(--earth-brown); }
+        .form-historia { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; padding: 20px; background: #f9f6f2; border-radius: 8px; }
+        .mural-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .post-pet { background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; transition: 0.3s; }
+        .post-pet img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px; }
+        
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: var(--earth-brown); color: white; border: none; padding: 15px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.3s; }
         button:hover { background: var(--accent-gold); }
-        #chart_div { width: 100%; height: 250px; }
+        
+        /* Estilos das Cartas e Gráfico mantidos */
+        .flip-card { width: 100%; height: 150px; perspective: 1000px; margin-bottom: 10px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        .flip-card-front { background: var(--earth-brown); color: white; }
+        .flip-card-back { background: var(--accent-gold); color: white; transform: rotateY(180deg); }
     </style>
 </head>
 <body>
 
-    <header class="hero">
-        <h1 style="text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">FINANÇA ANIMAL</h1>
-    </header>
+<header class="hero">
+    <h1>MURAL DA FAUNA</h1>
+</header>
 
-    <div class="container">
-        <section class="card">
-            <h2>💰 Planejamento</h2>
-            <input type="number" id="ali" placeholder="Alimentação (Mensal)">
-            <input type="number" id="sau" placeholder="Saúde (Mensal)">
-            <input type="number" id="mim" placeholder="Mimos (Mensal)">
-            <button onclick="calcularTudo()">CALCULAR E GERAR GRÁFICO</button>
-            <div id="res" style="margin-top:10px;"></div>
-            <div id="chart_div"></div>
-        </section>
+<div class="container">
+    <section class="card">
+        <h2>💰 Planejamento</h2>
+        <input type="number" id="ali" placeholder="Alimentação">
+        <input type="number" id="sau" placeholder="Saúde">
+        <input type="number" id="mim" placeholder="Mimos">
+        <button onclick="calcularTudo()">CALCULAR</button>
+        <div id="chart_div" style="height: 200px;"></div>
+    </section>
 
-        <section class="card">
-            <h2>📖 Minha Jornada</h2>
-            <p>Conexão profunda com a fauna e planejamento responsável para a liberdade animal.</p>
-        </section>
+    <section class="card">
+        <h2>💡 Você Sabia?</h2>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">🐘 Elefante</div>
+                <div class="flip-card-back">Têm memória incrível para recursos.</div>
+            </div>
+        </div>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">🦉 Coruja</div>
+                <div class="flip-card-back">Símbolo de visão estratégica.</div>
+            </div>
+        </div>
+    </section>
 
-        <section class="card" style="grid-column: 1 / -1;">
-            <h2>💡 Você Sabia? (Toque nas cartas)</h2>
-            <div class="flip-container" id="cards-area">
-                </div>
-        </section>
-    </div>
+    <section class="mural-container">
+        <h2>📖 Histórias da Nossa Alcateia</h2>
+        <div class="form-historia">
+            <input type="text" id="nomePet" placeholder="Nome do seu Pet">
+            <textarea id="relato" placeholder="Conte a história de vocês..."></textarea>
+            <label>Foto do Pet:</label>
+            <input type="file" id="fotoPet" accept="image/*">
+            <button onclick="salvarHistoria()">REGISTRAR NO MURAL</button>
+        </div>
 
-    <script>
-        google.charts.load('current', {'packages':['corechart']});
+        <div id="muralGrid" class="mural-grid">
+            </div>
+    </section>
+</div>
 
-        // LISTA DE CURIOSIDADES PARA ATUALIZAR SEMPRE
-        const curiosidades = [
-            { animal: "🐘 Elefante", texto: "Podem gastar até 16 horas por dia apenas comendo para manter sua energia." },
-            { animal: "🦉 Coruja", texto: "Têm visão estratégica de 270 graus, essencial para identificar riscos." },
-            { animal: "🦁 Leão", texto: "As leoas são as principais provedoras da alcateia, caçando em grupo." },
-            { animal: "🦒 Girafa", texto: "Seu coração precisa de muita força (pressão alta) para levar sangue ao cérebro." },
-            { animal: "🦎 Dragão", texto: "Investe tudo em uma única caçada, podendo comer 80% do seu peso." }
-        ];
+<script>
+    google.charts.load('current', {'packages':['corechart']});
 
-        function gerarCartas() {
-            const area = document.getElementById('cards-area');
-            // Embaralha e pega 3 curiosidades
-            const sorteadas = curiosidades.sort(() => 0.5 - Math.random()).slice(0, 3);
-            
-            area.innerHTML = sorteadas.map(item => `
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front"><h3>${item.animal}</h3></div>
-                        <div class="flip-card-back"><p>${item.texto}</p></div>
-                    </div>
-                </div>
-            `).join('');
+    // Carregar histórias ao abrir o site
+    window.onload = function() {
+        exibirHistorias();
+    };
+
+    function salvarHistoria() {
+        const nome = document.getElementById('nomePet').value;
+        const texto = document.getElementById('relato').value;
+        const fotoInput = document.getElementById('fotoPet');
+
+        if (!nome || !texto || !fotoInput.files[0]) {
+            alert("Por favor, preencha tudo e escolha uma foto!");
+            return;
         }
 
-        window.onload = gerarCartas;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const novaHistoria = {
+                nome: nome,
+                relato: texto,
+                foto: e.target.result
+            };
 
-        function calcularTudo() {
-            const ali = parseFloat(document.getElementById('ali').value) || 0;
-            const sau = parseFloat(document.getElementById('sau').value) || 0;
-            const mim = parseFloat(document.getElementById('mim').value) || 0;
-            const total = (ali + sau + mim) * 12;
-
-            document.getElementById('res').innerHTML = `<strong>Total Anual:</strong> R$ ${total.toFixed(2)}`;
+            let historias = JSON.parse(localStorage.getItem('muralPets')) || [];
+            historias.push(novaHistoria);
+            localStorage.setItem('muralPets', JSON.stringify(historias));
             
-            const data = google.visualization.arrayToDataTable([
-                ['Gasto', 'R$'], ['Alimentação', ali], ['Saúde', sau], ['Mimos', mim]
-            ]);
-            new google.visualization.PieChart(document.getElementById('chart_div')).draw(data, {
-                pieHole: 0.4, colors: ['#3e2723', '#c68642', '#8d6e63'], chartArea: {width:'90%', height:'80%'}
-            });
-        }
-    </script>
+            exibirHistorias();
+            // Limpar campos
+            document.getElementById('nomePet').value = '';
+            document.getElementById('relato').value = '';
+        };
+        reader.readAsDataURL(fotoInput.files[0]);
+    }
+
+    function exibirHistorias() {
+        const grid = document.getElementById('muralGrid');
+        const historias = JSON.parse(localStorage.getItem('muralPets')) || [];
+        
+        grid.innerHTML = historias.map(h => `
+            <div class="post-pet">
+                <img src="${h.foto}">
+                <h3>${h.nome}</h3>
+                <p>${h.relato}</p>
+            </div>
+        `).join('');
+    }
+
+    function calcularTudo() {
+        const ali = parseFloat(document.getElementById('ali').value) || 0;
+        const sau = parseFloat(document.getElementById('sau').value) || 0;
+        const mim = parseFloat(document.getElementById('mim').value) || 0;
+        const data = google.visualization.arrayToDataTable([
+            ['Gasto', 'R$'], ['Alimentação', ali], ['Saúde', sau], ['Mimos', mim]
+        ]);
+        new google.visualization.PieChart(document.getElementById('chart_div')).draw(data, {
+            pieHole: 0.4, colors: ['#3e2723', '#c68642', '#8d6e63'], chartArea: {width:'90%', height:'80%'}
+        });
+    }
+</script>
 </body>
 </html>
