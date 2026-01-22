@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finança Animal | Safari</title>
     <style>
+        /* Tarefa #1: Cores Safari Moderno */
         :root {
-            --bg-safari: #fdfbf7;
-            --accent-gold: #c68642;
-            --earth-brown: #3e2723;
+            --bg-safari: #fdfbf7;      
+            --accent-gold: #c68642;    
+            --earth-brown: #3e2723;    
             --card-bg: #ffffff;
         }
 
@@ -20,14 +21,15 @@
             line-height: 1.6;
         }
 
-        /* CABEÇALHO COM FOCO NOS ANIMAIS */
+        /* AJUSTE DEFINITIVO PARA MOSTRAR OS ANIMAIS JUNTOS */
         .hero {
-            height: 70vh;
-            /* Nova imagem focada em animais (Girafa e fauna) */
-            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1547407139-3c921a66005c?q=80&w=2000');
-            background-size: cover;
-            background-position: center 40%; 
+            height: 60vh;
+            background: linear-gradient(rgba(62, 39, 35, 0.2), rgba(62, 39, 35, 0.2)), 
+                        url('https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000');
+            background-size: contain; /* MOSTRA A IMAGEM INTEIRA SEM CORTAR OS ANIMAIS */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #2c1b18; /* Cor de fundo caso a imagem não cubra tudo */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -39,21 +41,12 @@
         }
 
         .hero h1 { 
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            text-shadow: 3px 3px 12px rgba(0,0,0,0.9); 
+            font-size: clamp(2rem, 8vw, 4rem);
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.8); 
             margin: 0;
-            letter-spacing: 4px;
         }
 
-        .hero p { 
-            font-size: 1.2rem; 
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
-            background: rgba(62, 39, 35, 0.4);
-            padding: 8px 20px;
-            border-radius: 30px;
-            margin-top: 15px;
-        }
-
+        /* Tarefa #4: Moedas */
         .coin {
             position: absolute;
             font-size: 1.5rem;
@@ -68,69 +61,51 @@
 
         .container {
             max-width: 1100px;
-            margin: -60px auto 50px;
+            margin: 20px auto 50px;
             padding: 20px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-            position: relative;
-            z-index: 10;
         }
 
         .card {
             background: var(--card-bg);
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(62, 39, 35, 0.15);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             border-top: 6px solid var(--accent-gold);
         }
 
-        .card h2 { color: var(--earth-brown); margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
-        button { background: var(--earth-brown); color: white; border: none; padding: 15px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 1rem; transition: 0.3s; }
-        button:hover { background: var(--accent-gold); transform: translateY(-2px); }
-        
-        #res { font-weight: bold; margin-top: 15px; color: var(--accent-gold); font-size: 1.1rem; }
-        
-        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; background: #eee; margin-top: 50px; }
+        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <header class="hero" onclick="spawnCoin(event)">
         <h1>FINANÇA ANIMAL</h1>
-        <p>Clique aqui e colete moedas da sorte! 🪙</p>
+        <p>Toque na imagem para coletar moedas! 🪙</p>
     </header>
 
     <div class="container">
-        
         <section class="card">
             <h2>💰 Planejamento</h2>
-            <p>Simule o gasto anual para cuidar de um animal:</p>
-            <input type="number" id="valor" placeholder="Gasto mensal médio (R$)">
-            <button onclick="calc()">CALCULAR INVESTIMENTO</button>
+            <p>Simule o gasto mensal do seu animal:</p>
+            <input type="number" id="valor" style="width:100%; padding:10px;" placeholder="Valor em R$">
+            <button onclick="calc()" style="width:100%; margin-top:10px; padding:10px; background:var(--earth-brown); color:white; border:none; cursor:pointer;">CALCULAR</button>
             <p id="res"></p>
         </section>
 
         <section class="card">
             <h2>📖 Minha Jornada</h2>
-            <p>Minha conexão com o mundo animal nasce de uma admiração profunda pela natureza e sua liberdade.</p>
-            <p>Este espaço une educação financeira e amor pela fauna, ajudando no planejamento responsável.</p>
+            <p>Unindo o amor pela fauna e a liberdade animal com a educação financeira responsável.</p>
         </section>
 
         <section class="card">
             <h2>💡 Você Sabia?</h2>
-            <p><strong>🐘 Elefantes:</strong> Têm uma memória financeira emocional e nunca esquecem onde há recursos.</p>
-            <p><strong>🦎 Dragão-de-Komodo:</strong> Um exemplo de investimento pesado em uma única caçada.</p>
-            <p><strong>🦉 Corujas:</strong> Visão estratégica essencial para suas finanças.</p>
+            <p><strong>🐘 Elefantes:</strong> Planejam recursos com memória incrível.</p>
+            <p><strong>🦉 Corujas:</strong> São o símbolo da visão estratégica.</p>
         </section>
-
     </div>
-
-    <footer>
-        &copy; 2026 Finança Animal - Projeto Original
-    </footer>
 
     <script>
         function spawnCoin(e) {
@@ -147,10 +122,7 @@
             const v = document.getElementById('valor').value;
             if (v > 0) {
                 const total = v * 12;
-                const reserva = total * 0.15;
-                document.getElementById('res').innerHTML = 
-                    `Total Anual: R$ ${total.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}<br>` +
-                    `<small style="color:#888">Reserva sugerida: R$ ${reserva.toFixed(2)}</small>`;
+                document.getElementById('res').innerHTML = `Gasto Anual: R$ ${total.toFixed(2)}`;
             }
         }
     </script>
