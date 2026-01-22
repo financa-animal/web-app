@@ -21,13 +21,13 @@
             line-height: 1.6;
         }
 
-        /* AJUSTE PARA MOSTRAR OS ANIMAIS */
+        /* CORREÇÃO PARA MOSTRAR OS ANIMAIS */
         .hero {
-            height: 70vh; /* Altura aumentada para mostrar a fauna */
-            background: linear-gradient(rgba(62, 39, 35, 0.3), rgba(62, 39, 35, 0.3)), 
+            height: 60vh; /* Altura ideal para ver os animais */
+            background: linear-gradient(rgba(62, 39, 35, 0.2), rgba(62, 39, 35, 0.2)), 
                         url('https://r.jina.ai/i/679198692797452eb201633534b86869');
-            background-size: cover; /* Preenche o espaço */
-            background-position: center 20%; /* Foca na parte dos animais */
+            background-size: cover;      /* Garante que a imagem preenche o espaço */
+            background-position: center; /* Centraliza os animais no meio do topo */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -38,7 +38,18 @@
             border-bottom: 5px solid var(--accent-gold);
         }
 
-        /* Tarefa #4: Moedas */
+        .hero h1 { 
+            font-size: 3rem; 
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7); 
+            margin: 0;
+        }
+
+        .hero p { 
+            font-size: 1.2rem; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7); 
+        }
+
+        /* Moedas */
         .coin {
             position: absolute;
             font-size: 1.5rem;
@@ -53,22 +64,24 @@
 
         .container {
             max-width: 1100px;
-            margin: -40px auto 50px;
+            margin: -50px auto 50px;
             padding: 20px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
+            position: relative;
+            z-index: 10;
         }
 
         .card {
             background: var(--card-bg);
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             border-top: 5px solid var(--accent-gold);
         }
 
-        .card h2 { color: var(--earth-brown); margin-top: 0; }
+        .card h2 { color: var(--earth-brown); margin-top: 0; display: flex; align-items: center; gap: 10px; }
 
         input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         button { background: var(--earth-brown); color: white; border: none; padding: 12px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s; }
@@ -82,8 +95,8 @@
 <body>
 
     <header class="hero" onclick="spawnCoin(event)">
-        <h1 style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">FINANÇA ANIMAL</h1>
-        <p style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Clique aqui e colete moedas da sorte! 🪙</p>
+        <h1>FINANÇA ANIMAL</h1>
+        <p>Clique aqui e colete moedas da sorte! 🪙</p>
     </header>
 
     <div class="container">
