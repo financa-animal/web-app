@@ -21,14 +21,13 @@
             line-height: 1.6;
         }
 
-        /* Tarefa #4: Cabeçalho Interativo */
+        /* AJUSTE PARA MOSTRAR OS ANIMAIS */
         .hero {
-    height: 45vh;
-    background: linear-gradient(rgba(62, 39, 35, 0.4), rgba(62, 39, 35, 0.4)), 
-                url('https://r.jina.ai/i/679198692797452eb201633534b86869'); /* Nova Imagem Safari */
-    background-size: cover;
-    background-position: center;
-}
+            height: 70vh; /* Altura aumentada para mostrar a fauna */
+            background: linear-gradient(rgba(62, 39, 35, 0.3), rgba(62, 39, 35, 0.3)), 
+                        url('https://r.jina.ai/i/679198692797452eb201633534b86869');
+            background-size: cover; /* Preenche o espaço */
+            background-position: center 20%; /* Foca na parte dos animais */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -39,6 +38,7 @@
             border-bottom: 5px solid var(--accent-gold);
         }
 
+        /* Tarefa #4: Moedas */
         .coin {
             position: absolute;
             font-size: 1.5rem;
@@ -70,7 +70,6 @@
 
         .card h2 { color: var(--earth-brown); margin-top: 0; }
 
-        /* Estilos da Calculadora */
         input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         button { background: var(--earth-brown); color: white; border: none; padding: 12px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s; }
         button:hover { background: var(--accent-gold); }
@@ -83,15 +82,15 @@
 <body>
 
     <header class="hero" onclick="spawnCoin(event)">
-        <h1>FINANÇA ANIMAL</h1>
-        <p>Clique aqui e colete moedas da sorte! 🪙</p>
+        <h1 style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">FINANÇA ANIMAL</h1>
+        <p style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Clique aqui e colete moedas da sorte! 🪙</p>
     </header>
 
     <div class="container">
         
         <section class="card">
             <h2>💰 Planejamento</h2>
-            <p>Simule o gasto anual para cuidar de um animal:</p>
+            <p>Simule o gasto anual para seu pet:</p>
             <input type="number" id="valor" placeholder="Gasto mensal médio (R$)">
             <button onclick="calc()">CALCULAR INVESTIMENTO</button>
             <p id="res"></p>
@@ -100,14 +99,14 @@
         <section class="card">
             <h2>📖 Minha Jornada</h2>
             <p>Minha conexão com o mundo animal nasce de uma admiração profunda pela natureza e sua liberdade.</p>
-            <p>Este espaço foi criado para unir educação financeira e o amor pela fauna, ajudando futuros donos a se planejarem com responsabilidade.</p>
+            <p>Este espaço une educação financeira e amor pela fauna, ajudando no planejamento responsável.</p>
         </section>
 
         <section class="card">
             <h2>💡 Você Sabia?</h2>
-            <p><strong>🐘 Elefantes:</strong> Têm uma memória emocional incrível e planejam rotas de sobrevivência por décadas.</p>
-            <p><strong>🦎 Dragão-de-Komodo:</strong> Um "investidor" que consome até 80% do seu peso em uma única refeição.</p>
-            <p><strong>🦉 Corujas:</strong> Símbolos de sabedoria, essencial para manter a visão estratégica das suas finanças.</p>
+            <p><strong>🐘 Elefantes:</strong> Nunca esquecem rotas de recursos importantes.</p>
+            <p><strong>🦎 Dragão-de-Komodo:</strong> Um exemplo de investimento pesado em uma única caçada.</p>
+            <p><strong>🦉 Corujas:</strong> Visão estratégica para suas finanças.</p>
         </section>
 
     </div>
@@ -117,7 +116,6 @@
     </footer>
 
     <script>
-        // Lógica das Moedas (Tarefa #4)
         function spawnCoin(e) {
             const coin = document.createElement('div');
             coin.innerHTML = '🪙';
@@ -128,7 +126,6 @@
             setTimeout(() => coin.remove(), 1000);
         }
 
-        // Lógica da Calculadora (Tarefa #2)
         function calc() {
             const v = document.getElementById('valor').value;
             if (v > 0) {
@@ -137,11 +134,8 @@
                 document.getElementById('res').innerHTML = 
                     `Total Anual: R$ ${total.toFixed(2)}<br>` +
                     `<small style="color:#888">Reserva sugerida: R$ ${reserva.toFixed(2)}</small>`;
-            } else {
-                document.getElementById('res').innerText = "Por favor, insira um valor.";
             }
         }
     </script>
 </body>
 </html>
-
