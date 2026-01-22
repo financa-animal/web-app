@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finança Animal | Explorando o Mundo</title>
+    <title>Finança Animal | Safari</title>
     <style>
-        /* Definição da Paleta Safari Moderno */
+        /* Tarefa #1: Cores Safari Moderno */
         :root {
-            --bg-color: #fdfbf7;      /* Creme / Off-white */
-            --primary: #d97706;       /* Laranja Queimado */
-            --secondary: #4b3621;     /* Marrom Café */
-            --card-bg: #ffffff;       /* Branco Puro */
-            --text-main: #2d241e;     /* Marrom Escuro quase preto */
+            --bg-safari: #fdfbf7;      /* Creme */
+            --accent-gold: #c68642;    /* Laranja Queimado */
+            --earth-brown: #3e2723;    /* Marrom Profundo */
+            --card-bg: #ffffff;
         }
 
         body { 
-            font-family: 'Georgia', serif; /* Fonte com serifa para parecer blog/revista */
-            margin: 0; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
+            font-family: 'Georgia', serif; 
+            background-color: var(--bg-safari); 
+            color: var(--earth-brown);
+            margin: 0;
             line-height: 1.6;
         }
 
-        /* Header com interação de moedas */
+        /* Tarefa #4: Cabeçalho Interativo */
         .hero {
-            height: 60vh;
-            background: linear-gradient(rgba(75, 54, 33, 0.4), rgba(75, 54, 33, 0.4)), 
-                        url('https://images.unsplash.com/photo-1516466723877-e4ec1d736c8a?q=80&w=1000');
+            height: 45vh;
+            background: linear-gradient(rgba(62, 39, 35, 0.6), rgba(62, 39, 35, 0.6)), 
+                        url('https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=1000');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -34,139 +33,111 @@
             align-items: center;
             justify-content: center;
             color: white;
-            text-align: center;
             cursor: pointer;
-            border-bottom: 8px solid var(--secondary);
+            text-align: center;
+            border-bottom: 5px solid var(--accent-gold);
         }
 
-        .hero h1 { font-size: 3.5rem; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-        /* Estilo das Moedas */
         .coin {
             position: absolute;
             font-size: 1.5rem;
-            animation: fall 1.2s ease-in forwards;
+            animation: fall 1s ease-in forwards;
             pointer-events: none;
-            z-index: 10;
+            z-index: 100;
         }
 
         @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+            to { transform: translateY(500px) rotate(360deg); opacity: 0; }
         }
 
-        /* Container Principal */
-        .main-content {
+        .container {
             max-width: 1100px;
-            margin: -50px auto 50px;
-            padding: 0 20px;
+            margin: -40px auto 50px;
+            padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
-        /* Cards Estilizados */
         .card {
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 4px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
-            transition: transform 0.3s;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--accent-gold);
         }
 
-        .card:hover { transform: translateY(-5px); }
+        .card h2 { color: var(--earth-brown); margin-top: 0; }
 
-        .card h2 { color: var(--secondary); border-bottom: 2px solid var(--primary); display: inline-block; margin-bottom: 20px; }
-
-        /* Calculadora Estilizada */
-        .calc-group { margin-bottom: 15px; }
-        input { 
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; 
-            box-sizing: border-box; background: #fafafa;
-        }
-        button { 
-            background: var(--secondary); color: white; border: none; padding: 12px; 
-            width: 100%; cursor: pointer; font-weight: bold; border-radius: 4px; transition: 0.3s;
-        }
-        button:hover { background: var(--primary); }
-        #resultado { margin-top: 15px; font-weight: bold; color: var(--primary); font-size: 1.1rem; }
-
-        /* Seção da História */
-        .img-history { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 15px; }
-
-        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; }
+        /* Estilos da Calculadora */
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: var(--earth-brown); color: white; border: none; padding: 12px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s; }
+        button:hover { background: var(--accent-gold); }
+        
+        #res { font-weight: bold; margin-top: 15px; color: var(--accent-gold); }
+        
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-    <header class="hero" onclick="dropCoin(event)">
-        <h1>Finança Animal</h1>
-        <p>Clique no topo para ver a mágica acontecer! 🪙</p>
+    <header class="hero" onclick="spawnCoin(event)">
+        <h1>FINANÇA ANIMAL</h1>
+        <p>Clique aqui e colete moedas da sorte! 🪙</p>
     </header>
 
-    <div class="main-content">
+    <div class="container">
         
         <section class="card">
             <h2>💰 Planejamento</h2>
-            <p>Simule o investimento anual para cuidar de uma espécie exótica ou pet comum.</p>
-            <div class="calc-group">
-                <label>Gasto Mensal Estimado (R$):</label>
-                <input type="number" id="valorMensal" placeholder="Ex: 150">
-            </div>
-            <button onclick="calcular()">CALCULAR INVESTIMENTO</button>
-            <div id="resultado"></div>
+            <p>Simule o gasto anual para cuidar de um animal:</p>
+            <input type="number" id="valor" placeholder="Gasto mensal médio (R$)">
+            <button onclick="calc()">CALCULAR INVESTIMENTO</button>
+            <p id="res"></p>
         </section>
 
         <section class="card">
-            <img src="https://images.unsplash.com/photo-1520315342629-6ea920342047?q=80&w=500" alt="Natureza" class="img-history">
             <h2>📖 Minha Jornada</h2>
-            <p>Mesmo sem ter um pet hoje, minha conexão com o mundo animal nasceu da admiração pela liberdade e pelas histórias que a natureza conta...</p>
-            <p><i>Em breve: O relato completo sobre minha paixão pela fauna.</i></p>
+            <p>Minha conexão com o mundo animal nasce de uma admiração profunda pela natureza e sua liberdade.</p>
+            <p>Este espaço foi criado para unir educação financeira e o amor pela fauna, ajudando futuros donos a se planejarem com responsabilidade.</p>
         </section>
 
         <section class="card">
-            <h2>💡 Curiosidades</h2>
-            <ul style="list-style-type: '🐾 '; padding-left: 20px;">
-                <li><strong>Elefantes:</strong> Têm uma memória financeira emocional? Eles nunca esquecem onde há água!</li>
-                <br>
-                <li><strong>Corujas:</strong> São símbolos de sabedoria, algo essencial para nossas finanças.</li>
-                <br>
-                <li><strong>Custo de Vida:</strong> Sabia que manter um Cavalo Marinho exige um controle de pH rigoroso?</li>
-            </ul>
+            <h2>💡 Você Sabia?</h2>
+            <p><strong>🐘 Elefantes:</strong> Têm uma memória emocional incrível e planejam rotas de sobrevivência por décadas.</p>
+            <p><strong>🦎 Dragão-de-Komodo:</strong> Um "investidor" que consome até 80% do seu peso em uma única refeição.</p>
+            <p><strong>🦉 Corujas:</strong> Símbolos de sabedoria, essencial para manter a visão estratégica das suas finanças.</p>
         </section>
 
     </div>
 
     <footer>
-        &copy; 2026 Finança Animal - Um projeto original e educativo.
+        &copy; 2026 Finança Animal - Projeto Original
     </footer>
 
     <script>
-        // Função da Brincadeira das Moedas
-        function dropCoin(e) {
+        // Lógica das Moedas (Tarefa #4)
+        function spawnCoin(e) {
             const coin = document.createElement('div');
             coin.innerHTML = '🪙';
             coin.className = 'coin';
             coin.style.left = e.pageX + 'px';
             coin.style.top = e.pageY + 'px';
             document.body.appendChild(coin);
-            
-            // Remove a moeda após a animação
-            setTimeout(() => { coin.remove(); }, 1200);
+            setTimeout(() => coin.remove(), 1000);
         }
 
-        // Função da Calculadora
-        function calcular() {
-            const mensal = document.getElementById('valorMensal').value;
-            if(mensal > 0) {
-                const anual = mensal * 12;
-                const reserva = anual * 0.15; // Sugestão de reserva de emergência 15%
-                document.getElementById('resultado').innerHTML = 
-                    `Total Anual: R$ ${anual.toFixed(2)}<br>` +
-                    `<small>Reserva sugerida (15%): R$ ${reserva.toFixed(2)}</small>`;
+        // Lógica da Calculadora (Tarefa #2)
+        function calc() {
+            const v = document.getElementById('valor').value;
+            if (v > 0) {
+                const total = v * 12;
+                const reserva = total * 0.15;
+                document.getElementById('res').innerHTML = 
+                    `Total Anual: R$ ${total.toFixed(2)}<br>` +
+                    `<small style="color:#888">Reserva sugerida: R$ ${reserva.toFixed(2)}</small>`;
             } else {
-                document.getElementById('resultado').innerText = "Insira um valor válido.";
+                document.getElementById('res').innerText = "Por favor, insira um valor.";
             }
         }
     </script>
