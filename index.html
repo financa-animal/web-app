@@ -8,98 +8,164 @@
 
 <style>
 body{
- margin:0;
- font-family:Arial;
- background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a') center/cover fixed;
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a') center/cover fixed;
 }
 
+/* HEADER */
 header{
- text-align:center;
- color:white;
- padding:15px;
- font-size:24px;
- font-weight:bold;
- background:rgba(0,0,0,0.6);
+    text-align:center;
+    color:white;
+    padding:10px;
+    font-size:24px;
+    font-weight:bold;
+    background:rgba(0,0,0,0.7);
 }
 
+/* USUÁRIO */
+.user-bar{
+    text-align:center;
+    padding:10px;
+    background:#f1c40f;
+}
+.user-bar input{
+    padding:6px;
+    border-radius:5px;
+    border:none;
+}
+.user-bar button{
+    padding:6px 10px;
+    border:none;
+    border-radius:5px;
+    background:#6b4c2a;
+    color:white;
+}
+
+/* LAYOUT */
 .container{
- display:flex;
- gap:20px;
- padding:20px;
- max-width:1100px;
- margin:auto;
+    display:flex;
+    gap:20px;
+    padding:20px;
+    max-width:1200px;
+    margin:auto;
+    align-items:flex-start;
+    flex-wrap:wrap;
 }
 
 .box{
- background:white;
- padding:15px;
- border-radius:12px;
- flex:1;
- box-shadow:0 10px 25px rgba(0,0,0,0.15);
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    flex:1;
+    min-width:280px;
 }
 
-input, textarea{
- width:100%;
- padding:8px;
- margin:5px 0;
- border-radius:6px;
- border:1px solid #ccc;
+/* CALCULADORA */
+.box input{
+    width:100%;
+    padding:6px;
+    margin-bottom:8px;
 }
-
 button{
- background:#a66a2c;
- color:white;
- border:none;
- padding:8px 12px;
- border-radius:6px;
- cursor:pointer;
+    background:#6b4c2a;
+    color:white;
+    border:none;
+    padding:8px;
+    border-radius:6px;
+    cursor:pointer;
 }
 
-.dica-card{
- background:#3b2a22;
- color:white;
- padding:15px;
- border-radius:10px;
- text-align:center;
- margin-top:10px;
+#emergencia{
+    margin-top:10px;
+    font-weight:bold;
 }
 
-.galeria{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:10px;
+/* DICAS */
+.tips-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
 }
 
-.foto-card{
- background:white;
- padding:8px;
- border-radius:10px;
- box-shadow:0 5px 15px rgba(0,0,0,0.1);
+.tip-card{
+    perspective:1000px;
+    height:90px;
 }
 
-.foto-card img{width:100%; border-radius:8px;}
-.curtir{color:red; cursor:pointer; font-weight:bold;}
+.tip-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transition:transform 0.6s;
+    transform-style:preserve-3d;
+    cursor:pointer;
+}
 
-.mural{
- margin:20px auto;
- background:white;
- padding:15px;
- border-radius:12px;
- max-width:900px;
- box-shadow:0 10px 25px rgba(0,0,0,0.15);
+.tip-card.flip .tip-inner{
+    transform:rotateY(180deg);
+}
+
+.tip-front, .tip-back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    backface-visibility:hidden;
+    border-radius:10px;
+    background:#3d2b1f;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:5px;
+    text-align:center;
+}
+
+.tip-back{
+    transform:rotateY(180deg);
+    background:#6b4c2a;
+}
+
+/* FOTOS */
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
 }
 
 .post{
- border:1px solid #ddd;
- padding:10px;
- margin-top:10px;
- border-radius:10px;
+    background:#f9f9f9;
+    padding:8px;
+    border-radius:10px;
 }
 
-.post img{width:100%; border-radius:10px;}
+.post img{
+    width:100%;
+    border-radius:8px;
+    max-height:140px;
+    object-fit:cover;
+}
 
-@media(max-width:900px){
- .container{flex-direction:column;}
+.like{
+    color:red;
+    cursor:pointer;
+}
+
+/* HISTÓRIA */
+.story{
+    max-width:800px;
+    margin:20px auto;
+    background:white;
+    padding:15px;
+    border-radius:12px;
+}
+
+/* RESPONSIVO */
+@media(max-width:768px){
+    .container{
+        flex-direction:column;
+    }
 }
 </style>
 </head>
@@ -107,156 +173,141 @@ button{
 
 <header>FINANÇA ANIMAL</header>
 
-<div style="text-align:center;color:white;margin:10px;">
-👤 Seu nome: <input id="usuarioNome" placeholder="Digite seu nome">
-<button onclick="salvarUsuario()">Salvar</button>
-<span id="userAtual"></span>
+<div class="user-bar">
+    👤 Seu nome:
+    <input id="username" placeholder="Digite seu nome">
+    <button onclick="saveUser()">Salvar</button>
 </div>
 
 <div class="container">
 
-<!-- PLANEJAMENTO -->
-<div class="box">
-<h3>💰 Planejamento</h3>
-<input type="number" id="alimentacao" placeholder="Alimentação">
-<input type="number" id="saude" placeholder="Saúde">
-<input type="number" id="mimos" placeholder="Mimos">
-<button onclick="calcular()">Analisar Gastos</button>
-<canvas id="grafico"></canvas>
-<p><b>Emergência:</b> R$ <span id="emergencia">0</span></p>
+    <!-- CALCULADORA -->
+    <div class="box">
+        <h3>💰 Planejamento</h3>
+        <input type="number" id="alimentacao" placeholder="Alimentação">
+        <input type="number" id="saude" placeholder="Saúde">
+        <input type="number" id="mimos" placeholder="Mimos">
+        <button onclick="calcular()">Analisar Gastos</button>
+        <canvas id="grafico"></canvas>
+        <div id="emergencia"></div>
+    </div>
+
+    <!-- DICAS -->
+    <div class="box">
+        <h3>💡 Dicas <button onclick="updateTips()">Atualizar</button></h3>
+        <div class="tips-grid" id="tips"></div>
+    </div>
+
+    <!-- MOMENTO FOFURA -->
+    <div class="box">
+        <h3>📸 Momento Fofura</h3>
+        <div class="gallery" id="gallery"></div>
+    </div>
 </div>
 
-<!-- DICAS -->
-<div class="box">
-<h3>💡 Dicas <button onclick="novaDica()">Atualizar</button></h3>
-<div class="dica-card" id="dica"></div>
-</div>
-
-<!-- GALERIA -->
-<div class="box">
-<h3>📸 Momento Fofura</h3>
-<div class="galeria" id="galeria"></div>
-</div>
-
-</div>
-
-<!-- MURAL -->
-<div class="mural">
-<h3>📝 História do seu Pet</h3>
-<input id="nomePet" placeholder="Nome do Pet">
-<textarea id="historia" placeholder="História"></textarea>
-<input type="file" id="fotoPet">
-<button onclick="postar()">Registrar</button>
-<div id="posts"></div>
+<!-- HISTÓRIA -->
+<div class="story">
+    <h3>📖 História do seu Pet</h3>
+    <input id="petname" placeholder="Nome do Pet">
+    <textarea id="petstory" placeholder="História"></textarea>
+    <input type="file" id="petphoto">
+    <button onclick="postStory()">Registrar</button>
 </div>
 
 <script>
-/* PERFIL */
-let usuario=localStorage.getItem("usuario")||"";
-function salvarUsuario(){
- usuario=usuarioNome.value;
- localStorage.setItem("usuario",usuario);
- userAtual.innerText="Logado como: "+usuario;
+let chart;
+
+/* USUÁRIO */
+function saveUser(){
+    localStorage.setItem("user", username.value);
 }
-if(usuario) userAtual.innerText="Logado como: "+usuario;
+username.value = localStorage.getItem("user") || "";
 
 /* CALCULADORA */
-let grafico;
 function calcular(){
- let a=+alimentacao.value||0;
- let s=+saude.value||0;
- let m=+mimos.value||0;
- let emergencia=(a+s+m)*0.2;
- emergenciaEl.innerText=emergencia.toFixed(2);
+    let a = +alimentacao.value || 0;
+    let s = +saude.value || 0;
+    let m = +mimos.value || 0;
+    let total = a+s+m;
 
- let ctx=document.getElementById("grafico");
- if(grafico)grafico.destroy();
- grafico=new Chart(ctx,{
-  type:'pie',
-  data:{labels:['Alimentação','Saúde','Mimos'],
-  datasets:[{data:[a,s,m]}]}
- });
+    let emergencia = total*0.2;
+    document.getElementById("emergencia").innerText = "Emergência: R$ "+emergencia.toFixed(2);
+
+    if(chart) chart.destroy();
+    chart = new Chart(grafico, {
+        type:'pie',
+        data:{
+            labels:['Alimentação','Saúde','Mimos'],
+            datasets:[{data:[a,s,m]}]
+        }
+    });
 }
-const emergenciaEl=document.getElementById("emergencia");
 
 /* DICAS */
-const dicas=["Vacinas evitam gastos","Guarde 20%","Ração boa ajuda","Passeios evitam estresse"];
-function novaDica(){dica.innerText=dicas[Math.floor(Math.random()*dicas.length)];}
-novaDica();
+const tipsList = [
+"Vacinas em dia evitam gastos altos",
+"Guarde 20% para emergências",
+"Passeios reduzem estresse",
+"Ração boa evita veterinário",
+"Hidratação é essencial",
+"Brinquedos evitam ansiedade"
+];
+
+function updateTips(){
+    let shuffled = tipsList.sort(()=>0.5-Math.random()).slice(0,4);
+    tips.innerHTML="";
+    shuffled.forEach(t=>{
+        tips.innerHTML+=`
+        <div class="tip-card" onclick="this.classList.toggle('flip')">
+            <div class="tip-inner">
+                <div class="tip-front">Dica</div>
+                <div class="tip-back">${t}</div>
+            </div>
+        </div>`;
+    });
+}
+updateTips();
 
 /* GALERIA */
-const imagens=[
-'https://images.unsplash.com/photo-1518717758536-85ae29035b6d',
-'https://images.unsplash.com/photo-1558788353-f76d92427f16'
-];
-function carregarGaleria(){
- galeria.innerHTML="";
- imagens.forEach((src,i)=>{
-  let curtidas=localStorage.getItem("like"+i)||0;
-  galeria.innerHTML+=`
-  <div class="foto-card">
-   <img src="${src}">
-   <p><span class="curtir" onclick="curtir(${i})">❤️</span> ${curtidas}</p>
-   <input placeholder="Comentar..." onblur="salvarComentario(this)">
-  </div>`;
- });
-}
-function curtir(i){
- let c=+localStorage.getItem("like"+i)||0;
- localStorage.setItem("like"+i,c+1);
- carregarGaleria();
-}
+let badWords = ["idiota","burro","feio"];
 
-/* FILTRO OFENSIVO */
-const proibidas=["idiota","burro","lixo","ódio"];
-function salvarComentario(input){
- let texto=input.value.toLowerCase();
- if(proibidas.some(p=>texto.includes(p))){
-  alert("Comentário bloqueado por linguagem inadequada");
-  input.value="";
- }
+function postStory(){
+    let user = localStorage.getItem("user") || "Anônimo";
+    let name = petname.value;
+    let story = petstory.value;
+
+    for(let w of badWords){
+        if(story.toLowerCase().includes(w)){
+            alert("Comentário bloqueado!");
+            return;
+        }
+    }
+
+    let file = petphoto.files[0];
+    let reader = new FileReader();
+    reader.onload = e=>{
+        gallery.innerHTML+=`
+        <div class="post">
+            <img src="${e.target.result}">
+            <div><span class="like" onclick="like(this)">❤️</span> 0</div>
+            <input placeholder="Comentar..." onblur="comment(this)">
+        </div>`;
+    };
+    if(file) reader.readAsDataURL(file);
 }
 
-carregarGaleria();
-
-/* MURAL */
-let postsData=JSON.parse(localStorage.getItem("posts")||"[]");
-
-function postar(){
- if(!usuario) return alert("Coloque seu nome primeiro!");
- let nome=nomePet.value;
- let hist=historia.value;
- let file=fotoPet.files[0];
- if(!nome||!hist||!file)return alert("Preencha tudo");
-
- let reader=new FileReader();
- reader.onload=function(){
-  postsData.push({usuario,nome,hist,img:reader.result});
-  localStorage.setItem("posts",JSON.stringify(postsData));
-  mostrarPosts();
- }
- reader.readAsDataURL(file);
+function like(el){
+    el.nextSibling.textContent = parseInt(el.nextSibling.textContent)+1;
 }
 
-function mostrarPosts(){
- posts.innerHTML="";
- postsData.forEach((p,i)=>{
-  posts.innerHTML+=`
-  <div class="post">
-   <b>${p.usuario}</b> - ${p.nome}
-   <img src="${p.img}">
-   <p>${p.hist}</p>
-   ${p.usuario===usuario?`<button onclick="excluir(${i})">Excluir</button>`:""}
-  </div>`;
- });
+function comment(el){
+    for(let w of badWords){
+        if(el.value.toLowerCase().includes(w)){
+            alert("Comentário ofensivo bloqueado!");
+            el.value="";
+        }
+    }
 }
-
-function excluir(i){
- postsData.splice(i,1);
- localStorage.setItem("posts",JSON.stringify(postsData));
- mostrarPosts();
-}
-mostrarPosts();
 </script>
 
 </body>
