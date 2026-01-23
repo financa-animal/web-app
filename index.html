@@ -4,178 +4,107 @@
 <meta charset="UTF-8">
 <title>Finança Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:#f5f2ed;
-}
+body{margin:0;font-family:Arial;background:#f4efe9;}
+h1{margin:0;padding:18px;text-align:center;color:white;font-size:22px;
+background:url('https://images.unsplash.com/photo-1558788353-f76d92427f16') center/cover;}
 
-h1{
-  text-align:center;
-  color:white;
-  padding:20px;
-  background:url('https://images.unsplash.com/photo-1558788353-f76d92427f16') center/cover;
-  margin:0;
-}
+.container{display:flex;gap:15px;padding:15px;flex-wrap:wrap;}
+.card{background:white;padding:12px;border-radius:10px;box-shadow:0 3px 6px rgba(0,0,0,0.1);flex:1;min-width:260px;}
 
-.container{
-  display:flex;
-  gap:20px;
-  padding:20px;
-}
+h3{margin:5px 0 10px;font-size:16px;}
+input,textarea{width:100%;padding:6px;margin:4px 0;font-size:12px;}
+button{background:#c68a3c;border:none;color:white;padding:8px;border-radius:6px;cursor:pointer;width:100%;font-size:12px;}
 
-.card{
-  background:white;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 4px 8px rgba(0,0,0,0.1);
-  flex:1;
-}
+.galeria{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.post{background:#fff;border-radius:8px;padding:6px;box-shadow:0 2px 4px rgba(0,0,0,0.1);font-size:12px;}
+.post img{width:100%;height:120px;object-fit:cover;border-radius:8px;}
 
-button{
-  background:#c68a3c;
-  border:none;
-  color:white;
-  padding:10px;
-  border-radius:6px;
-  cursor:pointer;
-}
+.like{color:red;cursor:pointer;font-size:12px}
 
-input, textarea{
-  width:100%;
-  padding:8px;
-  margin:6px 0;
-}
+/* TIKTOK */
+.tiktok-feed{height:300px;overflow-y:auto;scroll-snap-type:y mandatory;border-radius:10px}
+.tiktok-video{height:300px;scroll-snap-align:start;margin-bottom:8px}
+.tiktok-video iframe{width:100%;height:100%;border-radius:10px}
 
-.galeria{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.post{
-  background:#fff;
-  border-radius:10px;
-  padding:8px;
-  box-shadow:0 3px 6px rgba(0,0,0,0.1);
-}
-
-.post img, .post video{
-  width:100%;
-  border-radius:10px;
-}
-
-.like{
-  color:red;
-  cursor:pointer;
-  font-size:14px;
-}
-
-/* TIKTOK FEED */
-.tiktok-feed{
-  height:420px;
-  overflow-y:auto;
-  scroll-snap-type:y mandatory;
-}
-
-.tiktok-video{
-  scroll-snap-align:start;
-  height:420px;
-  margin-bottom:10px;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.tiktok-video iframe{
-  width:100%;
-  height:100%;
-  border:none;
-}
-
-#historias .post{
-  margin-top:10px;
-}
+canvas{max-height:180px}
 </style>
 </head>
-<body>
 
+<body>
 <h1>FINANÇA ANIMAL</h1>
 
 <div class="container">
 
-  <!-- PLANEJAMENTO -->
-  <div class="card">
-    <h3>💰 Planejamento</h3>
-    <input type="number" id="alimentacao" placeholder="Alimentação">
-    <input type="number" id="saude" placeholder="Saúde">
-    <input type="number" id="mimos" placeholder="Mimos">
-    <button onclick="calcular()">ANALISAR GASTOS</button>
-    <canvas id="grafico"></canvas>
-    <p style="color:red;">Emergência: R$ <span id="emergencia">0</span></p>
-  </div>
+<div class="card">
+<h3>💰 Planejamento</h3>
+<input type="number" id="alimentacao" placeholder="Alimentação">
+<input type="number" id="saude" placeholder="Saúde">
+<input type="number" id="mimos" placeholder="Mimos">
+<button onclick="calcular()">ANALISAR GASTOS</button>
+<canvas id="grafico"></canvas>
+<p style="color:red;font-size:12px">Emergência: R$ <span id="emergencia">0</span></p>
+</div>
 
-  <!-- DICAS -->
-  <div class="card">
-    <h3>💡 Dicas</h3>
-    <div id="dicas"></div>
-    <button onclick="sortearDica()">Atualizar</button>
-  </div>
+<div class="card">
+<h3>💡 Dicas</h3>
+<div id="dicas"></div>
+</div>
 
-  <!-- MOMENTO FOFURA -->
-  <div class="card">
-    <h3>📸 Momento Fofura</h3>
-    <div class="galeria" id="galeriaFotos"></div>
-    <div class="tiktok-feed" id="feedVideos"></div>
-  </div>
+<div class="card">
+<h3>📸 Fotos Fofas</h3>
+<div class="galeria" id="galeriaFotos"></div>
+
+<h3 style="margin-top:10px">🎬 Vídeos Fofos</h3>
+<div class="tiktok-feed" id="feedVideos"></div>
+</div>
 
 </div>
 
-<!-- HISTÓRIA DO PET -->
-<div class="card" style="margin:20px;">
-  <h3>📖 História do seu Pet</h3>
-  <input type="text" id="nomePet" placeholder="Nome do Pet">
-  <textarea id="historiaPet" placeholder="Conte a história..."></textarea>
-  <input type="file" id="fotoPet">
-  <button onclick="publicarHistoria()">PUBLICAR</button>
-  <div id="historias"></div>
+<div class="card" style="margin:15px">
+<h3>📖 História do seu Pet</h3>
+<input id="nomePet" placeholder="Nome do Pet">
+<textarea id="historiaPet" placeholder="Conte a história..."></textarea>
+<input type="file" id="fotoPet">
+<button onclick="publicarHistoria()">PUBLICAR</button>
+<div id="historias"></div>
 </div>
 
 <script>
 let grafico;
 
+/* CALCULADORA */
 function calcular(){
-  const a = +alimentacao.value;
-  const s = +saude.value;
-  const m = +mimos.value;
-  const total = a+s+m;
-  emergencia.textContent = (total*0.2).toFixed(2);
+const a=+alimentacao.value||0;
+const s=+saude.value||0;
+const m=+mimos.value||0;
+emergencia.textContent=(s*6).toFixed(2);
 
-  if(grafico) grafico.destroy();
-
-  grafico = new Chart(graficoCanvas=document.getElementById('grafico'), {
-    type:'doughnut',
-    data:{
-      labels:['Alimentação','Saúde','Mimos'],
-      datasets:[{data:[a,s,m]}]
-    }
-  });
+if(grafico)grafico.destroy();
+grafico=new Chart(document.getElementById('grafico'),{
+type:'doughnut',
+data:{labels:['Alimentação','Saúde','Mimos'],
+datasets:[{data:[a,s,m],backgroundColor:['#7b4b2a','#c68a3c','#e0b27a']}]},
+options:{plugins:{legend:{display:false}}}
+});
 }
 
-/* DICAS */
-const dicasLista=[
-"Vacinação em dia evita gastos futuros.",
-"Escovar os dentes do pet reduz problemas.",
-"Guardar 20% para emergências é essencial.",
-"Passeios diários melhoram a saúde."
+/* DICAS AUTO ATUALIZANDO */
+const listaDicas=[
+"Vacinação em dia evita gastos enormes.",
+"Escovar dentes do pet reduz problemas.",
+"Castração previne doenças e fugas.",
+"Passeios diários melhoram saúde mental.",
+"Guardar 20% para emergências é ideal."
 ];
 
-function sortearDica(){
-  dicas.innerHTML="";
-  dicasLista.sort(()=>0.5-Math.random()).slice(0,2).forEach(d=>{
-    dicas.innerHTML+=`<p>${d}</p>`;
-  });
+function atualizarDicas(){
+dicas.innerHTML="";
+listaDicas.sort(()=>0.5-Math.random()).slice(0,2)
+.forEach(d=>dicas.innerHTML+=`<p>• ${d}</p>`);
 }
+setInterval(atualizarDicas,5000);
 
 /* FOTOS */
 const fotos=[
@@ -184,73 +113,53 @@ const fotos=[
 "https://images.unsplash.com/photo-1558788353-f76d92427f16",
 "https://images.unsplash.com/photo-1583511655826-05700442b31b"
 ];
+fotos.forEach(f=>galeriaFotos.innerHTML+=`
+<div class="post">
+<img src="${f}">
+<span class="like" onclick="curtir(this)">❤ 0</span>
+<input placeholder="Comentar..." onkeydown="comentario(event,this)">
+</div>`);
 
-function criarPost(conteudo){
-  const post=document.createElement("div");
-  post.className="post";
-  post.innerHTML=conteudo+`
-  <div>
-    <span class="like" onclick="curtir(this)">❤ 0</span>
-    <input placeholder="Comentar..." onkeydown="comentario(event,this)">
-  </div>`;
-  galeriaFotos.appendChild(post);
-}
+/* VIDEOS CURTOS */
+const videos=[
+"https://www.youtube.com/embed/j5a0jTc9S10",
+"https://www.youtube.com/embed/cbP2N1BQdYc",
+"https://www.youtube.com/embed/5dsGWM5XGdg"
+];
+videos.forEach(v=>feedVideos.innerHTML+=`
+<div class="tiktok-video"><iframe src="${v}" allowfullscreen></iframe></div>`);
 
 function curtir(el){
-  let n=parseInt(el.textContent.split(" ")[1]);
-  el.textContent="❤ "+(++n);
+let n=parseInt(el.textContent.split(" ")[1]);
+el.textContent="❤ "+(++n);
 }
 
 function comentario(e,input){
-  if(e.key==="Enter"){
-    input.insertAdjacentHTML("beforebegin",`<p>💬 ${input.value}</p>`);
-    input.value="";
-  }
+if(e.key==="Enter"){input.insertAdjacentHTML("beforebegin",`<p>💬 ${input.value}</p>`);input.value="";}
 }
 
-/* VIDEOS TIKTOK */
-const videos=[
-"https://www.youtube.com/embed/tntOCGkgt98",
-"https://www.youtube.com/embed/5dsGWM5XGdg",
-"https://www.youtube.com/embed/9No-FiEInLA"
-];
-
-function carregarVideos(){
-  videos.forEach(v=>{
-    feedVideos.innerHTML+=`<div class="tiktok-video">
-    <iframe src="${v}" allowfullscreen></iframe>
-    </div>`;
-  });
-}
-
-/* HISTÓRIAS */
+/* HISTÓRIA COM FOTO */
 function publicarHistoria(){
-  const nome=nomePet.value;
-  const texto=historiaPet.value;
-  const file=fotoPet.files[0];
-  const reader=new FileReader();
+const nome=nomePet.value;
+const texto=historiaPet.value;
+const file=fotoPet.files[0];
+if(!file)return;
 
-  reader.onload=function(){
-    const post=document.createElement("div");
-    post.className="post";
-    post.innerHTML=`
-      <h4>${nome}</h4>
-      <img src="${reader.result}">
-      <p>${texto}</p>
-      <span class="like" onclick="curtir(this)">❤ 0</span>
-      <input placeholder="Comentar..." onkeydown="comentario(event,this)">
-    `;
-    historias.prepend(post);
-  }
-  if(file) reader.readAsDataURL(file);
+const reader=new FileReader();
+reader.onload=function(){
+historias.innerHTML=`
+<div class="post">
+<h4>${nome}</h4>
+<img src="${reader.result}">
+<p>${texto}</p>
+<span class="like" onclick="curtir(this)">❤ 0</span>
+<input placeholder="Comentar..." onkeydown="comentario(event,this)">
+</div>`+historias.innerHTML;
+}
+reader.readAsDataURL(file);
 }
 
-window.onload=()=>{
-  sortearDica();
-  fotos.forEach(f=>criarPost(`<img src="${f}">`));
-  carregarVideos();
-}
+window.onload=atualizarDicas;
 </script>
-
 </body>
 </html>
