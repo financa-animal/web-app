@@ -2,23 +2,22 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Finança Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{box-sizing:border-box;}
-
 body{
- font-family:Arial;
  margin:0;
- background:url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b') center/cover fixed;
+ font-family:Arial;
+ background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a') center/cover fixed;
 }
 
-.topo{
+header{
  text-align:center;
  color:white;
- padding:20px;
- font-size:28px;
+ padding:15px;
+ font-size:24px;
  font-weight:bold;
  background:rgba(0,0,0,0.6);
 }
@@ -27,21 +26,28 @@ body{
  display:flex;
  gap:20px;
  padding:20px;
- max-width:1200px;
+ max-width:1100px;
  margin:auto;
 }
 
 .box{
  background:white;
  padding:15px;
- border-radius:10px;
+ border-radius:12px;
  flex:1;
- box-shadow:0 0 10px rgba(0,0,0,0.2);
- min-width:280px;
+ box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+input, textarea{
+ width:100%;
+ padding:8px;
+ margin:5px 0;
+ border-radius:6px;
+ border:1px solid #ccc;
 }
 
 button{
- background:#b57b38;
+ background:#a66a2c;
  color:white;
  border:none;
  padding:8px 12px;
@@ -49,135 +55,84 @@ button{
  cursor:pointer;
 }
 
-input, textarea{
- width:100%;
- padding:6px;
- margin:5px 0;
+.dica-card{
+ background:#3b2a22;
+ color:white;
+ padding:15px;
+ border-radius:10px;
+ text-align:center;
+ margin-top:10px;
 }
 
-/* gráfico */
-canvas{
- max-width:300px !important;
- max-height:300px !important;
- margin:auto;
- display:block;
-}
-
-/* dicas cards */
-.dicas-grid{
+.galeria{
  display:grid;
  grid-template-columns:repeat(2,1fr);
  gap:10px;
 }
 
-.card{
- perspective:1000px;
- height:90px;
- cursor:pointer;
-}
-
-.card-inner{
- position:relative;
- width:100%;
- height:100%;
- transition:transform 0.6s;
- transform-style:preserve-3d;
-}
-
-.card.flipped .card-inner{
- transform:rotateY(180deg);
-}
-
-.card-front,.card-back{
- position:absolute;
- width:100%;
- height:100%;
- backface-visibility:hidden;
- border-radius:8px;
- display:flex;
- align-items:center;
- justify-content:center;
- text-align:center;
- padding:10px;
- color:white;
- font-weight:bold;
-}
-
-.card-front{background:#3b2b25;}
-.card-back{background:#6d4c41; transform:rotateY(180deg);}
-
-/* fotos */
-.galeria{
- display:grid;
- grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
- gap:10px;
-}
-
 .foto-card{
- background:#fff;
- border-radius:8px;
- padding:5px;
- box-shadow:0 0 5px rgba(0,0,0,0.2);
+ background:white;
+ padding:8px;
+ border-radius:10px;
+ box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-.foto-card img{
- width:100%;
- height:110px;
- object-fit:cover;
- border-radius:6px;
-}
-
-.like{color:red;cursor:pointer}
+.foto-card img{width:100%; border-radius:8px;}
+.curtir{color:red; cursor:pointer; font-weight:bold;}
 
 .mural{
  margin:20px auto;
  background:white;
  padding:15px;
- border-radius:10px;
- max-width:1200px;
+ border-radius:12px;
+ max-width:900px;
+ box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
 .post{
- border-bottom:1px solid #ddd;
- padding:10px 0;
+ border:1px solid #ddd;
+ padding:10px;
+ margin-top:10px;
+ border-radius:10px;
 }
 
-.post img{
- width:100%;
- max-width:300px;
- border-radius:8px;
-}
+.post img{width:100%; border-radius:10px;}
 
 @media(max-width:900px){
  .container{flex-direction:column;}
- canvas{max-width:220px !important;max-height:220px !important;}
 }
 </style>
 </head>
-
 <body>
-<div class="topo">FINANÇA ANIMAL</div>
+
+<header>FINANÇA ANIMAL</header>
+
+<div style="text-align:center;color:white;margin:10px;">
+👤 Seu nome: <input id="usuarioNome" placeholder="Digite seu nome">
+<button onclick="salvarUsuario()">Salvar</button>
+<span id="userAtual"></span>
+</div>
 
 <div class="container">
 
 <!-- PLANEJAMENTO -->
 <div class="box">
 <h3>💰 Planejamento</h3>
-<input type="number" id="a" placeholder="Alimentação">
-<input type="number" id="s" placeholder="Saúde">
-<input type="number" id="m" placeholder="Mimos">
-<button onclick="calc()">ANALISAR GASTOS</button>
+<input type="number" id="alimentacao" placeholder="Alimentação">
+<input type="number" id="saude" placeholder="Saúde">
+<input type="number" id="mimos" placeholder="Mimos">
+<button onclick="calcular()">Analisar Gastos</button>
 <canvas id="grafico"></canvas>
-<p style="color:red">Emergência: R$ <span id="emerg">0</span></p>
+<p><b>Emergência:</b> R$ <span id="emergencia">0</span></p>
 </div>
 
 <!-- DICAS -->
 <div class="box">
-<h3>💡 Dicas <button onclick="atualizarDicas()">Atualizar</button></h3>
-<div class="dicas-grid" id="dicas"></div>
+<h3>💡 Dicas <button onclick="novaDica()">Atualizar</button></h3>
+<div class="dica-card" id="dica"></div>
 </div>
 
-<!-- MOMENTO FOFURA -->
+<!-- GALERIA -->
 <div class="box">
 <h3>📸 Momento Fofura</h3>
 <div class="galeria" id="galeria"></div>
@@ -187,99 +142,122 @@ canvas{
 
 <!-- MURAL -->
 <div class="mural">
-<h3>📖 Registre a história do seu Pet com uma foto</h3>
-<input id="nome" placeholder="Nome do Pet">
-<textarea id="hist" placeholder="Como vocês se conheceram?"></textarea>
-<input type="file" id="foto">
-<button onclick="postar()">Registrar no Mural</button>
+<h3>📝 História do seu Pet</h3>
+<input id="nomePet" placeholder="Nome do Pet">
+<textarea id="historia" placeholder="História"></textarea>
+<input type="file" id="fotoPet">
+<button onclick="postar()">Registrar</button>
 <div id="posts"></div>
 </div>
 
 <script>
-let graf;
+/* PERFIL */
+let usuario=localStorage.getItem("usuario")||"";
+function salvarUsuario(){
+ usuario=usuarioNome.value;
+ localStorage.setItem("usuario",usuario);
+ userAtual.innerText="Logado como: "+usuario;
+}
+if(usuario) userAtual.innerText="Logado como: "+usuario;
 
-function calc(){
- let a=+a.value, s=+s.value, m=+m.value;
- let total=a+s+m;
- let emergencia=(total*0.2).toFixed(2);
- emerg.textContent=emergencia;
+/* CALCULADORA */
+let grafico;
+function calcular(){
+ let a=+alimentacao.value||0;
+ let s=+saude.value||0;
+ let m=+mimos.value||0;
+ let emergencia=(a+s+m)*0.2;
+ emergenciaEl.innerText=emergencia.toFixed(2);
 
- if(graf)graf.destroy();
- graf=new Chart(grafico,{
+ let ctx=document.getElementById("grafico");
+ if(grafico)grafico.destroy();
+ grafico=new Chart(ctx,{
   type:'pie',
-  data:{
-   labels:['Alimentação','Saúde','Mimos'],
-   datasets:[{data:[a,s,m],backgroundColor:['#42a5f5','#ef5350','#ffa726']}]
-  }
+  data:{labels:['Alimentação','Saúde','Mimos'],
+  datasets:[{data:[a,s,m]}]}
  });
 }
+const emergenciaEl=document.getElementById("emergencia");
 
 /* DICAS */
-const listaDicas=[
-"Vacinas evitam gastos altos",
-"Guardar 20% ajuda emergências",
-"Passeios melhoram humor do pet",
-"Ração de qualidade evita doenças",
-"Água fresca sempre disponível",
-"Escovar os pelos reduz problemas"
-];
+const dicas=["Vacinas evitam gastos","Guarde 20%","Ração boa ajuda","Passeios evitam estresse"];
+function novaDica(){dica.innerText=dicas[Math.floor(Math.random()*dicas.length)];}
+novaDica();
 
-function atualizarDicas(){
- dicas.innerHTML='';
- let usadas=[];
- while(usadas.length<4){
-  let i=Math.floor(Math.random()*listaDicas.length);
-  if(!usadas.includes(i)) usadas.push(i);
- }
- usadas.forEach(i=>{
-  let c=document.createElement('div');
-  c.className='card';
-  c.innerHTML=`<div class="card-inner">
-   <div class="card-front">Dica Pet</div>
-   <div class="card-back">${listaDicas[i]}</div>
+/* GALERIA */
+const imagens=[
+'https://images.unsplash.com/photo-1518717758536-85ae29035b6d',
+'https://images.unsplash.com/photo-1558788353-f76d92427f16'
+];
+function carregarGaleria(){
+ galeria.innerHTML="";
+ imagens.forEach((src,i)=>{
+  let curtidas=localStorage.getItem("like"+i)||0;
+  galeria.innerHTML+=`
+  <div class="foto-card">
+   <img src="${src}">
+   <p><span class="curtir" onclick="curtir(${i})">❤️</span> ${curtidas}</p>
+   <input placeholder="Comentar..." onblur="salvarComentario(this)">
   </div>`;
-  c.onclick=()=>c.classList.toggle('flipped');
-  dicas.appendChild(c);
  });
 }
-atualizarDicas();
-
-/* FOTOS */
-const fotos=[
-"https://images.unsplash.com/photo-1517849845537-4d257902454a",
-"https://images.unsplash.com/photo-1558788353-f76d92427f16",
-"https://images.unsplash.com/photo-1507149833265-60c372daea22",
-"https://images.unsplash.com/photo-1518717758536-85ae29035b6d"
-];
-
-fotos.forEach(src=>{
- let c=document.createElement('div');
- c.className='foto-card';
- c.innerHTML=`<img src="${src}">
- <div><span class="like" onclick="curtir(this)">❤</span> <span>0</span></div>
- <input placeholder="Comentar...">`;
- galeria.appendChild(c);
-});
-
-function curtir(el){
- let n=el.nextElementSibling;
- n.textContent=+n.textContent+1;
+function curtir(i){
+ let c=+localStorage.getItem("like"+i)||0;
+ localStorage.setItem("like"+i,c+1);
+ carregarGaleria();
 }
+
+/* FILTRO OFENSIVO */
+const proibidas=["idiota","burro","lixo","ódio"];
+function salvarComentario(input){
+ let texto=input.value.toLowerCase();
+ if(proibidas.some(p=>texto.includes(p))){
+  alert("Comentário bloqueado por linguagem inadequada");
+  input.value="";
+ }
+}
+
+carregarGaleria();
 
 /* MURAL */
+let postsData=JSON.parse(localStorage.getItem("posts")||"[]");
+
 function postar(){
- let n=nome.value,h=hist.value,f=foto.files[0];
- if(!n||!h||!f)return alert("Preencha tudo");
- let r=new FileReader();
- r.onload=e=>{
-  let div=document.createElement('div');
-  div.className='post';
-  div.innerHTML=`<b>${n}</b><p>${h}</p><img src="${e.target.result}">
-  <br><button onclick="this.parentElement.remove()">Excluir</button>`;
-  posts.appendChild(div);
- };
- r.readAsDataURL(f);
+ if(!usuario) return alert("Coloque seu nome primeiro!");
+ let nome=nomePet.value;
+ let hist=historia.value;
+ let file=fotoPet.files[0];
+ if(!nome||!hist||!file)return alert("Preencha tudo");
+
+ let reader=new FileReader();
+ reader.onload=function(){
+  postsData.push({usuario,nome,hist,img:reader.result});
+  localStorage.setItem("posts",JSON.stringify(postsData));
+  mostrarPosts();
+ }
+ reader.readAsDataURL(file);
 }
+
+function mostrarPosts(){
+ posts.innerHTML="";
+ postsData.forEach((p,i)=>{
+  posts.innerHTML+=`
+  <div class="post">
+   <b>${p.usuario}</b> - ${p.nome}
+   <img src="${p.img}">
+   <p>${p.hist}</p>
+   ${p.usuario===usuario?`<button onclick="excluir(${i})">Excluir</button>`:""}
+  </div>`;
+ });
+}
+
+function excluir(i){
+ postsData.splice(i,1);
+ localStorage.setItem("posts",JSON.stringify(postsData));
+ mostrarPosts();
+}
+mostrarPosts();
 </script>
+
 </body>
 </html>
