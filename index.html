@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Finança Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 body{
  font-family: Arial, sans-serif;
@@ -82,9 +83,7 @@ input, textarea{
  border-radius:10px;
 }
 
-.card-dica{
- perspective:1000px;
-}
+.card-dica{ perspective:1000px; }
 
 .card-inner{
  position:relative;
@@ -95,9 +94,7 @@ input, textarea{
  transform-style: preserve-3d;
 }
 
-.card-dica:hover .card-inner{
- transform: rotateY(180deg);
-}
+.card-dica:hover .card-inner{ transform: rotateY(180deg); }
 
 .card-front, .card-back{
  position:absolute;
@@ -110,6 +107,7 @@ input, textarea{
  align-items:center;
  justify-content:center;
  border-radius:10px;
+ padding:5px;
 }
 
 .card-back{
@@ -118,17 +116,19 @@ input, textarea{
 }
 </style>
 </head>
+
 <body>
 
 <div class="topo">FINANÇA ANIMAL</div>
 
 <div class="container">
+
 <!-- Planejamento -->
 <div class="box">
 <h3>💰 Planejamento</h3>
-<input id="a" type="number" placeholder="Alimentação">
-<input id="s" type="number" placeholder="Saúde">
-<input id="m" type="number" placeholder="Mimos">
+<input id="alimentacao" type="number" placeholder="Alimentação">
+<input id="saude" type="number" placeholder="Saúde">
+<input id="mimos" type="number" placeholder="Mimos">
 <button onclick="calcular()">ANALISAR GASTOS</button>
 <canvas id="grafico"></canvas>
 <p style="color:red">Emergência: R$ <span id="emergencia">0</span></p>
@@ -146,9 +146,10 @@ input, textarea{
 <div class="galeria" id="galeria"></div>
 <input type="file" id="addFoto">
 </div>
+
 </div>
 
-<!-- História Pet -->
+<!-- História -->
 <div class="mural">
 <h3>📖 Registre a história do seu Pet</h3>
 <input id="nomePet" placeholder="Nome do Pet">
@@ -161,21 +162,27 @@ input, textarea{
 <script>
 let grafico;
 
+// 🔥 CALCULADORA CORRIGIDA
 function calcular(){
- let a=+a.value, s=+s.value, m=+m.value;
- let total=a+s+m;
- emergencia.innerText=(total*0.2).toFixed(2);
+ const alimentacao = Number(document.getElementById("alimentacao").value) || 0;
+ const saude = Number(document.getElementById("saude").value) || 0;
+ const mimos = Number(document.getElementById("mimos").value) || 0;
+
+ const total = alimentacao + saude + mimos;
+ document.getElementById("emergencia").innerText = (total * 0.2).toFixed(2);
 
  if(grafico) grafico.destroy();
- grafico=new Chart(graficoCanvas,{
-  type:'pie',
-  data:{labels:['Alimentação','Saúde','Mimos'],
-  datasets:[{data:[a,s,m]}]}
+
+ grafico = new Chart(document.getElementById("grafico"), {
+   type:'pie',
+   data:{
+    labels:['Alimentação','Saúde','Mimos'],
+    datasets:[{data:[alimentacao, saude, mimos]}]
+   }
  });
 }
 
-const graficoCanvas=document.getElementById("grafico");
-
+// DICAS
 const listaDicas=[
 ["Vacinas evitam gastos altos","Prevenção é economia"],
 ["Guarde 20% para emergências","Seu pet agradece depois"],
@@ -202,15 +209,14 @@ function gerarDicas(){
 }
 gerarDicas();
 
+// FOTOS
 const galeria=document.getElementById("galeria");
-
 const fotosPadrao=[
 "https://images.unsplash.com/photo-1517849845537-4d257902454a",
 "https://images.unsplash.com/photo-1507149833265-60c372daea22",
 "https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
 "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8"
 ];
-
 fotosPadrao.forEach(f=>criarFoto(f,false));
 
 addFoto.onchange=e=>{
@@ -225,16 +231,17 @@ function criarFoto(src,usuario){
  div.innerHTML=`
   <img src="${src}">
   <div class="acoes">
-   ❤️ <span>0</span>
+   ❤️ <span class="like">0</span>
    ${usuario?'<button class="del">🗑️</button>':""}
   </div>
   <input placeholder="Comentar...">
  `;
- div.querySelector("span").onclick=()=>div.querySelector("span").innerText++;
+ div.querySelector(".like").onclick=()=>div.querySelector(".like").innerText++;
  if(usuario) div.querySelector(".del").onclick=()=>div.remove();
  galeria.appendChild(div);
 }
 
+// HISTÓRIA
 function salvarHistoria(){
  let nome=nomePet.value, hist=historiaPet.value, file=fotoPet.files[0];
  if(!nome||!hist||!file) return;
