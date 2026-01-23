@@ -2,162 +2,281 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Finança Animal</title>
-<script src="https://www.gstatic.com/charts/loader.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root{
- --marrom:#3e2723;
- --dourado:#c68642;
- --bg:#f6f2ec;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f5f2ed;
 }
-body{margin:0;font-family:Segoe UI;background:var(--bg)}
-.hero{
- height:120px;
- background:url('https://images.unsplash.com/photo-1519098901909-b1553a1190af?q=80&w=2000') center/cover;
- display:flex;align-items:center;justify-content:center;
- color:white;font-size:26px;font-weight:bold;
+header{
+  background:url("https://images.unsplash.com/photo-1548199973-03cce0bbc87b");
+  background-size:cover;
+  padding:30px;
+  text-align:center;
+  color:#fff;
+  font-size:28px;
+  font-weight:bold;
+  letter-spacing:2px;
 }
-.dashboard{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;padding:15px}
-.card{background:white;border-radius:10px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,.08);border-top:4px solid var(--dourado)}
-h3{margin:0 0 10px;font-size:16px}
-input,textarea{width:100%;padding:8px;margin:4px 0;border-radius:6px;border:1px solid #eee}
-button{background:var(--dourado);color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer}
-button:hover{background:var(--marrom)}
-#chart{height:180px}
+
+.container{
+  display:flex;
+  gap:20px;
+  padding:20px;
+}
+
+.card-box{
+  background:#fff;
+  flex:1;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+
+h2{margin-top:0}
+
+button{
+  background:#b57a3d;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+input, textarea{
+  width:100%;
+  padding:8px;
+  margin:6px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+canvas{max-width:100%}
 
 /* DICAS */
-.dicas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.dica-card{background:var(--marrom);color:white;padding:15px;border-radius:10px;text-align:center}
+.dicas-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
 
-/* MURAL */
-.mural{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.post{background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.post img{width:100%;border-radius:8px}
-.actions{font-size:14px;margin-top:5px}
-.actions span{cursor:pointer;margin-right:10px}
-.comments input{width:100%;padding:5px;margin-top:5px}
-.comment-list{font-size:12px;margin-top:5px}
-.story-card{margin-top:10px}
+.flip-card{
+  perspective:1000px;
+  height:90px;
+}
+
+.flip-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .6s;
+  transform-style:preserve-3d;
+  cursor:pointer;
+}
+
+.flip-card:hover .flip-inner{
+  transform:rotateY(180deg);
+}
+
+.flip-front, .flip-back{
+  position:absolute;
+  width:100%;
+  height:100%;
+  backface-visibility:hidden;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8px;
+  font-size:14px;
+}
+
+.flip-front{background:#3a2a24;color:#fff;}
+.flip-back{background:#5a3f35;color:#fff;transform:rotateY(180deg);}
+
+/* MOMENTO FOFURA */
+.galeria{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.foto-card{
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 0 5px rgba(0,0,0,.1);
+  padding:5px;
+}
+
+.foto-card img{
+  width:100%;
+  height:130px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.acoes{
+  font-size:13px;
+  margin-top:5px;
+}
+
+.comentarios{
+  width:100%;
+  padding:5px;
+  margin-top:4px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+/* HISTÓRIA */
+.historia{
+  margin:20px;
+  background:#fff;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
 </style>
 </head>
 <body>
 
-<div class="hero">FINANÇA ANIMAL</div>
+<header>FINANÇA ANIMAL</header>
 
-<div class="dashboard">
+<div class="container">
 
-<!-- CALCULADORA -->
-<div class="card">
-<h3>💰 Planejamento</h3>
-<input type="number" id="food" placeholder="Alimentação (Mensal)">
-<input type="number" id="health" placeholder="Saúde (Mensal)">
-<input type="number" id="fun" placeholder="Mimos (Mensal)">
-<button onclick="calcular()">ANALISAR GASTOS</button>
-<div id="chart"></div>
-<p id="emergencia" style="color:red;font-weight:bold"></p>
+<!-- PLANEJAMENTO -->
+<div class="card-box">
+<h2>💰 Planejamento</h2>
+<input type="number" id="alimentacao" placeholder="Alimentação (Mensal)">
+<input type="number" id="saude" placeholder="Saúde (Mensal)">
+<input type="number" id="mimos" placeholder="Mimos (Mensal)">
+<button onclick="analisar()">ANALISAR GASTOS</button>
+<canvas id="grafico"></canvas>
+<p style="color:red;font-weight:bold">🚨 Emergência: R$ <span id="emergencia">0</span></p>
 </div>
 
 <!-- DICAS -->
-<div class="card">
-<h3>💡 Dicas <button onclick="novaDica()" style="float:right;font-size:11px">ATUALIZAR</button></h3>
-<div class="dicas-grid" id="dicasBox"></div>
+<div class="card-box">
+<h2>💡 Dicas <button onclick="gerarDicas()">ATUALIZAR</button></h2>
+<div class="dicas-grid" id="dicas"></div>
 </div>
 
-<!-- MURAL -->
-<div class="card">
-<h3>📸 Momento Fofura</h3>
-<div class="mural" id="muralFotos"></div>
+<!-- FOFURA -->
+<div class="card-box">
+<h2>📸 Momento Fofura</h2>
+<div class="galeria" id="galeria"></div>
+<input type="file" id="upload">
+<button onclick="addFoto()">NOVAS FOTOS</button>
 </div>
 
 </div>
 
 <!-- HISTÓRIA -->
-<div class="card" style="margin:15px">
-<h3>📖 Registre a história do seu Pet</h3>
-<input id="petNome" placeholder="Nome do Pet">
-<textarea id="petHistoria" placeholder="Como vocês se conheceram?"></textarea>
-<input type="file" id="petFoto">
-<button onclick="registrarHistoria()">REGISTRAR NO MURAL 🐾</button>
-<div id="historias"></div>
+<div class="historia">
+<h2>📖 Registre a história do seu Pet com uma foto</h2>
+<input id="nomePet" placeholder="Nome do Pet">
+<textarea id="historiaPet" placeholder="Como vocês se conheceram?"></textarea>
+<input type="file" id="fotoPet">
+<button onclick="salvarHistoria()">REGISTRAR NO MURAL 🐾</button>
+<div id="mural"></div>
 </div>
 
 <script>
-google.charts.load('current',{'packages':['corechart']});
+/* CALCULADORA */
+let grafico;
+function analisar(){
+ let a=+alimentacao.value||0;
+ let s=+saude.value||0;
+ let m=+mimos.value||0;
+ let total=a+s+m;
+ emergencia.innerText=(total*0.2).toFixed(2);
 
-function calcular(){
- let f=+food.value||0,h=+health.value||0,m=+fun.value||0,total=f+h+m;
- let data=google.visualization.arrayToDataTable([
-  ['Tipo','Valor'],['Alimentação',f],['Saúde',h],['Mimos',m]
- ]);
- new google.visualization.PieChart(chart).draw(data,{legend:{position:'bottom'}});
- emergencia.innerText="Emergência: R$ "+(total*0.2).toFixed(2);
+ if(grafico) grafico.destroy();
+ grafico=new Chart(grafico=document.getElementById('grafico'),{
+  type:'pie',
+  data:{labels:['Alimentação','Saúde','Mimos'],
+  datasets:[{data:[a,s,m]}]}
+ });
 }
 
-/* DICAS DINÂMICAS */
-const dicas=[
-"Pets reduzem estresse e ansiedade",
-"Vacinas em dia evitam gastos altos",
-"Passeios melhoram saúde mental do pet",
-"Guardar 20% ajuda emergências",
-"Brinquedos evitam destruição em casa"
-];
-function novaDica(){
- dicasBox.innerHTML="";
- for(let i=0;i<4;i++){
-  let r=dicas[Math.floor(Math.random()*dicas.length)];
-  dicasBox.innerHTML+=`<div class="dica-card">${r}</div>`;
- }
-}
-novaDica();
-
-/* POSTS FOFOS */
-const fotos=[
-"https://images.unsplash.com/photo-1517423440428-a5a00ad493e8",
-"https://images.unsplash.com/photo-1507146426996-ef05306b995a",
-"https://images.unsplash.com/photo-1543466835-00a7907e9de1",
-"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2"
+/* DICAS */
+const dicasLista=[
+["Vacinas em dia","Evita gastos altos com doenças"],
+["Guardar 20%","Cria fundo de emergência pet"],
+["Ração de qualidade","Menos problemas de saúde"],
+["Check-up anual","Previne surpresas caras"],
+["Brinquedos duráveis","Economia a longo prazo"],
+["Banho em casa","Reduz gastos mensais"]
 ];
 
-function criarPost(imgSrc){
- let post=document.createElement("div");
- post.className="post";
- post.innerHTML=`
- <img src="${imgSrc}">
- <div class="actions">
-  <span onclick="curtir(this)">❤️ 0</span>
- </div>
- <div class="comments">
-  <input placeholder="Comentar..." onkeypress="addComment(event,this)">
-  <div class="comment-list"></div>
- </div>`;
- muralFotos.appendChild(post);
-}
-fotos.forEach(f=>criarPost(f));
-
-function curtir(el){
- let n=parseInt(el.innerText.split(" ")[1])+1;
- el.innerText="❤️ "+n;
-}
-function addComment(e,input){
- if(e.key==="Enter"){
-  let div=input.nextElementSibling;
-  div.innerHTML+=`<div>💬 ${input.value}</div>`;
-  input.value="";
+function gerarDicas(){
+ let usadas=[];
+ dicas.innerHTML="";
+ while(usadas.length<4){
+   let i=Math.floor(Math.random()*dicasLista.length);
+   if(!usadas.includes(i)) usadas.push(i);
  }
+ usadas.forEach(i=>{
+   dicas.innerHTML+=`
+   <div class="flip-card">
+     <div class="flip-inner">
+       <div class="flip-front">${dicasLista[i][0]}</div>
+       <div class="flip-back">${dicasLista[i][1]}</div>
+     </div>
+   </div>`;
+ });
+}
+gerarDicas();
+
+/* GALERIA */
+function criarFoto(src){
+ let div=document.createElement("div");
+ div.className="foto-card";
+ div.innerHTML=`
+   <img src="${src}">
+   <div class="acoes">❤️ <span>0</span></div>
+   <input class="comentarios" placeholder="Comentar...">
+ `;
+ div.querySelector(".acoes").onclick=()=> {
+   let n=div.querySelector("span");
+   n.innerText=parseInt(n.innerText)+1;
+ }
+ galeria.appendChild(div);
+}
+
+["https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
+ "https://images.unsplash.com/photo-1507149833265-60c372daea22",
+ "https://images.unsplash.com/photo-1558788353-f76d92427f16"].forEach(criarFoto);
+
+function addFoto(){
+ let file=upload.files[0];
+ if(!file) return;
+ let reader=new FileReader();
+ reader.onload=e=>criarFoto(e.target.result);
+ reader.readAsDataURL(file);
 }
 
 /* HISTÓRIA */
-function registrarHistoria(){
- let nome=petNome.value,hist=petHistoria.value,file=petFoto.files[0];
- if(!file)return alert("Envie uma foto!");
+function salvarHistoria(){
+ let nome=nomePet.value;
+ let hist=historiaPet.value;
+ let file=fotoPet.files[0];
+ if(!nome||!hist||!file) return;
 
  let reader=new FileReader();
  reader.onload=e=>{
-  criarPost(e.target.result);
-  historias.innerHTML+=`<div class="story-card"><strong>${nome}</strong><p>${hist}</p></div>`;
- };
+   mural.innerHTML+=`
+   <div class="foto-card">
+     <img src="${e.target.result}">
+     <b>${nome}</b>
+     <p>${hist}</p>
+   </div>`;
+ }
  reader.readAsDataURL(file);
 }
 </script>
