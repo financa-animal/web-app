@@ -4,85 +4,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Finança Animal</title>
+
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <style>
 :root{
- --bg:#fdfbf7;
+ --bg:#f6f2ec;
  --marrom:#3e2723;
  --dourado:#c68642;
 }
-
 body{margin:0;font-family:Segoe UI;background:var(--bg)}
 .hero{
  height:120px;
  background:url('https://images.unsplash.com/photo-1519098901909-b1553a1190af?q=80&w=2000') center/cover;
  display:flex;align-items:center;justify-content:center;
- color:white;font-size:28px;font-weight:bold;
+ color:white;font-size:26px;font-weight:bold;
 }
-
-.dashboard{
- display:grid;
- grid-template-columns:1fr 1fr 1fr;
- gap:15px;
- padding:15px;
-}
-
-.card{
- background:white;
- border-radius:10px;
- padding:15px;
- box-shadow:0 5px 15px rgba(0,0,0,.08);
- border-top:4px solid var(--dourado);
-}
-
-h3{margin-top:0;font-size:16px}
-
-input,textarea{
- width:100%;padding:8px;margin:4px 0;border-radius:6px;border:1px solid #eee
-}
-
-button{
- background:var(--dourado);color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer
-}
+.dashboard{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;padding:15px}
+.card{background:white;border-radius:10px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,.08);border-top:4px solid var(--dourado)}
+h3{margin:0 0 10px;font-size:16px}
+input,textarea{width:100%;padding:8px;margin:4px 0;border-radius:6px;border:1px solid #eee}
+button{background:var(--dourado);color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer}
 button:hover{background:var(--marrom)}
+#chart{height:180px}
 
-.galeria{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.post{
- background:#fff;border-radius:8px;padding:6px;
- box-shadow:0 3px 10px rgba(0,0,0,.06)
+/* DICAS */
+.dicas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dica-card{perspective:1000px;height:90px;cursor:pointer}
+.inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.dica-card:hover .inner{transform:rotateY(180deg)}
+.front,.back{
+ position:absolute;width:100%;height:100%;backface-visibility:hidden;
+ border-radius:10px;display:flex;align-items:center;justify-content:center;
+ color:white;padding:10px;text-align:center;font-size:14px
 }
-.post img{width:100%;height:120px;object-fit:cover;border-radius:6px}
-.like{color:red;font-size:12px;cursor:pointer}
+.front{background:var(--marrom)}
+.back{background:var(--dourado);transform:rotateY(180deg)}
 
-.tiktok-feed{
- height:300px;
- overflow-y:auto;
- scroll-snap-type:y mandatory;
-}
-.tiktok-video{
- height:300px;
- margin-bottom:8px;
- scroll-snap-align:start;
- border-radius:10px;
- overflow:hidden;
-}
-.tiktok-video iframe{width:100%;height:100%}
+/* MURAL */
+.mural{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.mural img{width:100%;border-radius:8px}
 
-.dicas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.flip-card{perspective:1000px;height:80px;cursor:pointer}
-.flip-inner{position:relative;width:100%;height:100%;transition:.6s;transform-style:preserve-3d}
-.flip-card.virar .flip-inner{transform:rotateY(180deg)}
-.flip-front,.flip-back{
- position:absolute;width:100%;height:100%;
- backface-visibility:hidden;border-radius:8px;
- display:flex;align-items:center;justify-content:center;
- font-size:11px;text-align:center;padding:6px;color:white
-}
-.flip-front{background:var(--marrom)}
-.flip-back{background:var(--dourado);transform:rotateY(180deg)}
-
-.mural{grid-column:1/-1}
+/* HISTÓRIA */
+.story-card{background:#fff;border-radius:8px;padding:10px;margin-top:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.story-card img{width:100%;border-radius:8px;margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -91,120 +56,108 @@ button:hover{background:var(--marrom)}
 
 <div class="dashboard">
 
-<!-- PLANEJAMENTO -->
+<!-- CALCULADORA -->
 <div class="card">
 <h3>💰 Planejamento</h3>
-<input type="number" id="ali" placeholder="Alimentação">
-<input type="number" id="sau" placeholder="Saúde">
-<input type="number" id="mim" placeholder="Mimos">
+<input type="number" id="food" placeholder="Alimentação (Mensal)">
+<input type="number" id="health" placeholder="Saúde (Mensal)">
+<input type="number" id="fun" placeholder="Mimos (Mensal)">
 <button onclick="calcular()">ANALISAR GASTOS</button>
-<div id="chart_div" style="height:150px"></div>
-<p style="color:red;font-weight:bold">Emergência: <span id="reserva">R$ 0</span></p>
+<div id="chart"></div>
+<p id="emergencia" style="color:red;font-weight:bold"></p>
 </div>
 
 <!-- DICAS -->
 <div class="card">
-<h3>💡 Dicas <button onclick="atualizarDicas()" style="font-size:10px;padding:2px 6px">🔄</button></h3>
-<div class="dicas-grid" id="dicasGrid"></div>
+<h3>💡 Dicas <button onclick="carregarDicas()" style="float:right;font-size:11px">ATUALIZAR</button></h3>
+<div class="dicas-grid" id="dicasBox"></div>
 </div>
 
-<!-- FOTOS + VIDEOS -->
+<!-- MURAL FOTOS -->
 <div class="card">
 <h3>📸 Momento Fofura</h3>
-<div class="galeria" id="galeriaFotos"></div>
-<h3>🎬 Vídeos Fofos</h3>
-<div class="tiktok-feed" id="feedVideos"></div>
+<div class="mural" id="muralFotos"></div>
 </div>
 
-<!-- MURAL -->
-<div class="card mural">
-<h3>📖 História do seu Pet</h3>
-<input id="nomePet" placeholder="Nome do pet">
-<textarea id="historia" placeholder="Conte a história..."></textarea>
-<input type="file" id="fotoPet">
-<button onclick="postarHistoria()">PUBLICAR</button>
-<div id="muralPosts"></div>
 </div>
 
+<!-- HISTÓRIA -->
+<div class="card" style="margin:15px">
+<h3>📖 Registre a história do seu Pet com uma foto</h3>
+<input id="petNome" placeholder="Nome do Pet">
+<textarea id="petHistoria" placeholder="Como vocês se conheceram?"></textarea>
+<input type="file" id="petFoto">
+<button onclick="registrarHistoria()">REGISTRAR NO MURAL 🐾</button>
+<div id="historias"></div>
 </div>
 
 <script>
 google.charts.load('current',{'packages':['corechart']});
 
 function calcular(){
- const ali=+ali.value||0,sau=+sau.value||0,mim=+mim.value||0;
- reserva.innerText="R$ "+(sau*6).toFixed(2);
- const data=google.visualization.arrayToDataTable([
-  ['Gasto','R$'],['Alimentação',ali],['Saúde',sau],['Mimos',mim]
+ let f=+food.value||0,h=+health.value||0,m=+fun.value||0,total=f+h+m;
+
+ let data=google.visualization.arrayToDataTable([
+  ['Tipo','Valor'],
+  ['Alimentação',f],
+  ['Saúde',h],
+  ['Mimos',m]
  ]);
- new google.visualization.PieChart(chart_div).draw(data,{
-  pieHole:.4,colors:['#3e2723','#c68642','#d2b48c'],legend:'none'
- });
+
+ let chart=new google.visualization.PieChart(document.getElementById('chart'));
+ chart.draw(data,{legend:{position:'bottom'}});
+
+ emergencia.innerText="Emergência: R$ "+(total*0.2).toFixed(2);
 }
 
-const bancoDicas={
- Saúde:["Vacinas evitam gastos altos.","Check-up salva vidas."],
- Sabia?:["Cães entendem palavras.","Gatos dormem 16h."],
- Mimos:["Passeio vale mais que brinquedo."],
- Economia:["Ração grande é mais barata."]
-};
-
-function atualizarDicas(){
- dicasGrid.innerHTML="";
- Object.keys(bancoDicas).forEach(cat=>{
-  const dica=bancoDicas[cat][Math.floor(Math.random()*bancoDicas[cat].length)];
-  dicasGrid.innerHTML+=`
-   <div class="flip-card" onclick="this.classList.toggle('virar')">
-    <div class="flip-inner">
-     <div class="flip-front">${cat}</div>
-     <div class="flip-back">${dica}</div>
-    </div>
-   </div>`;
- });
-}
-
-const fotos=[
-"https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400",
-"https://images.unsplash.com/photo-1552053831-71594a27632d?w=400",
-"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400",
-"https://images.unsplash.com/photo-1517423440428-a5a00ad1e3e8?w=400"
+/* DICAS */
+const dicasLista=[
+ ["Saúde","Passeios evitam ansiedade e melhoram o humor do pet"],
+ ["Sabia?","Cães entendem emoções humanas"],
+ ["Mimos","Brinquedos interativos estimulam o cérebro"],
+ ["Economia","Guardar 20% evita apertos veterinários"]
 ];
 
-fotos.forEach(src=>{
- galeriaFotos.innerHTML+=`
-  <div class="post">
-   <img src="${src}">
-   <div class="like" onclick="this.innerText='❤️ 1 curtida'">🤍 Curtir</div>
-   <input placeholder="Comentar...">
+function carregarDicas(){
+ dicasBox.innerHTML="";
+ dicasLista.forEach(d=>{
+  dicasBox.innerHTML+=`
+  <div class="dica-card">
+   <div class="inner">
+    <div class="front">${d[0]}</div>
+    <div class="back">${d[1]}</div>
+   </div>
   </div>`;
-});
-
-const videos=[
-"https://www.youtube.com/embed/1Ne1hqOXKKI",
-"https://www.youtube.com/embed/j5a0jTc9S10"
-];
-
-videos.forEach(v=>{
- feedVideos.innerHTML+=`<div class="tiktok-video"><iframe src="${v}" allowfullscreen></iframe></div>`;
-});
-
-function postarHistoria(){
- if(!fotoPet.files[0])return;
- const reader=new FileReader();
- reader.onload=e=>{
-  muralPosts.innerHTML+=`
-   <div class="post">
-    <img src="${e.target.result}">
-    <b>${nomePet.value}</b>
-    <p>${historia.value}</p>
-    <div class="like" onclick="this.innerText='❤️ 1 curtida'">🤍 Curtir</div>
-    <input placeholder="Comentar...">
-   </div>`;
- };
- reader.readAsDataURL(fotoPet.files[0]);
+ });
 }
+carregarDicas();
 
-window.onload=atualizarDicas;
+/* FOTOS */
+const fotos=[
+ "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8",
+ "https://images.unsplash.com/photo-1507146426996-ef05306b995a",
+ "https://images.unsplash.com/photo-1543466835-00a7907e9de1",
+ "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2",
+ "https://images.unsplash.com/photo-1558788353-f76d92427f16"
+];
+fotos.forEach(f=>muralFotos.innerHTML+=`<img src="${f}">`);
+
+/* HISTÓRIA */
+function registrarHistoria(){
+ let nome=petNome.value, hist=petHistoria.value, file=petFoto.files[0];
+ if(!file)return alert("Envie uma foto do pet!");
+
+ let reader=new FileReader();
+ reader.onload=e=>{
+  historias.innerHTML+=`
+  <div class="story-card">
+   <img src="${e.target.result}">
+   <strong>${nome}</strong>
+   <p>${hist}</p>
+  </div>`;
+ };
+ reader.readAsDataURL(file);
+}
 </script>
 
 </body>
