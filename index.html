@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Finança Animal</title>
-
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <style>
 :root{
- --bg:#f6f2ec;
  --marrom:#3e2723;
  --dourado:#c68642;
+ --bg:#f6f2ec;
 }
 body{margin:0;font-family:Segoe UI;background:var(--bg)}
 .hero{
@@ -30,24 +29,17 @@ button:hover{background:var(--marrom)}
 
 /* DICAS */
 .dicas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.dica-card{perspective:1000px;height:90px;cursor:pointer}
-.inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
-.dica-card:hover .inner{transform:rotateY(180deg)}
-.front,.back{
- position:absolute;width:100%;height:100%;backface-visibility:hidden;
- border-radius:10px;display:flex;align-items:center;justify-content:center;
- color:white;padding:10px;text-align:center;font-size:14px
-}
-.front{background:var(--marrom)}
-.back{background:var(--dourado);transform:rotateY(180deg)}
+.dica-card{background:var(--marrom);color:white;padding:15px;border-radius:10px;text-align:center}
 
 /* MURAL */
-.mural{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.mural img{width:100%;border-radius:8px}
-
-/* HISTÓRIA */
-.story-card{background:#fff;border-radius:8px;padding:10px;margin-top:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.story-card img{width:100%;border-radius:8px;margin-bottom:5px}
+.mural{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.post{background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.post img{width:100%;border-radius:8px}
+.actions{font-size:14px;margin-top:5px}
+.actions span{cursor:pointer;margin-right:10px}
+.comments input{width:100%;padding:5px;margin-top:5px}
+.comment-list{font-size:12px;margin-top:5px}
+.story-card{margin-top:10px}
 </style>
 </head>
 <body>
@@ -69,11 +61,11 @@ button:hover{background:var(--marrom)}
 
 <!-- DICAS -->
 <div class="card">
-<h3>💡 Dicas <button onclick="carregarDicas()" style="float:right;font-size:11px">ATUALIZAR</button></h3>
+<h3>💡 Dicas <button onclick="novaDica()" style="float:right;font-size:11px">ATUALIZAR</button></h3>
 <div class="dicas-grid" id="dicasBox"></div>
 </div>
 
-<!-- MURAL FOTOS -->
+<!-- MURAL -->
 <div class="card">
 <h3>📸 Momento Fofura</h3>
 <div class="mural" id="muralFotos"></div>
@@ -83,7 +75,7 @@ button:hover{background:var(--marrom)}
 
 <!-- HISTÓRIA -->
 <div class="card" style="margin:15px">
-<h3>📖 Registre a história do seu Pet com uma foto</h3>
+<h3>📖 Registre a história do seu Pet</h3>
 <input id="petNome" placeholder="Nome do Pet">
 <textarea id="petHistoria" placeholder="Como vocês se conheceram?"></textarea>
 <input type="file" id="petFoto">
@@ -96,65 +88,75 @@ google.charts.load('current',{'packages':['corechart']});
 
 function calcular(){
  let f=+food.value||0,h=+health.value||0,m=+fun.value||0,total=f+h+m;
-
  let data=google.visualization.arrayToDataTable([
-  ['Tipo','Valor'],
-  ['Alimentação',f],
-  ['Saúde',h],
-  ['Mimos',m]
+  ['Tipo','Valor'],['Alimentação',f],['Saúde',h],['Mimos',m]
  ]);
-
- let chart=new google.visualization.PieChart(document.getElementById('chart'));
- chart.draw(data,{legend:{position:'bottom'}});
-
+ new google.visualization.PieChart(chart).draw(data,{legend:{position:'bottom'}});
  emergencia.innerText="Emergência: R$ "+(total*0.2).toFixed(2);
 }
 
-/* DICAS */
-const dicasLista=[
- ["Saúde","Passeios evitam ansiedade e melhoram o humor do pet"],
- ["Sabia?","Cães entendem emoções humanas"],
- ["Mimos","Brinquedos interativos estimulam o cérebro"],
- ["Economia","Guardar 20% evita apertos veterinários"]
+/* DICAS DINÂMICAS */
+const dicas=[
+"Pets reduzem estresse e ansiedade",
+"Vacinas em dia evitam gastos altos",
+"Passeios melhoram saúde mental do pet",
+"Guardar 20% ajuda emergências",
+"Brinquedos evitam destruição em casa"
 ];
-
-function carregarDicas(){
+function novaDica(){
  dicasBox.innerHTML="";
- dicasLista.forEach(d=>{
-  dicasBox.innerHTML+=`
-  <div class="dica-card">
-   <div class="inner">
-    <div class="front">${d[0]}</div>
-    <div class="back">${d[1]}</div>
-   </div>
-  </div>`;
- });
+ for(let i=0;i<4;i++){
+  let r=dicas[Math.floor(Math.random()*dicas.length)];
+  dicasBox.innerHTML+=`<div class="dica-card">${r}</div>`;
+ }
 }
-carregarDicas();
+novaDica();
 
-/* FOTOS */
+/* POSTS FOFOS */
 const fotos=[
- "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8",
- "https://images.unsplash.com/photo-1507146426996-ef05306b995a",
- "https://images.unsplash.com/photo-1543466835-00a7907e9de1",
- "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2",
- "https://images.unsplash.com/photo-1558788353-f76d92427f16"
+"https://images.unsplash.com/photo-1517423440428-a5a00ad493e8",
+"https://images.unsplash.com/photo-1507146426996-ef05306b995a",
+"https://images.unsplash.com/photo-1543466835-00a7907e9de1",
+"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2"
 ];
-fotos.forEach(f=>muralFotos.innerHTML+=`<img src="${f}">`);
+
+function criarPost(imgSrc){
+ let post=document.createElement("div");
+ post.className="post";
+ post.innerHTML=`
+ <img src="${imgSrc}">
+ <div class="actions">
+  <span onclick="curtir(this)">❤️ 0</span>
+ </div>
+ <div class="comments">
+  <input placeholder="Comentar..." onkeypress="addComment(event,this)">
+  <div class="comment-list"></div>
+ </div>`;
+ muralFotos.appendChild(post);
+}
+fotos.forEach(f=>criarPost(f));
+
+function curtir(el){
+ let n=parseInt(el.innerText.split(" ")[1])+1;
+ el.innerText="❤️ "+n;
+}
+function addComment(e,input){
+ if(e.key==="Enter"){
+  let div=input.nextElementSibling;
+  div.innerHTML+=`<div>💬 ${input.value}</div>`;
+  input.value="";
+ }
+}
 
 /* HISTÓRIA */
 function registrarHistoria(){
- let nome=petNome.value, hist=petHistoria.value, file=petFoto.files[0];
- if(!file)return alert("Envie uma foto do pet!");
+ let nome=petNome.value,hist=petHistoria.value,file=petFoto.files[0];
+ if(!file)return alert("Envie uma foto!");
 
  let reader=new FileReader();
  reader.onload=e=>{
-  historias.innerHTML+=`
-  <div class="story-card">
-   <img src="${e.target.result}">
-   <strong>${nome}</strong>
-   <p>${hist}</p>
-  </div>`;
+  criarPost(e.target.result);
+  historias.innerHTML+=`<div class="story-card"><strong>${nome}</strong><p>${hist}</p></div>`;
  };
  reader.readAsDataURL(file);
 }
