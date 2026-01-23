@@ -78,70 +78,126 @@ button:hover{background:var(--earth-brown);}
 
 <script>
 google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(()=>{});
 
-const fotosFofas=[
+/* ================== FOTOS + VÍDEOS ================== */
+const listaImagens = [
 "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300",
 "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=300",
 "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=300",
-"https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=300"
+"https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=300",
+"https://images.unsplash.com/photo-1548191265-cc70d3d45ba1?w=300",
+"https://images.unsplash.com/photo-1552053831-71594a27632d?w=300",
+"https://images.unsplash.com/photo-1517423440428-a5a00ad1e3e8?w=300"
 ];
 
-const videosFofos=[
-"https://www.youtube.com/embed/9dZs6s9XQhY",
-"https://www.youtube.com/embed/tntOCGkgt98"
+const videosFofos = [
+"https://www.youtube.com/embed/j5a0jTc9S10",
+"https://www.youtube.com/embed/3tmd-ClpJxA",
+"https://www.youtube.com/embed/l9PxOanFjxQ"
 ];
 
-function carregarFofura(){
-const grid=document.getElementById('galeriaFofura');
-[...fotosFofas].forEach(url=>criarPost(grid,`<img src="${url}">`));
-videosFofos.forEach(v=>criarPost(grid,`<iframe src="${v}" allowfullscreen></iframe>`));
+function carregarFotos() {
+    const grid = document.getElementById('galeriaFotos');
+    grid.innerHTML = "";
+
+    listaImagens.forEach(url => criarPost(grid, `<img src="${url}">`));
+    videosFofos.forEach(v => criarPost(grid, `<iframe src="${v}" frameborder="0" allowfullscreen></iframe>`));
 }
 
-function criarPost(grid,midia){
-const id=Date.now()+Math.random();
-const div=document.createElement('div');
-div.className='post';
-div.innerHTML=`${midia}
-<div class="actions">
-<span class="like-btn" onclick="curtir('${id}')">❤️ <span id="l${id}">0</span></span>
-</div>
-<div class="comment-box">
-<input placeholder="Comentar..." onkeypress="if(event.key==='Enter') comentar('${id}',this)">
-<div class="comments" id="c${id}"></div>
-</div>`;
-grid.appendChild(div);
+function criarPost(grid, midia){
+    const id = Date.now() + Math.random();
+    const div = document.createElement('div');
+    div.className = 'pet-post';
+    div.innerHTML = `
+        ${midia}
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-top:5px;">
+            <span onclick="curtir('${id}')" style="cursor:pointer;color:#c68642;">❤️ <span id="l${id}">0</span></span>
+        </div>
+        <input placeholder="Comentar..." onkeypress="if(event.key==='Enter') comentar('${id}',this)" style="margin-top:5px;font-size:0.7rem;">
+        <div id="c${id}" style="font-size:0.7rem;color:#555;"></div>
+    `;
+    grid.appendChild(div);
 }
 
+/* ================== CURTIDAS & COMENTÁRIOS ================== */
 function curtir(id){
-const el=document.getElementById('l'+id);
-el.innerText=parseInt(el.innerText)+1;
+    const el = document.getElementById('l'+id);
+    el.innerText = parseInt(el.innerText)+1;
 }
 
 function comentar(id,input){
-const box=document.getElementById('c'+id);
-box.innerHTML+=`<div>• ${input.value}</div>`;
-input.value="";
+    const box = document.getElementById('c'+id);
+    if(input.value.trim()!==""){
+        box.innerHTML += `<div>• ${input.value}</div>`;
+        input.value="";
+    }
 }
 
-function salvarMural(){
-const nome=nomePet.value, relato=relato.value, foto=fotoPet.files[0];
-if(nome&&relato&&foto){
-const reader=new FileReader();
-reader.onload=e=>{
-const id=Date.now();
-const div=document.createElement('div');
-div.className='pet-post';
-div.innerHTML=`<img src="${e.target.result}"><strong>${nome}</strong><p>${relato}</p>
-<div class="actions"><span class="like-btn" onclick="curtir('${id}')">❤️ <span id="l${id}">0</span></span></div>
-<input placeholder="Comentar..." onkeypress="if(event.key==='Enter') comentar('${id}',this)">
-<div class="comments" id="c${id}"></div>`;
-muralGrid.prepend(div);
+/* ================== DICAS (RESTAURADO) ================== */
+const bancoDicas = {
+"Saúde":["Check-ups anuais economizam 40% em emergências.","Vacinas em dia evitam gastos pesados.","Castração previne doenças graves."],
+"Sabia?":["Elefantes lembram rotas de água.","Gatos têm 32 músculos nas orelhas.","Cães entendem até 250 palavras."],
+"Mimos":["Brinquedos de garrafa pet funcionam.","Petiscos de fruta são baratos.","Passeios valem mais que brinquedos caros."],
+"Economia":["Ração de 15kg sai mais barata.","Filtro de barro mantém água fresca.","Escovar dentes evita veterinário."]
 };
-reader.readAsDataURL(foto);
-}
+
+function sortearConteudoDicas(){
+    const temas=["Saúde","Sabia?","Mimos","Economia"];
+    document.getElementById("containerDicas").innerHTML="";
+    temas.forEach(t=>{
+        const div=document.createElement('div');
+        div.className='flip-card';
+        div.innerHTML=`
+        <div class="flip-card-inner">
+            <div class="flip-card-front">${t}</div>
+            <div class="flip-card-back">${bancoDicas[t][Math.floor(Math.random()*bancoDicas[t].length)]}</div>
+        </div>`;
+        document.getElementById("containerDicas").appendChild(div);
+    });
 }
 
-window.onload=()=>carregarFofura();
+/* ================== CALCULADORA (RESTAURADO) ================== */
+function calcularTudo(){
+    const ali=parseFloat(document.getElementById('ali').value)||0;
+    const sau=parseFloat(document.getElementById('sau').value)||0;
+    const mim=parseFloat(document.getElementById('mim').value)||0;
+    document.getElementById('reserva').innerText=`R$ ${(sau*6).toFixed(2)}`;
+    const data=google.visualization.arrayToDataTable([
+        ['Gasto','R$'],['Comida',ali],['Saúde',sau],['Mimos',mim]
+    ]);
+    new google.visualization.PieChart(document.getElementById('chart_div')).draw(data,{
+        pieHole:0.4, colors:['#3e2723','#c68642','#d2b48c'], legend:'none', chartArea:{width:'100%',height:'100%'}
+    });
+}
+
+/* ================== MURAL COM INTERAÇÃO ================== */
+function salvarMural(){
+    const nome=nomePet.value, relato=relato.value, foto=fotoPet.files[0];
+    if(nome&&relato&&foto){
+        const reader=new FileReader();
+        reader.onload=e=>{
+            const id=Date.now();
+            const div=document.createElement('div');
+            div.className='pet-post';
+            div.innerHTML=`
+            <img src="${e.target.result}">
+            <strong>${nome}</strong>
+            <p style="font-size:0.8rem">${relato}</p>
+            <span onclick="curtir('${id}')" style="cursor:pointer;color:#c68642;">❤️ <span id="l${id}">0</span></span>
+            <input placeholder="Comentar..." onkeypress="if(event.key==='Enter') comentar('${id}',this)" style="margin-top:5px;font-size:0.7rem;">
+            <div id="c${id}" style="font-size:0.7rem;color:#555;"></div>`;
+            muralGrid.prepend(div);
+        };
+        reader.readAsDataURL(foto);
+    }
+}
+
+window.onload=()=>{
+    carregarFotos();
+    sortearConteudoDicas();
+};
 </script>
 </body>
 </html>
+
