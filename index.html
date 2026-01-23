@@ -6,278 +6,251 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f5f2ed;
+ font-family: Arial, sans-serif;
+ margin:0;
+ background:url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b') center/cover fixed;
 }
-header{
-  background:url("https://images.unsplash.com/photo-1548199973-03cce0bbc87b");
-  background-size:cover;
-  padding:30px;
-  text-align:center;
-  color:#fff;
-  font-size:28px;
-  font-weight:bold;
-  letter-spacing:2px;
+
+.topo{
+ text-align:center;
+ color:white;
+ padding:20px;
+ font-size:28px;
+ font-weight:bold;
+ background:rgba(0,0,0,0.6);
 }
 
 .container{
-  display:flex;
-  gap:20px;
-  padding:20px;
+ display:flex;
+ gap:20px;
+ padding:20px;
 }
 
-.card-box{
-  background:#fff;
-  flex:1;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 0 10px rgba(0,0,0,.1);
+.box{
+ background:white;
+ padding:15px;
+ border-radius:10px;
+ flex:1;
+ box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
-
-h2{margin-top:0}
 
 button{
-  background:#b57a3d;
-  color:#fff;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:bold;
+ background:#b57b38;
+ color:white;
+ border:none;
+ padding:8px 12px;
+ border-radius:6px;
+ cursor:pointer;
 }
 
 input, textarea{
-  width:100%;
-  padding:8px;
-  margin:6px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
+ width:100%;
+ padding:6px;
+ margin:5px 0;
 }
 
-canvas{max-width:100%}
-
-/* DICAS */
-.dicas-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.flip-card{
-  perspective:1000px;
-  height:90px;
-}
-
-.flip-inner{
-  position:relative;
-  width:100%;
-  height:100%;
-  transition:transform .6s;
-  transform-style:preserve-3d;
-  cursor:pointer;
-}
-
-.flip-card:hover .flip-inner{
-  transform:rotateY(180deg);
-}
-
-.flip-front, .flip-back{
-  position:absolute;
-  width:100%;
-  height:100%;
-  backface-visibility:hidden;
-  border-radius:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:8px;
-  font-size:14px;
-}
-
-.flip-front{background:#3a2a24;color:#fff;}
-.flip-back{background:#5a3f35;color:#fff;transform:rotateY(180deg);}
-
-/* MOMENTO FOFURA */
 .galeria{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px;
 }
 
 .foto-card{
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 0 5px rgba(0,0,0,.1);
-  padding:5px;
+ background:#fff;
+ border-radius:8px;
+ padding:5px;
+ box-shadow:0 0 5px rgba(0,0,0,0.2);
 }
 
 .foto-card img{
-  width:100%;
-  height:130px;
-  object-fit:cover;
-  border-radius:8px;
+ width:100%;
+ height:140px;
+ object-fit:cover;
+ border-radius:6px;
 }
 
 .acoes{
-  font-size:13px;
-  margin-top:5px;
+ display:flex;
+ justify-content:space-between;
+ font-size:14px;
 }
 
-.comentarios{
-  width:100%;
-  padding:5px;
-  margin-top:4px;
-  border-radius:6px;
-  border:1px solid #ccc;
+.mural{
+ margin:20px;
+ background:white;
+ padding:15px;
+ border-radius:10px;
 }
 
-/* HISTÓRIA */
-.historia{
-  margin:20px;
-  background:#fff;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 0 10px rgba(0,0,0,.1);
+.card-dica{
+ perspective:1000px;
+}
+
+.card-inner{
+ position:relative;
+ width:100%;
+ height:80px;
+ text-align:center;
+ transition: transform 0.6s;
+ transform-style: preserve-3d;
+}
+
+.card-dica:hover .card-inner{
+ transform: rotateY(180deg);
+}
+
+.card-front, .card-back{
+ position:absolute;
+ width:100%;
+ height:100%;
+ backface-visibility:hidden;
+ background:#3b2a24;
+ color:white;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:10px;
+}
+
+.card-back{
+ transform: rotateY(180deg);
+ background:#5a3d33;
 }
 </style>
 </head>
 <body>
 
-<header>FINANÇA ANIMAL</header>
+<div class="topo">FINANÇA ANIMAL</div>
 
 <div class="container">
-
-<!-- PLANEJAMENTO -->
-<div class="card-box">
-<h2>💰 Planejamento</h2>
-<input type="number" id="alimentacao" placeholder="Alimentação (Mensal)">
-<input type="number" id="saude" placeholder="Saúde (Mensal)">
-<input type="number" id="mimos" placeholder="Mimos (Mensal)">
-<button onclick="analisar()">ANALISAR GASTOS</button>
+<!-- Planejamento -->
+<div class="box">
+<h3>💰 Planejamento</h3>
+<input id="a" type="number" placeholder="Alimentação">
+<input id="s" type="number" placeholder="Saúde">
+<input id="m" type="number" placeholder="Mimos">
+<button onclick="calcular()">ANALISAR GASTOS</button>
 <canvas id="grafico"></canvas>
-<p style="color:red;font-weight:bold">🚨 Emergência: R$ <span id="emergencia">0</span></p>
+<p style="color:red">Emergência: R$ <span id="emergencia">0</span></p>
 </div>
 
-<!-- DICAS -->
-<div class="card-box">
-<h2>💡 Dicas <button onclick="gerarDicas()">ATUALIZAR</button></h2>
-<div class="dicas-grid" id="dicas"></div>
+<!-- Dicas -->
+<div class="box">
+<h3>💡 Dicas <button onclick="gerarDicas()">Atualizar</button></h3>
+<div id="dicas"></div>
 </div>
 
-<!-- FOFURA -->
-<div class="card-box">
-<h2>📸 Momento Fofura</h2>
+<!-- Momento Fofura -->
+<div class="box">
+<h3>📸 Momento Fofura</h3>
 <div class="galeria" id="galeria"></div>
-<input type="file" id="upload">
-<button onclick="addFoto()">NOVAS FOTOS</button>
+<input type="file" id="addFoto">
+</div>
 </div>
 
-</div>
-
-<!-- HISTÓRIA -->
-<div class="historia">
-<h2>📖 Registre a história do seu Pet com uma foto</h2>
+<!-- História Pet -->
+<div class="mural">
+<h3>📖 Registre a história do seu Pet</h3>
 <input id="nomePet" placeholder="Nome do Pet">
 <textarea id="historiaPet" placeholder="Como vocês se conheceram?"></textarea>
 <input type="file" id="fotoPet">
-<button onclick="salvarHistoria()">REGISTRAR NO MURAL 🐾</button>
-<div id="mural"></div>
+<button onclick="salvarHistoria()">REGISTRAR NO MURAL</button>
+<div id="posts"></div>
 </div>
 
 <script>
-/* CALCULADORA */
 let grafico;
-function analisar(){
- let a=+alimentacao.value||0;
- let s=+saude.value||0;
- let m=+mimos.value||0;
+
+function calcular(){
+ let a=+a.value, s=+s.value, m=+m.value;
  let total=a+s+m;
  emergencia.innerText=(total*0.2).toFixed(2);
 
  if(grafico) grafico.destroy();
- grafico=new Chart(grafico=document.getElementById('grafico'),{
+ grafico=new Chart(graficoCanvas,{
   type:'pie',
   data:{labels:['Alimentação','Saúde','Mimos'],
   datasets:[{data:[a,s,m]}]}
  });
 }
 
-/* DICAS */
-const dicasLista=[
-["Vacinas em dia","Evita gastos altos com doenças"],
-["Guardar 20%","Cria fundo de emergência pet"],
-["Ração de qualidade","Menos problemas de saúde"],
-["Check-up anual","Previne surpresas caras"],
-["Brinquedos duráveis","Economia a longo prazo"],
-["Banho em casa","Reduz gastos mensais"]
+const graficoCanvas=document.getElementById("grafico");
+
+const listaDicas=[
+["Vacinas evitam gastos altos","Prevenção é economia"],
+["Guarde 20% para emergências","Seu pet agradece depois"],
+["Passeios evitam estresse","Pet feliz = menos doenças"],
+["Ração boa evita veterinário","Qualidade é investimento"]
 ];
 
 function gerarDicas(){
- let usadas=[];
  dicas.innerHTML="";
+ let usadas=[];
  while(usadas.length<4){
-   let i=Math.floor(Math.random()*dicasLista.length);
-   if(!usadas.includes(i)) usadas.push(i);
+  let i=Math.floor(Math.random()*listaDicas.length);
+  if(!usadas.includes(i)) usadas.push(i);
  }
  usadas.forEach(i=>{
-   dicas.innerHTML+=`
-   <div class="flip-card">
-     <div class="flip-inner">
-       <div class="flip-front">${dicasLista[i][0]}</div>
-       <div class="flip-back">${dicasLista[i][1]}</div>
-     </div>
-   </div>`;
+  dicas.innerHTML+=`
+  <div class="card-dica">
+   <div class="card-inner">
+    <div class="card-front">${listaDicas[i][0]}</div>
+    <div class="card-back">${listaDicas[i][1]}</div>
+   </div>
+  </div>`;
  });
 }
 gerarDicas();
 
-/* GALERIA */
-function criarFoto(src){
+const galeria=document.getElementById("galeria");
+
+const fotosPadrao=[
+"https://images.unsplash.com/photo-1517849845537-4d257902454a",
+"https://images.unsplash.com/photo-1507149833265-60c372daea22",
+"https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
+"https://images.unsplash.com/photo-1537151608828-ea2b11777ee8"
+];
+
+fotosPadrao.forEach(f=>criarFoto(f,false));
+
+addFoto.onchange=e=>{
+ let r=new FileReader();
+ r.onload=ev=>criarFoto(ev.target.result,true);
+ r.readAsDataURL(e.target.files[0]);
+};
+
+function criarFoto(src,usuario){
  let div=document.createElement("div");
  div.className="foto-card";
  div.innerHTML=`
-   <img src="${src}">
-   <div class="acoes">❤️ <span>0</span></div>
-   <input class="comentarios" placeholder="Comentar...">
+  <img src="${src}">
+  <div class="acoes">
+   ❤️ <span>0</span>
+   ${usuario?'<button class="del">🗑️</button>':""}
+  </div>
+  <input placeholder="Comentar...">
  `;
- div.querySelector(".acoes").onclick=()=> {
-   let n=div.querySelector("span");
-   n.innerText=parseInt(n.innerText)+1;
- }
+ div.querySelector("span").onclick=()=>div.querySelector("span").innerText++;
+ if(usuario) div.querySelector(".del").onclick=()=>div.remove();
  galeria.appendChild(div);
 }
 
-["https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
- "https://images.unsplash.com/photo-1507149833265-60c372daea22",
- "https://images.unsplash.com/photo-1558788353-f76d92427f16"].forEach(criarFoto);
-
-function addFoto(){
- let file=upload.files[0];
- if(!file) return;
- let reader=new FileReader();
- reader.onload=e=>criarFoto(e.target.result);
- reader.readAsDataURL(file);
-}
-
-/* HISTÓRIA */
 function salvarHistoria(){
- let nome=nomePet.value;
- let hist=historiaPet.value;
- let file=fotoPet.files[0];
+ let nome=nomePet.value, hist=historiaPet.value, file=fotoPet.files[0];
  if(!nome||!hist||!file) return;
-
- let reader=new FileReader();
- reader.onload=e=>{
-   mural.innerHTML+=`
-   <div class="foto-card">
-     <img src="${e.target.result}">
-     <b>${nome}</b>
-     <p>${hist}</p>
-   </div>`;
- }
- reader.readAsDataURL(file);
+ let r=new FileReader();
+ r.onload=e=>{
+  let post=document.createElement("div");
+  post.className="foto-card";
+  post.innerHTML=`
+   <img src="${e.target.result}">
+   <b>${nome}</b>
+   <p>${hist}</p>
+   <button onclick="this.parentElement.remove()">🗑️ Excluir</button>
+  `;
+  posts.appendChild(post);
+ };
+ r.readAsDataURL(file);
 }
 </script>
 
