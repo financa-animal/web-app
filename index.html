@@ -6,8 +6,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+*{box-sizing:border-box;}
+
 body{
- font-family: Arial, sans-serif;
+ font-family:Arial;
  margin:0;
  background:url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b') center/cover fixed;
 }
@@ -25,6 +27,8 @@ body{
  display:flex;
  gap:20px;
  padding:20px;
+ max-width:1200px;
+ margin:auto;
 }
 
 .box{
@@ -33,6 +37,7 @@ body{
  border-radius:10px;
  flex:1;
  box-shadow:0 0 10px rgba(0,0,0,0.2);
+ min-width:280px;
 }
 
 button{
@@ -50,9 +55,61 @@ input, textarea{
  margin:5px 0;
 }
 
-.galeria{
+/* gráfico */
+canvas{
+ max-width:300px !important;
+ max-height:300px !important;
+ margin:auto;
+ display:block;
+}
+
+/* dicas cards */
+.dicas-grid{
  display:grid;
  grid-template-columns:repeat(2,1fr);
+ gap:10px;
+}
+
+.card{
+ perspective:1000px;
+ height:90px;
+ cursor:pointer;
+}
+
+.card-inner{
+ position:relative;
+ width:100%;
+ height:100%;
+ transition:transform 0.6s;
+ transform-style:preserve-3d;
+}
+
+.card.flipped .card-inner{
+ transform:rotateY(180deg);
+}
+
+.card-front,.card-back{
+ position:absolute;
+ width:100%;
+ height:100%;
+ backface-visibility:hidden;
+ border-radius:8px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:10px;
+ color:white;
+ font-weight:bold;
+}
+
+.card-front{background:#3b2b25;}
+.card-back{background:#6d4c41; transform:rotateY(180deg);}
+
+/* fotos */
+.galeria{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
  gap:10px;
 }
 
@@ -65,201 +122,164 @@ input, textarea{
 
 .foto-card img{
  width:100%;
- height:140px;
+ height:110px;
  object-fit:cover;
  border-radius:6px;
 }
 
-.acoes{
- display:flex;
- justify-content:space-between;
- font-size:14px;
-}
+.like{color:red;cursor:pointer}
 
 .mural{
- margin:20px;
+ margin:20px auto;
  background:white;
  padding:15px;
  border-radius:10px;
+ max-width:1200px;
 }
 
-.card-dica{ perspective:1000px; }
+.post{
+ border-bottom:1px solid #ddd;
+ padding:10px 0;
+}
 
-.card-inner{
- position:relative;
+.post img{
  width:100%;
- height:80px;
- text-align:center;
- transition: transform 0.6s;
- transform-style: preserve-3d;
+ max-width:300px;
+ border-radius:8px;
 }
 
-.card-dica:hover .card-inner{ transform: rotateY(180deg); }
-
-.card-front, .card-back{
- position:absolute;
- width:100%;
- height:100%;
- backface-visibility:hidden;
- background:#3b2a24;
- color:white;
- display:flex;
- align-items:center;
- justify-content:center;
- border-radius:10px;
- padding:5px;
-}
-
-.card-back{
- transform: rotateY(180deg);
- background:#5a3d33;
+@media(max-width:900px){
+ .container{flex-direction:column;}
+ canvas{max-width:220px !important;max-height:220px !important;}
 }
 </style>
 </head>
 
 <body>
-
 <div class="topo">FINANÇA ANIMAL</div>
 
 <div class="container">
 
-<!-- Planejamento -->
+<!-- PLANEJAMENTO -->
 <div class="box">
 <h3>💰 Planejamento</h3>
-<input id="alimentacao" type="number" placeholder="Alimentação">
-<input id="saude" type="number" placeholder="Saúde">
-<input id="mimos" type="number" placeholder="Mimos">
-<button onclick="calcular()">ANALISAR GASTOS</button>
+<input type="number" id="a" placeholder="Alimentação">
+<input type="number" id="s" placeholder="Saúde">
+<input type="number" id="m" placeholder="Mimos">
+<button onclick="calc()">ANALISAR GASTOS</button>
 <canvas id="grafico"></canvas>
-<p style="color:red">Emergência: R$ <span id="emergencia">0</span></p>
+<p style="color:red">Emergência: R$ <span id="emerg">0</span></p>
 </div>
 
-<!-- Dicas -->
+<!-- DICAS -->
 <div class="box">
-<h3>💡 Dicas <button onclick="gerarDicas()">Atualizar</button></h3>
-<div id="dicas"></div>
+<h3>💡 Dicas <button onclick="atualizarDicas()">Atualizar</button></h3>
+<div class="dicas-grid" id="dicas"></div>
 </div>
 
-<!-- Momento Fofura -->
+<!-- MOMENTO FOFURA -->
 <div class="box">
 <h3>📸 Momento Fofura</h3>
 <div class="galeria" id="galeria"></div>
-<input type="file" id="addFoto">
 </div>
 
 </div>
 
-<!-- História -->
+<!-- MURAL -->
 <div class="mural">
-<h3>📖 Registre a história do seu Pet</h3>
-<input id="nomePet" placeholder="Nome do Pet">
-<textarea id="historiaPet" placeholder="Como vocês se conheceram?"></textarea>
-<input type="file" id="fotoPet">
-<button onclick="salvarHistoria()">REGISTRAR NO MURAL</button>
+<h3>📖 Registre a história do seu Pet com uma foto</h3>
+<input id="nome" placeholder="Nome do Pet">
+<textarea id="hist" placeholder="Como vocês se conheceram?"></textarea>
+<input type="file" id="foto">
+<button onclick="postar()">Registrar no Mural</button>
 <div id="posts"></div>
 </div>
 
 <script>
-let grafico;
+let graf;
 
-// 🔥 CALCULADORA CORRIGIDA
-function calcular(){
- const alimentacao = Number(document.getElementById("alimentacao").value) || 0;
- const saude = Number(document.getElementById("saude").value) || 0;
- const mimos = Number(document.getElementById("mimos").value) || 0;
+function calc(){
+ let a=+a.value, s=+s.value, m=+m.value;
+ let total=a+s+m;
+ let emergencia=(total*0.2).toFixed(2);
+ emerg.textContent=emergencia;
 
- const total = alimentacao + saude + mimos;
- document.getElementById("emergencia").innerText = (total * 0.2).toFixed(2);
-
- if(grafico) grafico.destroy();
-
- grafico = new Chart(document.getElementById("grafico"), {
-   type:'pie',
-   data:{
-    labels:['Alimentação','Saúde','Mimos'],
-    datasets:[{data:[alimentacao, saude, mimos]}]
-   }
+ if(graf)graf.destroy();
+ graf=new Chart(grafico,{
+  type:'pie',
+  data:{
+   labels:['Alimentação','Saúde','Mimos'],
+   datasets:[{data:[a,s,m],backgroundColor:['#42a5f5','#ef5350','#ffa726']}]
+  }
  });
 }
 
-// DICAS
+/* DICAS */
 const listaDicas=[
-["Vacinas evitam gastos altos","Prevenção é economia"],
-["Guarde 20% para emergências","Seu pet agradece depois"],
-["Passeios evitam estresse","Pet feliz = menos doenças"],
-["Ração boa evita veterinário","Qualidade é investimento"]
+"Vacinas evitam gastos altos",
+"Guardar 20% ajuda emergências",
+"Passeios melhoram humor do pet",
+"Ração de qualidade evita doenças",
+"Água fresca sempre disponível",
+"Escovar os pelos reduz problemas"
 ];
 
-function gerarDicas(){
- dicas.innerHTML="";
+function atualizarDicas(){
+ dicas.innerHTML='';
  let usadas=[];
  while(usadas.length<4){
   let i=Math.floor(Math.random()*listaDicas.length);
   if(!usadas.includes(i)) usadas.push(i);
  }
  usadas.forEach(i=>{
-  dicas.innerHTML+=`
-  <div class="card-dica">
-   <div class="card-inner">
-    <div class="card-front">${listaDicas[i][0]}</div>
-    <div class="card-back">${listaDicas[i][1]}</div>
-   </div>
+  let c=document.createElement('div');
+  c.className='card';
+  c.innerHTML=`<div class="card-inner">
+   <div class="card-front">Dica Pet</div>
+   <div class="card-back">${listaDicas[i]}</div>
   </div>`;
+  c.onclick=()=>c.classList.toggle('flipped');
+  dicas.appendChild(c);
  });
 }
-gerarDicas();
+atualizarDicas();
 
-// FOTOS
-const galeria=document.getElementById("galeria");
-const fotosPadrao=[
+/* FOTOS */
+const fotos=[
 "https://images.unsplash.com/photo-1517849845537-4d257902454a",
+"https://images.unsplash.com/photo-1558788353-f76d92427f16",
 "https://images.unsplash.com/photo-1507149833265-60c372daea22",
-"https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
-"https://images.unsplash.com/photo-1537151608828-ea2b11777ee8"
+"https://images.unsplash.com/photo-1518717758536-85ae29035b6d"
 ];
-fotosPadrao.forEach(f=>criarFoto(f,false));
 
-addFoto.onchange=e=>{
- let r=new FileReader();
- r.onload=ev=>criarFoto(ev.target.result,true);
- r.readAsDataURL(e.target.files[0]);
-};
+fotos.forEach(src=>{
+ let c=document.createElement('div');
+ c.className='foto-card';
+ c.innerHTML=`<img src="${src}">
+ <div><span class="like" onclick="curtir(this)">❤</span> <span>0</span></div>
+ <input placeholder="Comentar...">`;
+ galeria.appendChild(c);
+});
 
-function criarFoto(src,usuario){
- let div=document.createElement("div");
- div.className="foto-card";
- div.innerHTML=`
-  <img src="${src}">
-  <div class="acoes">
-   ❤️ <span class="like">0</span>
-   ${usuario?'<button class="del">🗑️</button>':""}
-  </div>
-  <input placeholder="Comentar...">
- `;
- div.querySelector(".like").onclick=()=>div.querySelector(".like").innerText++;
- if(usuario) div.querySelector(".del").onclick=()=>div.remove();
- galeria.appendChild(div);
+function curtir(el){
+ let n=el.nextElementSibling;
+ n.textContent=+n.textContent+1;
 }
 
-// HISTÓRIA
-function salvarHistoria(){
- let nome=nomePet.value, hist=historiaPet.value, file=fotoPet.files[0];
- if(!nome||!hist||!file) return;
+/* MURAL */
+function postar(){
+ let n=nome.value,h=hist.value,f=foto.files[0];
+ if(!n||!h||!f)return alert("Preencha tudo");
  let r=new FileReader();
  r.onload=e=>{
-  let post=document.createElement("div");
-  post.className="foto-card";
-  post.innerHTML=`
-   <img src="${e.target.result}">
-   <b>${nome}</b>
-   <p>${hist}</p>
-   <button onclick="this.parentElement.remove()">🗑️ Excluir</button>
-  `;
-  posts.appendChild(post);
+  let div=document.createElement('div');
+  div.className='post';
+  div.innerHTML=`<b>${n}</b><p>${h}</p><img src="${e.target.result}">
+  <br><button onclick="this.parentElement.remove()">Excluir</button>`;
+  posts.appendChild(div);
  };
- r.readAsDataURL(file);
+ r.readAsDataURL(f);
 }
 </script>
-
 </body>
 </html>
