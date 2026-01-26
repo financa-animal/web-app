@@ -7,19 +7,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{
- margin:0;
- font-family:Arial, sans-serif;
- background:url("https://images.unsplash.com/photo-1518717758536-85ae29035b6d") center/cover fixed;
-}
+body{margin:0;font-family:Arial;background:url("https://images.unsplash.com/photo-1518717758536-85ae29035b6d") center/cover fixed;}
 header{background:#4b2e1e;color:white;text-align:center;padding:15px;font-size:22px;}
 .card{background:white;margin:15px auto;padding:15px;border-radius:12px;width:95%;max-width:520px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
 input,textarea,button{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ccc;}
 button{background:#5a3d2b;color:white;cursor:pointer}
+.alerta{font-weight:bold;margin-top:10px}
 
 /* DICAS */
 .dicas{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.flip{perspective:1000px;}
+.flip{perspective:1000px;cursor:pointer}
 .flip-inner{position:relative;width:100%;height:100px;transition:transform .6s;transform-style:preserve-3d;}
 .flip.active .flip-inner{transform:rotateY(180deg);}
 .frente,.verso{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;justify-content:center;align-items:center;padding:10px;font-weight:bold;text-align:center;}
@@ -29,9 +26,9 @@ button{background:#5a3d2b;color:white;cursor:pointer}
 /* POSTS */
 .post{background:#fff;padding:8px;border-radius:10px;margin-bottom:10px}
 .post img{width:100%;border-radius:8px}
-.actions{display:flex;gap:5px;margin-top:5px}
+.actions{display:flex;gap:5px;margin-top:5px;align-items:center}
 .like{color:red;cursor:pointer}
-.alerta{font-weight:bold;margin-top:10px}
+.comment{margin-top:5px;background:#f2f2f2;padding:5px;border-radius:5px;font-size:13px}
 </style>
 </head>
 
@@ -52,7 +49,7 @@ button{background:#5a3d2b;color:white;cursor:pointer}
 
 <!-- DICAS -->
 <div class="card">
-<h3>🧠 Dicas</h3>
+<h3>🧠 Dicas <button onclick="gerarDicas()">Atualizar Dicas</button></h3>
 <div class="dicas" id="dicas"></div>
 </div>
 
@@ -75,12 +72,16 @@ button{background:#5a3d2b;color:white;cursor:pointer}
 /* CALCULADORA */
 let chart;
 function calc(){
- let a=+a.value||0, s=+s.value||0, m=+m.value||0;
- let total=a+s+m;
+ let a = Number(document.getElementById("a").value)||0;
+ let s = Number(document.getElementById("s").value)||0;
+ let m = Number(document.getElementById("m").value)||0;
+ let total = a+s+m;
+
  if(chart) chart.destroy();
- chart=new Chart(graf,{type:'doughnut',
- data:{labels:['Alimentação','Saúde','Mimos'],
- datasets:[{data:[a,s,m]}]}});
+ chart = new Chart(document.getElementById("graf"),{
+  type:'doughnut',
+  data:{labels:['Alimentação','Saúde','Mimos'],datasets:[{data:[a,s,m]}]}
+ });
 
  let msg="";
  if(total>800) msg="🚨 Alerta! Gastos muito altos.";
@@ -90,23 +91,27 @@ function calc(){
  document.getElementById("msg").innerText=msg;
 }
 
-/* DICAS */
+/* DICAS DINÂMICAS */
 const lista=[
 "Vacinas evitam gastos grandes",
 "Ração boa reduz veterinário",
 "Escovar dentes evita cirurgia",
-"Passeio mantém saúde"
+"Passeio mantém saúde",
+"Água fresca sempre",
+"Check-up anual é essencial"
 ];
+
 function gerarDicas(){
  dicas.innerHTML="";
- lista.forEach(t=>{
- dicas.innerHTML+=`
- <div class="flip" onclick="this.classList.toggle('active')">
-  <div class="flip-inner">
-   <div class="frente">🐾 Dica</div>
-   <div class="verso">${t}</div>
-  </div>
- </div>`;
+ let sorteadas = lista.sort(()=>0.5-Math.random()).slice(0,4);
+ sorteadas.forEach(t=>{
+  dicas.innerHTML+=`
+  <div class="flip" onclick="this.classList.toggle('active')">
+   <div class="flip-inner">
+    <div class="frente">🐾 Dica</div>
+    <div class="verso">${t}</div>
+   </div>
+  </div>`;
  });
 }
 gerarDicas();
@@ -114,18 +119,17 @@ gerarDicas();
 /* POSTS */
 let posts=JSON.parse(localStorage.getItem("posts"))||[];
 
-function salvarPost(editIndex=null){
+function salvarPost(){
  let file=foto.files[0];
  let reader=new FileReader();
  reader.onload=e=>{
-  let post={
+  posts.push({
    nome:nomePet.value,
    texto:historia.value,
    img:e.target.result,
-   likes:0
-  };
-  if(editIndex!==null) posts[editIndex]=post;
-  else posts.push(post);
+   likes:0,
+   comentarios:[]
+  });
   localStorage.setItem("posts",JSON.stringify(posts));
   renderPosts();
  };
@@ -135,6 +139,11 @@ function salvarPost(editIndex=null){
 function renderPosts(){
  feed.innerHTML="";
  posts.forEach((p,i)=>{
+  let comentariosHTML="";
+  p.comentarios.forEach(c=>{
+    comentariosHTML+=`<div class="comment">${c}</div>`;
+  });
+
   feed.innerHTML+=`
   <div class="post">
    <h4>${p.nome}</h4>
@@ -142,9 +151,10 @@ function renderPosts(){
    <img src="${p.img}">
    <div class="actions">
     <span class="like" onclick="curtir(${i})">❤️ ${p.likes}</span>
-    <button onclick="editar(${i})">✏️</button>
     <button onclick="excluir(${i})">🗑</button>
    </div>
+   <input placeholder="Comentar..." onkeydown="if(event.key==='Enter') comentar(${i},this)">
+   ${comentariosHTML}
   </div>`;
  });
 }
@@ -156,19 +166,18 @@ function curtir(i){
  renderPosts();
 }
 
+function comentar(i,input){
+ posts[i].comentarios.push(input.value);
+ localStorage.setItem("posts",JSON.stringify(posts));
+ renderPosts();
+}
+
 function excluir(i){
  if(confirm("Excluir post?")){
   posts.splice(i,1);
   localStorage.setItem("posts",JSON.stringify(posts));
   renderPosts();
  }
-}
-
-function editar(i){
- nomePet.value=posts[i].nome;
- historia.value=posts[i].texto;
- foto.required=false;
- salvarPost=i;
 }
 </script>
 
