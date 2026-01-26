@@ -6,58 +6,32 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{
-font-family:Arial;
-margin:0;
-background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a') center/cover fixed;
-}
-
-header{
-background:#4e342e;
-color:white;
-padding:15px;
-text-align:center;
-font-size:22px;
-font-weight:bold;
-}
-
+body{font-family:Arial;margin:0;background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a')center/cover fixed;}
+header{background:#4e342e;color:white;text-align:center;padding:15px;font-size:22px;}
 .container{max-width:900px;margin:auto;padding:15px;}
+.box{background:white;border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+input,textarea,button{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
+button{background:#6d4c41;color:white;font-weight:bold;border:none;cursor:pointer;}
+canvas{max-width:300px;margin:auto;display:block}
 
-.box{
-background:white;
-border-radius:15px;
-padding:15px;
-margin-bottom:20px;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
+/* DICAS */
+.tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.tip-card{perspective:1000px;height:100px;}
+.tip-inner{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d;}
+.tip-card:hover .tip-inner{transform:rotateY(180deg);}
+.tip-front,.tip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:5px;}
+.tip-front{background:#ffca28;}
+.tip-back{background:#6d4c41;color:white;transform:rotateY(180deg);}
 
-input,textarea,button{
-width:100%;padding:10px;margin-top:8px;
-border-radius:8px;border:1px solid #ccc;
-}
-
-button{background:#6d4c41;color:white;border:none;cursor:pointer;font-weight:bold;}
-
-.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-
-.card{
-background:#ffca28;height:90px;display:flex;align-items:center;
-justify-content:center;border-radius:10px;font-weight:bold;
-cursor:pointer;text-align:center;padding:5px;
-}
-
-.post img{width:100%;border-radius:10px;margin-top:5px;}
-
-.actions{display:flex;gap:10px;margin-top:5px;}
-
-.comment{background:#f1f1f1;padding:5px;margin-top:5px;border-radius:5px;}
-
-video{width:100%;border-radius:10px;margin-top:10px;}
+/* POSTS */
+.post img{width:100%;border-radius:10px;margin-top:5px}
+.actions{display:flex;gap:10px;margin-top:5px}
+.comment{background:#f1f1f1;margin-top:5px;padding:5px;border-radius:5px}
+video{width:100%;border-radius:10px;margin-top:10px}
 </style>
 </head>
 
 <body>
-
 <header>🐾 Finança Animal</header>
 <div class="container">
 
@@ -74,29 +48,33 @@ video{width:100%;border-radius:10px;margin-top:10px;}
 
 <!-- DICAS -->
 <div class="box">
-<h3>🧠 Dicas</h3>
-<div class="card-grid" id="tips"></div>
+<h3>💡 Dicas <button onclick="updateTips()">Atualizar</button></h3>
+<div class="tip-grid" id="tips"></div>
 </div>
 
-<!-- HISTÓRIA -->
+<!-- HISTÓRIA PET -->
 <div class="box">
 <h3>📖 História do seu Pet</h3>
 <input id="petName" placeholder="Nome do Pet">
 <textarea id="story" placeholder="Conte a história"></textarea>
-<input type="file" id="photo">
-<button onclick="postStory()">Publicar</button>
-<div id="posts"></div>
+<input type="file" id="photos" multiple>
+<button onclick="postStory()">Publicar História</button>
+<div id="stories"></div>
 </div>
 
 <!-- MOMENTO FOFURA -->
 <div class="box">
 <h3>📸 Momento Fofura</h3>
+<input type="file" id="cuteUpload">
+<button onclick="addCute()">Adicionar Foto Fofa</button>
 <div id="cute"></div>
 </div>
 
 <!-- VÍDEOS -->
 <div class="box">
 <h3>🎥 Vídeos Engraçados de Pets</h3>
+<input type="file" id="videoUpload" accept="video/*">
+<button onclick="addVideo()">Adicionar Vídeo</button>
 <div id="videos"></div>
 </div>
 
@@ -104,122 +82,62 @@ video{width:100%;border-radius:10px;margin-top:10px;}
 
 <script>
 // CALCULADORA
+let chart;
 function calc(){
-let f=+food.value||0,h=+health.value||0,e=+extras.value||0;
-let total=f+h+e;
-document.getElementById("alert").innerText=
-total>500?"⚠ Você está gastando muito! Fique em alerta.":"✅ Gastos sob controle!";
-
-new Chart(document.getElementById("chart"),{
+let f=+food.value||0,h=+health.value||0,e=+extras.value||0,total=f+h+e;
+alert.innerText=total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
+if(chart)chart.destroy();
+chart=new Chart(chartEl=document.getElementById("chart"),{
 type:'doughnut',
-data:{labels:["Alimentação","Saúde","Mimos"],
-datasets:[{data:[f,h,e]}]}
+data:{labels:["Alimentação","Saúde","Mimos"],datasets:[{data:[f,h,e]}]}
 });
 }
 
-// DICAS GIRATÓRIAS
-const tipList=[
-"Vacinas evitam gastos grandes",
-"Ração boa reduz veterinário",
-"Escovar dentes evita cirurgia",
-"Passeio mantém saúde"
-];
-
-tipList.forEach(t=>{
-let c=document.createElement("div");
-c.className="card";
-c.innerText="Clique para ver dica";
-c.onclick=()=>c.innerText=t;
-tips.appendChild(c);
+// DICAS
+const tipList=["Vacinas evitam gastos grandes","Ração boa reduz veterinário","Escovar dentes evita cirurgia","Passeio mantém saúde","Hidratação é essencial","Brincar reduz ansiedade"];
+function updateTips(){
+tips.innerHTML="";
+tipList.sort(()=>0.5-Math.random()).slice(0,4).forEach(t=>{
+tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
+<div class="tip-front">🐶 Dica</div>
+<div class="tip-back">${t}</div>
+</div></div>`;
 });
+}
+updateTips();
 
 // HISTÓRIAS
 function postStory(){
-let name=petName.value,txt=story.value,file=photo.files[0];
-if(!name||!txt||!file)return alert("Preencha tudo!");
-
-let reader=new FileReader();
-reader.onload=function(){
-let post={name,txt,img:reader.result,likes:0,comments:[]};
-let arr=JSON.parse(localStorage.getItem("posts")||"[]");
-arr.push(post);
-localStorage.setItem("posts",JSON.stringify(arr));
-loadPosts();
-};
-reader.readAsDataURL(file);
-}
-
-function loadPosts(){
-posts.innerHTML="";
-let arr=JSON.parse(localStorage.getItem("posts")||"[]");
-
-arr.forEach((p,i)=>{
-let div=document.createElement("div");
-div.className="post";
-div.innerHTML=`<h4>${p.name}</h4><p>${p.txt}</p><img src="${p.img}">
-<div class="actions">
-<button onclick="like(${i})">❤️ ${p.likes}</button>
-<button onclick="del(${i})">🗑 Excluir</button>
-</div>
-<input placeholder="Comentar" onkeypress="comment(event,${i})">`;
-
-p.comments.forEach(c=>{
-let cm=document.createElement("div");
-cm.className="comment";
-cm.innerText=c;
-div.appendChild(cm);
+let name=petName.value,txt=story.value,files=photos.files;
+if(!name||!txt||files.length===0)return alert("Preencha tudo");
+let storyDiv=document.createElement("div");
+storyDiv.className="post";
+storyDiv.innerHTML=`<h4>${name}</h4><p>${txt}</p>`;
+Array.from(files).forEach(f=>{
+let r=new FileReader();
+r.onload=e=>storyDiv.innerHTML+=`<img src="${e.target.result}">`;
+r.readAsDataURL(f);
 });
-
-posts.appendChild(div);
-});
+stories.appendChild(storyDiv);
 }
 
-function like(i){
-let arr=JSON.parse(localStorage.getItem("posts"));
-arr[i].likes++;localStorage.setItem("posts",JSON.stringify(arr));loadPosts();
+// MOMENTO FOFURA
+const cuteImgs=["https://images.unsplash.com/photo-1548199973-03cce0bbc87b","https://images.unsplash.com/photo-1518717758536-85ae29035b6d"];
+cuteImgs.forEach(src=>cute.innerHTML+=`<img src="${src}" style="width:100%;margin-top:10px;border-radius:10px">`);
+
+function addCute(){
+let f=cuteUpload.files[0];if(!f)return;
+let r=new FileReader();r.onload=e=>cute.innerHTML+=`<img src="${e.target.result}" style="width:100%;margin-top:10px;border-radius:10px">`;
+r.readAsDataURL(f);
 }
 
-function del(i){
-let arr=JSON.parse(localStorage.getItem("posts"));
-arr.splice(i,1);localStorage.setItem("posts",JSON.stringify(arr));loadPosts();
+// VÍDEOS
+function addVideo(){
+let f=videoUpload.files[0];if(!f)return;
+let r=new FileReader();
+r.onload=e=>videos.innerHTML+=`<video src="${e.target.result}" controls loop></video>`;
+r.readAsDataURL(f);
 }
-
-function comment(e,i){
-if(e.key==="Enter"){
-let arr=JSON.parse(localStorage.getItem("posts"));
-arr[i].comments.push(e.target.value);
-localStorage.setItem("posts",JSON.stringify(arr));loadPosts();
-}
-}
-
-loadPosts();
-
-// FOTOS FOFAS
-const cuteImgs=[
-"https://images.unsplash.com/photo-1548199973-03cce0bbc87b",
-"https://images.unsplash.com/photo-1518717758536-85ae29035b6d"
-];
-
-cuteImgs.forEach(src=>{
-let img=document.createElement("img");
-img.src=src;img.style.width="100%";img.style.marginBottom="10px";
-cute.appendChild(img);
-});
-
-// VÍDEOS CURTOS
-const vids=[
-"https://www.w3schools.com/html/mov_bbb.mp4",
-"https://www.w3schools.com/html/movie.mp4"
-];
-
-vids.forEach(v=>{
-let video=document.createElement("video");
-video.src=v;
-video.controls=true;
-video.loop=true;
-videos.appendChild(video);
-});
 </script>
-
 </body>
 </html>
