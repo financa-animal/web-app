@@ -2,234 +2,142 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Finança Animal</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{
-  font-family: Arial, sans-serif;
-  margin:0;
-  background:
-    linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
-    url("https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=1600&q=80");
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
-}
+body{font-family:Arial;margin:0;background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a')center/cover fixed;}
+header{background:#4e342e;color:white;text-align:center;padding:15px;font-size:22px;}
+.container{max-width:900px;margin:auto;padding:15px;}
+.box{background:white;border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+input,textarea,button{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
+button{background:#6d4c41;color:white;font-weight:bold;border:none;cursor:pointer;}
+canvas{max-width:300px;margin:auto;display:block}
 
-header{
-  background:#3b2a22;
-  color:white;
-  text-align:center;
-  padding:10px;
-  font-weight:bold;
-}
+/* DICAS */
+.tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.tip-card{perspective:1000px;height:100px;}
+.tip-inner{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d;}
+.tip-card:hover .tip-inner{transform:rotateY(180deg);}
+.tip-front,.tip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:5px;}
+.tip-front{background:#ffca28;}
+.tip-back{background:#6d4c41;color:white;transform:rotateY(180deg);}
 
-.container{
-  width:95%;
-  max-width:650px;
-  margin:20px auto;
-}
-
-.card{
-  background:white;
-  padding:15px;
-  border-radius:10px;
-  margin-bottom:20px;
-  box-shadow:0 4px 10px rgba(0,0,0,.2);
-}
-
-input, textarea{
-  width:100%;
-  padding:8px;
-  margin:5px 0;
-  border-radius:5px;
-  border:1px solid #ccc;
-}
-
-button{
-  background:#5a3e36;
-  color:white;
-  border:none;
-  padding:10px;
-  width:100%;
-  border-radius:5px;
-  margin-top:5px;
-  cursor:pointer;
-}
-
-img, video{
-  width:100%;
-  border-radius:8px;
-  margin-top:10px;
-}
-
-.actions{
-  display:flex;
-  justify-content:space-between;
-  margin-top:10px;
-}
-
-.comment{
-  background:#eee;
-  padding:5px;
-  border-radius:5px;
-  margin-top:5px;
-}
+/* POSTS */
+.post img{width:100%;border-radius:10px;margin-top:5px}
+.actions{display:flex;gap:10px;margin-top:5px}
+.comment{background:#f1f1f1;margin-top:5px;padding:5px;border-radius:5px}
+video{width:100%;border-radius:10px;margin-top:10px}
 </style>
 </head>
-<body>
 
+<body>
 <header>🐾 Finança Animal</header>
 <div class="container">
 
 <!-- CALCULADORA -->
-<div class="card">
-  <h3>💰 Controle de Gastos</h3>
-  <input type="number" id="food" placeholder="Ração">
-  <input type="number" id="vet" placeholder="Veterinário">
-  <input type="number" id="other" placeholder="Outros">
-  <button onclick="calc()">Calcular</button>
-  <canvas id="chart"></canvas>
+<div class="box">
+<h3>💰 Planejamento do Pet</h3>
+<input id="food" type="number" placeholder="Alimentação">
+<input id="health" type="number" placeholder="Saúde">
+<input id="extras" type="number" placeholder="Mimos">
+<button onclick="calc()">Analisar Gastos</button>
+<p id="alert"></p>
+<canvas id="chart"></canvas>
 </div>
 
 <!-- DICAS -->
-<div class="card">
-  <h3>📚 Dicas</h3>
-  <button onclick="newTips()">Atualizar Dicas</button>
-  <div id="tips"></div>
+<div class="box">
+<h3>💡 Dicas <button onclick="updateTips()">Atualizar</button></h3>
+<div class="tip-grid" id="tips"></div>
 </div>
 
-<!-- HISTÓRIAS -->
-<div class="card">
-  <h3>📖 História do seu Pet</h3>
-  <input type="text" id="petName" placeholder="Nome do Pet">
-  <textarea id="storyText" placeholder="Conte a história"></textarea>
-  <input type="file" id="imageInput">
-  <button onclick="addStory()">Publicar</button>
-</div>
+<!-- HISTÓRIA PET -->
+<div class="box">
+<h3>📖 História do seu Pet</h3>
+<input id="petName" placeholder="Nome do Pet">
+<textarea id="story" placeholder="Conte a história"></textarea>
+<input type="file" id="photos" multiple>
+<button onclick="postStory()">Publicar História</button>
 <div id="stories"></div>
-
-<!-- FOFURA -->
-<div class="card">
-  <h3>🐶 Momento Fofura</h3>
-  <input type="file" id="cuteImg">
-  <button onclick="addCute()">Postar Foto Fofa</button>
 </div>
-<div id="cuteArea"></div>
+
+<!-- MOMENTO FOFURA -->
+<div class="box">
+<h3>📸 Momento Fofura</h3>
+<input type="file" id="cuteUpload">
+<button onclick="addCute()">Adicionar Foto Fofa</button>
+<div id="cute"></div>
+</div>
 
 <!-- VÍDEOS -->
-<div class="card">
-  <h3>🎥 Vídeos Engraçados</h3>
-  <input type="file" id="videoInput" accept="video/*">
-  <button onclick="addVideo()">Postar Vídeo</button>
-</div>
+<div class="box">
+<h3>🎥 Vídeos Engraçados de Pets</h3>
+<input type="file" id="videoUpload" accept="video/*">
+<button onclick="addVideo()">Adicionar Vídeo</button>
 <div id="videos"></div>
+</div>
 
 </div>
 
 <script>
-/* ---------- CALCULADORA + GRÁFICO ---------- */
+// CALCULADORA
+let chart;
 function calc(){
-  const food=+food.value||0;
-  const vet=+vet.value||0;
-  const other=+other.value||0;
-
-  new Chart(chart,{
-    type:"pie",
-    data:{
-      labels:["Ração","Veterinário","Outros"],
-      datasets:[{data:[food,vet,other]}]
-    }
-  });
+let f=+food.value||0,h=+health.value||0,e=+extras.value||0,total=f+h+e;
+alert.innerText=total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
+if(chart)chart.destroy();
+chart=new Chart(chartEl=document.getElementById("chart"),{
+type:'doughnut',
+data:{labels:["Alimentação","Saúde","Mimos"],datasets:[{data:[f,h,e]}]}
+});
 }
 
-/* ---------- DICAS ---------- */
-const tipsList=[
-"🐾 Leve ao veterinário regularmente",
-"💧 Água fresca sempre",
-"🥩 Alimentação adequada",
-"🎾 Brincar é saúde",
-"🛁 Banho com produtos certos"
-];
-function newTips(){
-  tips.innerHTML="";
-  tipsList.sort(()=>0.5-Math.random()).slice(0,3).forEach(t=>{
-    tips.innerHTML+=`<p>• ${t}</p>`;
-  });
+// DICAS
+const tipList=["Vacinas evitam gastos grandes","Ração boa reduz veterinário","Escovar dentes evita cirurgia","Passeio mantém saúde","Hidratação é essencial","Brincar reduz ansiedade"];
+function updateTips(){
+tips.innerHTML="";
+tipList.sort(()=>0.5-Math.random()).slice(0,4).forEach(t=>{
+tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
+<div class="tip-front">🐶 Dica</div>
+<div class="tip-back">${t}</div>
+</div></div>`;
+});
+}
+updateTips();
+
+// HISTÓRIAS
+function postStory(){
+let name=petName.value,txt=story.value,files=photos.files;
+if(!name||!txt||files.length===0)return alert("Preencha tudo");
+let storyDiv=document.createElement("div");
+storyDiv.className="post";
+storyDiv.innerHTML=`<h4>${name}</h4><p>${txt}</p>`;
+Array.from(files).forEach(f=>{
+let r=new FileReader();
+r.onload=e=>storyDiv.innerHTML+=`<img src="${e.target.result}">`;
+r.readAsDataURL(f);
+});
+stories.appendChild(storyDiv);
 }
 
-/* ---------- HISTÓRIAS ---------- */
-let stories=JSON.parse(localStorage.getItem("stories"))||[];
-function saveStories(){localStorage.setItem("stories",JSON.stringify(stories));}
-function addStory(){
-  const reader=new FileReader();
-  const file=imageInput.files[0];
-  reader.onload=()=>{
-    stories.push({id:Date.now(),name:petName.value,text:storyText.value,img:reader.result,likes:0,comments:[]});
-    saveStories(); renderStories();
-  }
-  file?reader.readAsDataURL(file):reader.onload();
-}
-function renderStories(){
-  storiesDiv.innerHTML="";
-}
-const storiesDiv=document.getElementById("stories");
-function renderStories(){
-  storiesDiv.innerHTML="";
-  stories.forEach(s=>{
-    storiesDiv.innerHTML+=`
-    <div class="card">
-      <h4>${s.name}</h4><p>${s.text}</p>
-      ${s.img?`<img src="${s.img}">`:""}
-      <div class="actions">
-        <button onclick="likeStory(${s.id})">❤️ ${s.likes}</button>
-        <button onclick="editStory(${s.id})">✏️</button>
-        <button onclick="deleteStory(${s.id})">🗑️</button>
-      </div>
-      <input id="c${s.id}" placeholder="Comentar">
-      <button onclick="comment(${s.id})">Comentar</button>
-      ${s.comments.map(c=>`<div class="comment">${c}</div>`).join("")}
-    </div>`;
-  });
-}
-function likeStory(id){stories.find(s=>s.id==id).likes++;saveStories();renderStories();}
-function deleteStory(id){stories=stories.filter(s=>s.id!=id);saveStories();renderStories();}
-function editStory(id){let s=stories.find(s=>s.id==id);let t=prompt("Editar:",s.text);if(t){s.text=t;saveStories();renderStories();}}
-function comment(id){let i=document.getElementById("c"+id);stories.find(s=>s.id==id).comments.push(i.value);i.value="";saveStories();renderStories();}
-renderStories();
+// MOMENTO FOFURA
+const cuteImgs=["https://images.unsplash.com/photo-1548199973-03cce0bbc87b","https://images.unsplash.com/photo-1518717758536-85ae29035b6d"];
+cuteImgs.forEach(src=>cute.innerHTML+=`<img src="${src}" style="width:100%;margin-top:10px;border-radius:10px">`);
 
-/* ---------- FOFURA ---------- */
-let cute=JSON.parse(localStorage.getItem("cute"))||[];
 function addCute(){
-  const reader=new FileReader();
-  reader.onload=()=>{cute.push({img:reader.result,likes:0});localStorage.setItem("cute",JSON.stringify(cute));renderCute();}
-  reader.readAsDataURL(cuteImg.files[0]);
+let f=cuteUpload.files[0];if(!f)return;
+let r=new FileReader();r.onload=e=>cute.innerHTML+=`<img src="${e.target.result}" style="width:100%;margin-top:10px;border-radius:10px">`;
+r.readAsDataURL(f);
 }
-function renderCute(){
-  cuteArea.innerHTML="";
-  cute.forEach((c,i)=>{
-    cuteArea.innerHTML+=`<div class="card"><img src="${c.img}"><button onclick="likeCute(${i})">❤️ ${c.likes}</button></div>`;
-  });
-}
-function likeCute(i){cute[i].likes++;localStorage.setItem("cute",JSON.stringify(cute));renderCute();}
-renderCute();
 
-/* ---------- VÍDEOS ---------- */
-let vids=JSON.parse(localStorage.getItem("vids"))||[];
+// VÍDEOS
 function addVideo(){
-  const reader=new FileReader();
-  reader.onload=()=>{vids.push(reader.result);localStorage.setItem("vids",JSON.stringify(vids));renderVids();}
-  reader.readAsDataURL(videoInput.files[0]);
+let f=videoUpload.files[0];if(!f)return;
+let r=new FileReader();
+r.onload=e=>videos.innerHTML+=`<video src="${e.target.result}" controls loop></video>`;
+r.readAsDataURL(f);
 }
-function renderVids(){
-  videos.innerHTML="";
-  vids.forEach(v=>{videos.innerHTML+=`<div class="card"><video controls src="${v}"></video></div>`});
-}
-renderVids();
-
 </script>
 </body>
 </html>
