@@ -6,13 +6,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{font-family:Arial;margin:0;background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a')center/cover fixed;}
+body{
+font-family:Arial;
+margin:0;
+background:url('https://images.unsplash.com/photo-1517423440428-a5a00ad493e8') center/cover fixed;
+}
 header{background:#4e342e;color:white;text-align:center;padding:15px;font-size:22px;}
 .container{max-width:900px;margin:auto;padding:15px;}
 .box{background:white;border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
 input,textarea,button{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
 button{background:#6d4c41;color:white;font-weight:bold;border:none;cursor:pointer;}
-canvas{max-width:300px;margin:auto;display:block}
+canvas{max-width:260px;margin:auto;display:block}
 
 /* DICAS */
 .tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
@@ -24,6 +28,7 @@ canvas{max-width:300px;margin:auto;display:block}
 .tip-back{background:#6d4c41;color:white;transform:rotateY(180deg);}
 
 /* POSTS */
+.post{border-top:1px solid #ddd;margin-top:10px;padding-top:10px}
 .post img{width:100%;border-radius:10px;margin-top:5px}
 .actions{display:flex;gap:10px;margin-top:5px}
 .comment{background:#f1f1f1;margin-top:5px;padding:5px;border-radius:5px}
@@ -81,19 +86,19 @@ video{width:100%;border-radius:10px;margin-top:10px}
 </div>
 
 <script>
-// CALCULADORA
+/* CALCULADORA */
 let chart;
 function calc(){
 let f=+food.value||0,h=+health.value||0,e=+extras.value||0,total=f+h+e;
 alert.innerText=total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
 if(chart)chart.destroy();
-chart=new Chart(chartEl=document.getElementById("chart"),{
+chart=new Chart(document.getElementById("chart"),{
 type:'doughnut',
 data:{labels:["Alimentação","Saúde","Mimos"],datasets:[{data:[f,h,e]}]}
 });
 }
 
-// DICAS
+/* DICAS */
 const tipList=["Vacinas evitam gastos grandes","Ração boa reduz veterinário","Escovar dentes evita cirurgia","Passeio mantém saúde","Hidratação é essencial","Brincar reduz ansiedade"];
 function updateTips(){
 tips.innerHTML="";
@@ -106,32 +111,70 @@ tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
 }
 updateTips();
 
-// HISTÓRIAS
+/* HISTÓRIAS */
 function postStory(){
 let name=petName.value,txt=story.value,files=photos.files;
 if(!name||!txt||files.length===0)return alert("Preencha tudo");
-let storyDiv=document.createElement("div");
-storyDiv.className="post";
-storyDiv.innerHTML=`<h4>${name}</h4><p>${txt}</p>`;
+
+let post=document.createElement("div");
+post.className="post";
+let likes=0,comments=[];
+
+post.innerHTML=`<h4>${name}</h4>
+<p contenteditable="false">${txt}</p>
+<div class="imgs"></div>
+<div class="actions">
+<button onclick="likePost(this)">❤️ 0</button>
+<button onclick="editPost(this)">✏️ Editar</button>
+<button onclick="deletePost(this)">🗑 Excluir</button>
+</div>
+<input placeholder="Comentar" onkeypress="addComment(event,this)">
+<div class="commentArea"></div>`;
+
 Array.from(files).forEach(f=>{
 let r=new FileReader();
-r.onload=e=>storyDiv.innerHTML+=`<img src="${e.target.result}">`;
+r.onload=e=>post.querySelector(".imgs").innerHTML+=`<img src="${e.target.result}">`;
 r.readAsDataURL(f);
 });
-stories.appendChild(storyDiv);
+
+stories.prepend(post);
 }
 
-// MOMENTO FOFURA
+function likePost(btn){
+let n=parseInt(btn.innerText.split(" ")[1])+1;
+btn.innerText="❤️ "+n;
+}
+
+function deletePost(btn){
+btn.closest(".post").remove();
+}
+
+function editPost(btn){
+let p=btn.closest(".post").querySelector("p");
+p.contentEditable=p.contentEditable==="true"?"false":"true";
+btn.innerText=p.contentEditable==="true"?"💾 Salvar":"✏️ Editar";
+}
+
+function addComment(e,input){
+if(e.key==="Enter"){
+let div=input.parentElement.querySelector(".commentArea");
+div.innerHTML+=`<div class="comment">${input.value}</div>`;
+input.value="";
+}
+}
+
+/* MOMENTO FOFURA */
 const cuteImgs=["https://images.unsplash.com/photo-1548199973-03cce0bbc87b","https://images.unsplash.com/photo-1518717758536-85ae29035b6d"];
 cuteImgs.forEach(src=>cute.innerHTML+=`<img src="${src}" style="width:100%;margin-top:10px;border-radius:10px">`);
 
 function addCute(){
 let f=cuteUpload.files[0];if(!f)return;
-let r=new FileReader();r.onload=e=>cute.innerHTML+=`<img src="${e.target.result}" style="width:100%;margin-top:10px;border-radius:10px">`;
+let r=new FileReader();
+r.onload=e=>cute.innerHTML+=`<img src="${e.target.result}" style="width:100%;margin-top:10px;border-radius:10px">`;
 r.readAsDataURL(f);
 }
 
-// VÍDEOS
+/* VÍDEOS */
 function addVideo(){
 let f=videoUpload.files[0];if(!f)return;
 let r=new FileReader();
