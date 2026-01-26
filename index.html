@@ -12,23 +12,12 @@ header{background:#4b2e1e;color:white;text-align:center;padding:15px;font-size:2
 .card{background:white;margin:15px auto;padding:15px;border-radius:12px;width:95%;max-width:520px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
 input,textarea,button{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ccc;}
 button{background:#5a3d2b;color:white;cursor:pointer}
-.alerta{font-weight:bold;margin-top:10px}
-
-/* DICAS */
-.dicas{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.flip{perspective:1000px;cursor:pointer}
-.flip-inner{position:relative;width:100%;height:100px;transition:transform .6s;transform-style:preserve-3d;}
-.flip.active .flip-inner{transform:rotateY(180deg);}
-.frente,.verso{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;justify-content:center;align-items:center;padding:10px;font-weight:bold;text-align:center;}
-.frente{background:#5a3d2b;color:white;}
-.verso{background:#f1c40f;transform:rotateY(180deg);}
-
-/* POSTS */
 .post{background:#fff;padding:8px;border-radius:10px;margin-bottom:10px}
 .post img{width:100%;border-radius:8px}
-.actions{display:flex;gap:5px;margin-top:5px;align-items:center}
+.actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
 .like{color:red;cursor:pointer}
-.comment{margin-top:5px;background:#f2f2f2;padding:5px;border-radius:5px;font-size:13px}
+.comment{background:#f2f2f2;padding:4px;margin-top:3px;border-radius:5px;font-size:13px}
+.alert{color:green;font-weight:bold}
 </style>
 </head>
 
@@ -36,94 +25,51 @@ button{background:#5a3d2b;color:white;cursor:pointer}
 
 <header>🐾 Finança Animal</header>
 
-<!-- CALCULADORA -->
 <div class="card">
-<h3>💰 Planejamento do Pet</h3>
-<input type="number" id="a" placeholder="Alimentação">
-<input type="number" id="s" placeholder="Saúde">
-<input type="number" id="m" placeholder="Mimos">
-<button onclick="calc()">Analisar Gastos</button>
-<canvas id="graf"></canvas>
-<div id="msg" class="alerta"></div>
+<h3>👤 Seu nome</h3>
+<input id="user" placeholder="Digite seu nome">
+<button onclick="salvarUsuario()">Salvar Nome</button>
 </div>
 
-<!-- DICAS -->
-<div class="card">
-<h3>🧠 Dicas <button onclick="gerarDicas()">Atualizar Dicas</button></h3>
-<div class="dicas" id="dicas"></div>
-</div>
-
-<!-- POSTAR -->
 <div class="card">
 <h3>📖 História do seu Pet</h3>
 <input id="nomePet" placeholder="Nome do Pet">
 <textarea id="historia" placeholder="Conte a história"></textarea>
 <input type="file" id="foto">
 <button onclick="salvarPost()">Publicar</button>
+<div id="ok" class="alert"></div>
 </div>
 
-<!-- FEED -->
 <div class="card">
 <h3>📸 Momento Fofura</h3>
 <div id="feed"></div>
 </div>
 
 <script>
-/* CALCULADORA */
-let chart;
-function calc(){
- let a = Number(document.getElementById("a").value)||0;
- let s = Number(document.getElementById("s").value)||0;
- let m = Number(document.getElementById("m").value)||0;
- let total = a+s+m;
+let usuario = localStorage.getItem("usuario") || "";
+user.value = usuario;
 
- if(chart) chart.destroy();
- chart = new Chart(document.getElementById("graf"),{
-  type:'doughnut',
-  data:{labels:['Alimentação','Saúde','Mimos'],datasets:[{data:[a,s,m]}]}
- });
-
- let msg="";
- if(total>800) msg="🚨 Alerta! Gastos muito altos.";
- else if(m>a) msg="⚠️ Muitos mimos.";
- else if(s>a) msg="⚠️ Saúde pesando no orçamento.";
- else msg="✅ Gastos equilibrados!";
- document.getElementById("msg").innerText=msg;
+function salvarUsuario(){
+ usuario = user.value;
+ localStorage.setItem("usuario", usuario);
+ alert("Nome salvo!");
 }
 
-/* DICAS DINÂMICAS */
-const lista=[
-"Vacinas evitam gastos grandes",
-"Ração boa reduz veterinário",
-"Escovar dentes evita cirurgia",
-"Passeio mantém saúde",
-"Água fresca sempre",
-"Check-up anual é essencial"
-];
+let posts = JSON.parse(localStorage.getItem("posts")) || [];
 
-function gerarDicas(){
- dicas.innerHTML="";
- let sorteadas = lista.sort(()=>0.5-Math.random()).slice(0,4);
- sorteadas.forEach(t=>{
-  dicas.innerHTML+=`
-  <div class="flip" onclick="this.classList.toggle('active')">
-   <div class="flip-inner">
-    <div class="frente">🐾 Dica</div>
-    <div class="verso">${t}</div>
-   </div>
-  </div>`;
- });
+/* Fotos fofas padrão */
+if(posts.length===0){
+ posts.push({autor:"Finança Animal",nome:"Dog Feliz",texto:"Só alegria!",img:"https://images.unsplash.com/photo-1507146426996-ef05306b995a",likes:0,comentarios:[]});
+ posts.push({autor:"Finança Animal",nome:"Gatinho Fofo",texto:"Olha essa carinha!",img:"https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9",likes:0,comentarios:[]});
 }
-gerarDicas();
-
-/* POSTS */
-let posts=JSON.parse(localStorage.getItem("posts"))||[];
 
 function salvarPost(){
+ if(!usuario) return alert("Salve seu nome primeiro!");
  let file=foto.files[0];
  let reader=new FileReader();
  reader.onload=e=>{
-  posts.push({
+  posts.unshift({
+   autor:usuario,
    nome:nomePet.value,
    texto:historia.value,
    img:e.target.result,
@@ -131,6 +77,7 @@ function salvarPost(){
    comentarios:[]
   });
   localStorage.setItem("posts",JSON.stringify(posts));
+  ok.innerText="Publicação feita com sucesso!";
   renderPosts();
  };
  if(file) reader.readAsDataURL(file);
@@ -140,18 +87,23 @@ function renderPosts(){
  feed.innerHTML="";
  posts.forEach((p,i)=>{
   let comentariosHTML="";
-  p.comentarios.forEach(c=>{
-    comentariosHTML+=`<div class="comment">${c}</div>`;
-  });
+  p.comentarios.forEach(c=>comentariosHTML+=`<div class="comment">${c}</div>`);
+
+  let botoesAutor = "";
+  if(p.autor===usuario){
+    botoesAutor=`
+      <button onclick="editar(${i})">✏️</button>
+      <button onclick="excluir(${i})">🗑</button>`;
+  }
 
   feed.innerHTML+=`
   <div class="post">
-   <h4>${p.nome}</h4>
+   <b>${p.nome}</b> — por ${p.autor}
    <p>${p.texto}</p>
    <img src="${p.img}">
    <div class="actions">
-    <span class="like" onclick="curtir(${i})">❤️ ${p.likes}</span>
-    <button onclick="excluir(${i})">🗑</button>
+     <span class="like" onclick="curtir(${i})">❤️ ${p.likes}</span>
+     ${botoesAutor}
    </div>
    <input placeholder="Comentar..." onkeydown="if(event.key==='Enter') comentar(${i},this)">
    ${comentariosHTML}
@@ -173,11 +125,17 @@ function comentar(i,input){
 }
 
 function excluir(i){
- if(confirm("Excluir post?")){
-  posts.splice(i,1);
-  localStorage.setItem("posts",JSON.stringify(posts));
-  renderPosts();
- }
+ posts.splice(i,1);
+ localStorage.setItem("posts",JSON.stringify(posts));
+ renderPosts();
+}
+
+function editar(i){
+ nomePet.value=posts[i].nome;
+ historia.value=posts[i].texto;
+ posts.splice(i,1);
+ localStorage.setItem("posts",JSON.stringify(posts));
+ renderPosts();
 }
 </script>
 
