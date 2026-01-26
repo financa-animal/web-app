@@ -106,96 +106,19 @@ tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
 }
 updateTips();
 
-/* ================= HISTÓRIAS COMPLETAS ================= */
-
-let stories = JSON.parse(localStorage.getItem("petStories")) || [];
-
-function saveStories(){
-  localStorage.setItem("petStories", JSON.stringify(stories));
-}
-
+// HISTÓRIAS
 function postStory(){
-  let name = petName.value;
-  let text = story.value;
-  let file = photos.files[0];
-
-  if(!name || !text) return alert("Preencha nome e história");
-
-  const reader = new FileReader();
-  reader.onload = function(e){
-    stories.push({
-      id: Date.now(),
-      name,
-      text,
-      img: e.target.result || "",
-      likes: 0,
-      comments: []
-    });
-    saveStories();
-    renderStories();
-  };
-
-  if(file) reader.readAsDataURL(file);
-  else reader.onload({target:{result:""}});
-}
-
-function renderStories(){
-  storiesDiv.innerHTML = "";
-  stories.forEach(s=>{
-    storiesDiv.innerHTML += `
-      <div class="box post">
-        <h4>${s.name}</h4>
-        <p>${s.text}</p>
-        ${s.img ? `<img src="${s.img}">` : ""}
-
-        <div class="actions">
-          <button onclick="likeStory(${s.id})">❤️ ${s.likes}</button>
-          <button onclick="editStory(${s.id})">✏️ Editar</button>
-          <button onclick="deleteStory(${s.id})">🗑️ Excluir</button>
-        </div>
-
-        <input id="c${s.id}" placeholder="Escrever comentário">
-        <button onclick="addComment(${s.id})">Comentar</button>
-
-        ${s.comments.map(c=>`<div class="comment">${c}</div>`).join("")}
-      </div>
-    `;
-  });
-}
-
-function likeStory(id){
-  stories.find(s=>s.id==id).likes++;
-  saveStories();
-  renderStories();
-}
-
-function deleteStory(id){
-  stories = stories.filter(s=>s.id!=id);
-  saveStories();
-  renderStories();
-}
-
-function editStory(id){
-  let s = stories.find(s=>s.id==id);
-  let novo = prompt("Editar história:", s.text);
-  if(novo){
-    s.text = novo;
-    saveStories();
-    renderStories();
-  }
-}
-
-function addComment(id){
-  let input = document.getElementById("c"+id);
-  if(!input.value) return;
-  stories.find(s=>s.id==id).comments.push(input.value);
-  input.value = "";
-  saveStories();
-  renderStories();
-}
-
-const storiesDiv = document.getElementById("stories");
-renderStories();
+let name=petName.value,txt=story.value,files=photos.files;
+if(!name||!txt||files.length===0)return alert("Preencha tudo");
+let storyDiv=document.createElement("div");
+storyDiv.className="post";
+storyDiv.innerHTML=`<h4>${name}</h4><p>${txt}</p>`;
+Array.from(files).forEach(f=>{
+let r=new FileReader();
+r.onload=e=>storyDiv.innerHTML+=`<img src="${e.target.result}">`;
+r.readAsDataURL(f);
+});
+stories.appendChild(storyDiv);
 }
 
 // MOMENTO FOFURA
@@ -218,4 +141,3 @@ r.readAsDataURL(f);
 </script>
 </body>
 </html>
-
