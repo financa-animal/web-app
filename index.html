@@ -5,29 +5,22 @@
 <title>Finança Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"></script>
+
 <style>
-body{font-family:Arial;margin:0;background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a')center/cover fixed;}
+body{font-family:Arial;margin:0;background:url('https://images.unsplash.com/photo-1507146426996-ef05306b995a')center/cover fixed;}
 header{background:#4e342e;color:white;text-align:center;padding:15px;font-size:22px;}
 .container{max-width:900px;margin:auto;padding:15px;}
 .box{background:white;border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
 input,textarea,button{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
 button{background:#6d4c41;color:white;font-weight:bold;border:none;cursor:pointer;}
 canvas{max-width:300px;margin:auto;display:block}
-
-/* DICAS */
-.tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.tip-card{perspective:1000px;height:100px;}
-.tip-inner{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d;}
-.tip-card:hover .tip-inner{transform:rotateY(180deg);}
-.tip-front,.tip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:5px;}
-.tip-front{background:#ffca28;}
-.tip-back{background:#6d4c41;color:white;transform:rotateY(180deg);}
-
-/* POSTS */
 .post img{width:100%;border-radius:10px;margin-top:5px}
 .actions{display:flex;gap:10px;margin-top:5px}
 .comment{background:#f1f1f1;margin-top:5px;padding:5px;border-radius:5px}
-video{width:100%;border-radius:10px;margin-top:10px}
 </style>
 </head>
 
@@ -35,24 +28,6 @@ video{width:100%;border-radius:10px;margin-top:10px}
 <header>🐾 Finança Animal</header>
 <div class="container">
 
-<!-- CALCULADORA -->
-<div class="box">
-<h3>💰 Planejamento do Pet</h3>
-<input id="food" type="number" placeholder="Alimentação">
-<input id="health" type="number" placeholder="Saúde">
-<input id="extras" type="number" placeholder="Mimos">
-<button onclick="calc()">Analisar Gastos</button>
-<p id="alert"></p>
-<canvas id="chart"></canvas>
-</div>
-
-<!-- DICAS -->
-<div class="box">
-<h3>💡 Dicas <button onclick="updateTips()">Atualizar</button></h3>
-<div class="tip-grid" id="tips"></div>
-</div>
-
-<!-- HISTÓRIA PET -->
 <div class="box">
 <h3>📖 História do seu Pet</h3>
 <input id="petName" placeholder="Nome do Pet">
@@ -62,82 +37,93 @@ video{width:100%;border-radius:10px;margin-top:10px}
 <div id="stories"></div>
 </div>
 
-<!-- MOMENTO FOFURA -->
-<div class="box">
-<h3>📸 Momento Fofura</h3>
-<input type="file" id="cuteUpload">
-<button onclick="addCute()">Adicionar Foto Fofa</button>
-<div id="cute"></div>
 </div>
 
-<!-- VÍDEOS -->
-<div class="box">
-<h3>🎥 Vídeos Engraçados de Pets</h3>
-<input type="file" id="videoUpload" accept="video/*">
-<button onclick="addVideo()">Adicionar Vídeo</button>
-<div id="videos"></div>
-</div>
+<script type="module">
+// 🔥 CONFIG FIREBASE
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-</div>
+const firebaseConfig = {
+  apiKey: "SUA_CHAVE",
+  authDomain: "SEU_DOMINIO",
+  projectId: "SEU_ID",
+  storageBucket: "SEU_BUCKET",
+  messagingSenderId: "SEU_ID",
+  appId: "SEU_APP_ID"
+};
 
-<script>
-// CALCULADORA
-let chart;
-function calc(){
-let f=+food.value||0,h=+health.value||0,e=+extras.value||0,total=f+h+e;
-alert.innerText=total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
-if(chart)chart.destroy();
-chart=new Chart(chartEl=document.getElementById("chart"),{
-type:'doughnut',
-data:{labels:["Alimentação","Saúde","Mimos"],datasets:[{data:[f,h,e]}]}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+// POSTAR HISTÓRIA
+async function postStory(){
+let name=petName.value, txt=story.value, files=photos.files;
+if(!name||!txt||files.length===0) return alert("Preencha tudo");
+
+let urls=[];
+for(let file of files){
+let storageRef=ref(storage,"pets/"+Date.now()+file.name);
+await uploadBytes(storageRef,file);
+let url=await getDownloadURL(storageRef);
+urls.push(url);
+}
+
+await addDoc(collection(db,"stories"),{
+name, txt, images:urls, likes:0, comments:[]
+});
+
+loadStories();
+}
+
+// CARREGAR HISTÓRIAS
+async function loadStories(){
+stories.innerHTML="";
+const querySnapshot = await getDocs(collection(db,"stories"));
+querySnapshot.forEach((docSnap)=>{
+let s=docSnap.data();
+let id=docSnap.id;
+
+let div=document.createElement("div");
+div.className="post";
+div.innerHTML=`<h4>${s.name}</h4>
+<p contenteditable="true" onblur="saveEdit('${id}', this.innerText)">${s.txt}</p>
+${s.images.map(img=>`<img src="${img}">`).join("")}
+<div class="actions">
+<button onclick="likeStory('${id}',${s.likes})">❤️ ${s.likes}</button>
+<button onclick="deleteStory('${id}')">🗑 Excluir</button>
+</div>
+<input placeholder="Comentar" onkeypress="commentStory(event,'${id}', ${JSON.stringify(s.comments)})">`;
+
+stories.appendChild(div);
 });
 }
 
-// DICAS
-const tipList=["Vacinas evitam gastos grandes","Ração boa reduz veterinário","Escovar dentes evita cirurgia","Passeio mantém saúde","Hidratação é essencial","Brincar reduz ansiedade"];
-function updateTips(){
-tips.innerHTML="";
-tipList.sort(()=>0.5-Math.random()).slice(0,4).forEach(t=>{
-tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
-<div class="tip-front">🐶 Dica</div>
-<div class="tip-back">${t}</div>
-</div></div>`;
-});
-}
-updateTips();
-
-// HISTÓRIAS
-function postStory(){
-let name=petName.value,txt=story.value,files=photos.files;
-if(!name||!txt||files.length===0)return alert("Preencha tudo");
-let storyDiv=document.createElement("div");
-storyDiv.className="post";
-storyDiv.innerHTML=`<h4>${name}</h4><p>${txt}</p>`;
-Array.from(files).forEach(f=>{
-let r=new FileReader();
-r.onload=e=>storyDiv.innerHTML+=`<img src="${e.target.result}">`;
-r.readAsDataURL(f);
-});
-stories.appendChild(storyDiv);
+window.likeStory = async (id,likes)=>{
+await updateDoc(doc(db,"stories",id),{likes:likes+1});
+loadStories();
 }
 
-// MOMENTO FOFURA
-const cuteImgs=["https://images.unsplash.com/photo-1548199973-03cce0bbc87b","https://images.unsplash.com/photo-1518717758536-85ae29035b6d"];
-cuteImgs.forEach(src=>cute.innerHTML+=`<img src="${src}" style="width:100%;margin-top:10px;border-radius:10px">`);
-
-function addCute(){
-let f=cuteUpload.files[0];if(!f)return;
-let r=new FileReader();r.onload=e=>cute.innerHTML+=`<img src="${e.target.result}" style="width:100%;margin-top:10px;border-radius:10px">`;
-r.readAsDataURL(f);
+window.deleteStory = async (id)=>{
+await deleteDoc(doc(db,"stories",id));
+loadStories();
 }
 
-// VÍDEOS
-function addVideo(){
-let f=videoUpload.files[0];if(!f)return;
-let r=new FileReader();
-r.onload=e=>videos.innerHTML+=`<video src="${e.target.result}" controls loop></video>`;
-r.readAsDataURL(f);
+window.saveEdit = async (id,text)=>{
+await updateDoc(doc(db,"stories",id),{txt:text});
 }
+
+window.commentStory = async (e,id,comments)=>{
+if(e.key==="Enter"){
+comments.push(e.target.value);
+await updateDoc(doc(db,"stories",id),{comments});
+loadStories();
+}
+}
+
+loadStories();
 </script>
 </body>
 </html>
