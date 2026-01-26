@@ -5,22 +5,22 @@
 <title>Finança Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"></script>
-
 <style>
-body{font-family:Arial;margin:0;background:url('https://images.unsplash.com/photo-1507146426996-ef05306b995a')center/cover fixed;}
-header{background:#4e342e;color:white;text-align:center;padding:15px;font-size:22px;}
-.container{max-width:900px;margin:auto;padding:15px;}
-.box{background:white;border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-input,textarea,button{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
-button{background:#6d4c41;color:white;font-weight:bold;border:none;cursor:pointer;}
-canvas{max-width:300px;margin:auto;display:block}
-.post img{width:100%;border-radius:10px;margin-top:5px}
+body{
+font-family:Arial;
+margin:0;
+background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')center/cover fixed;
+}
+header{background:#3e2723;color:white;text-align:center;padding:15px;font-size:22px}
+.container{max-width:900px;margin:auto;padding:15px}
+.box{background:white;border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+input,textarea,button{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc}
+button{background:#6d4c41;color:white;font-weight:bold;border:none;cursor:pointer}
+.post img,.fofura img{width:100%;border-radius:10px;margin-top:5px}
+video{width:100%;border-radius:10px;margin-top:5px}
 .actions{display:flex;gap:10px;margin-top:5px}
-.comment{background:#f1f1f1;margin-top:5px;padding:5px;border-radius:5px}
+.tip{background:#ffd54f;padding:10px;border-radius:10px;margin:5px 0}
+canvas{max-width:260px;margin:auto;display:block}
 </style>
 </head>
 
@@ -28,100 +28,111 @@ canvas{max-width:300px;margin:auto;display:block}
 <header>🐾 Finança Animal</header>
 <div class="container">
 
+<!-- CALCULADORA -->
+<div class="box">
+<h3>📊 Planejamento do Pet</h3>
+<input id="food" type="number" placeholder="Alimentação">
+<input id="vet" type="number" placeholder="Veterinário">
+<input id="other" type="number" placeholder="Outros">
+<button onclick="calc()">Analisar</button>
+<canvas id="chart"></canvas>
+</div>
+
+<!-- DICAS -->
+<div class="box">
+<h3>💡 Dicas</h3>
+<input id="newTip" placeholder="Nova dica">
+<button onclick="addTip()">Adicionar Dica</button>
+<div id="tips"></div>
+</div>
+
+<!-- HISTÓRIA PET -->
 <div class="box">
 <h3>📖 História do seu Pet</h3>
 <input id="petName" placeholder="Nome do Pet">
 <textarea id="story" placeholder="Conte a história"></textarea>
-<input type="file" id="photos" multiple>
+<input type="file" id="storyPhotos" multiple>
 <button onclick="postStory()">Publicar História</button>
 <div id="stories"></div>
+</div>
+
+<!-- MOMENTO FOFURA -->
+<div class="box">
+<h3>📸 Momento Fofura</h3>
+<input type="file" id="cutePhoto">
+<button onclick="uploadCute()">Enviar Foto Fofa</button>
+<div id="cuteGallery" class="fofura"></div>
+</div>
+
+<!-- VÍDEOS -->
+<div class="box">
+<h3>🎥 Vídeos Engraçados</h3>
+<input type="file" id="petVideo">
+<button onclick="uploadVideo()">Enviar Vídeo</button>
+<div id="videos"></div>
 </div>
 
 </div>
 
 <script type="module">
-// 🔥 CONFIG FIREBASE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-const firebaseConfig = {
-  apiKey: "SUA_CHAVE",
-  authDomain: "SEU_DOMINIO",
-  projectId: "SEU_ID",
-  storageBucket: "SEU_BUCKET",
-  messagingSenderId: "SEU_ID",
-  appId: "SEU_APP_ID"
-};
+const firebaseConfig={apiKey:"SUA_CHAVE",authDomain:"SEU_DOMINIO",projectId:"SEU_ID",storageBucket:"SEU_BUCKET",messagingSenderId:"SEU_ID",appId:"SEU_APP_ID"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const storage=getStorage(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-// POSTAR HISTÓRIA
-async function postStory(){
-let name=petName.value, txt=story.value, files=photos.files;
-if(!name||!txt||files.length===0) return alert("Preencha tudo");
-
-let urls=[];
-for(let file of files){
-let storageRef=ref(storage,"pets/"+Date.now()+file.name);
-await uploadBytes(storageRef,file);
-let url=await getDownloadURL(storageRef);
-urls.push(url);
+let chart;
+window.calc=()=>{
+let f=+food.value,v=+vet.value,o=+other.value;
+chart?.destroy();
+chart=new Chart(chart.getContext('2d'),{type:'doughnut',data:{labels:["Alimentação","Veterinário","Outros"],datasets:[{data:[f,v,o]}]}});
 }
 
-await addDoc(collection(db,"stories"),{
-name, txt, images:urls, likes:0, comments:[]
-});
+// DICAS
+window.addTip=async()=>{await addDoc(collection(db,"tips"),{text:newTip.value});loadTips()}
+async function loadTips(){tips.innerHTML="";(await getDocs(collection(db,"tips"))).forEach(d=>tips.innerHTML+=`<div class="tip">${d.data().text}</div>`)} loadTips();
 
-loadStories();
+// HISTÓRIAS
+window.postStory=async()=>{
+let urls=[];for(let file of storyPhotos.files){let r=ref(storage,"stories/"+Date.now()+file.name);await uploadBytes(r,file);urls.push(await getDownloadURL(r))}
+await addDoc(collection(db,"stories"),{name:petName.value,txt:story.value,images:urls,likes:0,comments:[]});loadStories()
 }
 
-// CARREGAR HISTÓRIAS
 async function loadStories(){
 stories.innerHTML="";
-const querySnapshot = await getDocs(collection(db,"stories"));
-querySnapshot.forEach((docSnap)=>{
-let s=docSnap.data();
-let id=docSnap.id;
-
-let div=document.createElement("div");
-div.className="post";
-div.innerHTML=`<h4>${s.name}</h4>
-<p contenteditable="true" onblur="saveEdit('${id}', this.innerText)">${s.txt}</p>
-${s.images.map(img=>`<img src="${img}">`).join("")}
+(await getDocs(collection(db,"stories"))).forEach(docSnap=>{
+let s=docSnap.data(),id=docSnap.id;
+stories.innerHTML+=`<div class="post"><h4>${s.name}</h4>
+<p contenteditable onblur="saveEdit('${id}',this.innerText)">${s.txt}</p>
+${s.images.map(i=>`<img src="${i}">`).join("")}
 <div class="actions">
-<button onclick="likeStory('${id}',${s.likes})">❤️ ${s.likes}</button>
-<button onclick="deleteStory('${id}')">🗑 Excluir</button>
-</div>
-<input placeholder="Comentar" onkeypress="commentStory(event,'${id}', ${JSON.stringify(s.comments)})">`;
+<button onclick="like('${id}',${s.likes})">❤️ ${s.likes}</button>
+<button onclick="del('${id}')">🗑</button></div>
+<input placeholder="Comentar" onkeypress="comment(event,'${id}',${JSON.stringify(s.comments)})">
+</div>`
+})
+}
+window.like=async(id,l)=>{await updateDoc(doc(db,"stories",id),{likes:l+1});loadStories()}
+window.del=async(id)=>{await deleteDoc(doc(db,"stories",id));loadStories()}
+window.saveEdit=async(id,t)=>{await updateDoc(doc(db,"stories",id),{txt:t})}
+window.comment=async(e,id,c)=>{if(e.key==="Enter"){c.push(e.target.value);await updateDoc(doc(db,"stories",id),{comments:c});loadStories()}}
 
-stories.appendChild(div);
-});
+// MOMENTO FOFURA
+window.uploadCute=async()=>{
+let f=cutePhoto.files[0];let r=ref(storage,"cute/"+Date.now()+f.name);await uploadBytes(r,f);
+await addDoc(collection(db,"cute"),{img:await getDownloadURL(r)});loadCute()
 }
+async function loadCute(){cuteGallery.innerHTML="";(await getDocs(collection(db,"cute"))).forEach(d=>cuteGallery.innerHTML+=`<img src="${d.data().img}">`)} loadCute();
 
-window.likeStory = async (id,likes)=>{
-await updateDoc(doc(db,"stories",id),{likes:likes+1});
-loadStories();
+// VÍDEOS
+window.uploadVideo=async()=>{
+let f=petVideo.files[0];let r=ref(storage,"videos/"+Date.now()+f.name);await uploadBytes(r,f);
+await addDoc(collection(db,"videos"),{vid:await getDownloadURL(r)});loadVideos()
 }
-
-window.deleteStory = async (id)=>{
-await deleteDoc(doc(db,"stories",id));
-loadStories();
-}
-
-window.saveEdit = async (id,text)=>{
-await updateDoc(doc(db,"stories",id),{txt:text});
-}
-
-window.commentStory = async (e,id,comments)=>{
-if(e.key==="Enter"){
-comments.push(e.target.value);
-await updateDoc(doc(db,"stories",id),{comments});
-loadStories();
-}
-}
+async function loadVideos(){videos.innerHTML="";(await getDocs(collection(db,"videos"))).forEach(d=>videos.innerHTML+=`<video controls src="${d.data().vid}"></video>`)} loadVideos();
 
 loadStories();
 </script>
