@@ -4,70 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🐾 Finança Animal</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Firebase versão compat (funciona fácil em HTML único) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
 <style>
 body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:url("https://images.unsplash.com/photo-1518717758536-85ae29035b6d") no-repeat center/cover fixed;
+ margin:0;
+ font-family:Arial, sans-serif;
+ background:url("https://images.unsplash.com/photo-1518717758536-85ae29035b6d") center/cover fixed;
 }
-header{
-  background:#4b2e1e;
-  color:#fff;
-  padding:15px;
-  text-align:center;
-  font-size:22px;
-}
-.card{
-  background:#fff;
-  margin:15px auto;
-  padding:15px;
-  border-radius:12px;
-  width:95%;
-  max-width:500px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
-input,button{
-  width:100%;
-  padding:8px;
-  margin:5px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-button{
-  background:#5a3d2b;
-  color:white;
-  cursor:pointer;
-}
-.post{
-  background:white;
-  padding:10px;
-  border-radius:10px;
-  margin-bottom:10px;
-}
-.dicas{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.dica{
-  background:#5a3d2b;
-  color:white;
-  padding:15px;
-  border-radius:10px;
-  text-align:center;
-  transform-style:preserve-3d;
-  transition:0.6s;
-}
-.dica:hover{ transform:rotateY(180deg); }
+header{background:#4b2e1e;color:white;text-align:center;padding:15px;font-size:22px;}
+.card{background:white;margin:15px auto;padding:15px;border-radius:12px;width:95%;max-width:520px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+input,textarea,button{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ccc;}
+button{background:#5a3d2b;color:white;cursor:pointer}
+
+/* DICAS */
+.dicas{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.flip{perspective:1000px;}
+.flip-inner{position:relative;width:100%;height:100px;transition:transform .6s;transform-style:preserve-3d;}
+.flip.active .flip-inner{transform:rotateY(180deg);}
+.frente,.verso{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;justify-content:center;align-items:center;padding:10px;font-weight:bold;text-align:center;}
+.frente{background:#5a3d2b;color:white;}
+.verso{background:#f1c40f;transform:rotateY(180deg);}
+
+/* POSTS */
+.post{background:#fff;padding:8px;border-radius:10px;margin-bottom:10px}
+.post img{width:100%;border-radius:8px}
+.actions{display:flex;gap:5px;margin-top:5px}
+.like{color:red;cursor:pointer}
+.alerta{font-weight:bold;margin-top:10px}
 </style>
 </head>
 
@@ -75,110 +39,136 @@ button{
 
 <header>🐾 Finança Animal</header>
 
+<!-- CALCULADORA -->
 <div class="card">
-  <h3>👤 Login / Cadastro</h3>
-  <input id="email" placeholder="Email">
-  <input id="senha" type="password" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-  <button onclick="cadastro()">Criar Conta</button>
+<h3>💰 Planejamento do Pet</h3>
+<input type="number" id="a" placeholder="Alimentação">
+<input type="number" id="s" placeholder="Saúde">
+<input type="number" id="m" placeholder="Mimos">
+<button onclick="calc()">Analisar Gastos</button>
+<canvas id="graf"></canvas>
+<div id="msg" class="alerta"></div>
 </div>
 
+<!-- DICAS -->
 <div class="card">
-  <h3>📸 Postar Foto ou Vídeo</h3>
-  <input id="petNome" placeholder="Nome do Pet">
-  <input type="file" id="arquivo">
-  <button onclick="postar()">Postar</button>
+<h3>🧠 Dicas</h3>
+<div class="dicas" id="dicas"></div>
 </div>
 
+<!-- POSTAR -->
 <div class="card">
-  <h3>💰 Gastos do Pet</h3>
-  <input type="number" id="alimentacao" placeholder="Alimentação">
-  <input type="number" id="saude" placeholder="Saúde">
-  <input type="number" id="mimos" placeholder="Mimos">
-  <button onclick="grafico()">Analisar</button>
-  <canvas id="chart"></canvas>
+<h3>📖 História do seu Pet</h3>
+<input id="nomePet" placeholder="Nome do Pet">
+<textarea id="historia" placeholder="Conte a história"></textarea>
+<input type="file" id="foto">
+<button onclick="salvarPost()">Publicar</button>
 </div>
 
+<!-- FEED -->
 <div class="card">
-  <h3>🧠 Dicas</h3>
-  <div class="dicas">
-    <div class="dica">💉 Vacinas evitam gastos grandes</div>
-    <div class="dica">🥩 Ração boa = menos veterinário</div>
-    <div class="dica">🦷 Escovar dentes evita cirurgia</div>
-    <div class="dica">🚶 Passeio mantém saúde</div>
-  </div>
-</div>
-
-<div class="card">
-  <h3>🐾 Momento Fofura</h3>
-  <div id="feed"></div>
+<h3>📸 Momento Fofura</h3>
+<div id="feed"></div>
 </div>
 
 <script>
-// 🔥 COLOQUE SUAS CHAVES DO FIREBASE AQUI
-const firebaseConfig = {
-  apiKey: "SUA_KEY",
-  authDomain: "SEU_DOMINIO",
-  projectId: "SEU_ID",
-  storageBucket: "SEU_BUCKET",
-  messagingSenderId: "ID",
-  appId: "APP_ID"
-};
+/* CALCULADORA */
+let chart;
+function calc(){
+ let a=+a.value||0, s=+s.value||0, m=+m.value||0;
+ let total=a+s+m;
+ if(chart) chart.destroy();
+ chart=new Chart(graf,{type:'doughnut',
+ data:{labels:['Alimentação','Saúde','Mimos'],
+ datasets:[{data:[a,s,m]}]}});
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
-
-function cadastro(){
-  auth.createUserWithEmailAndPassword(email.value, senha.value);
+ let msg="";
+ if(total>800) msg="🚨 Alerta! Gastos muito altos.";
+ else if(m>a) msg="⚠️ Muitos mimos.";
+ else if(s>a) msg="⚠️ Saúde pesando no orçamento.";
+ else msg="✅ Gastos equilibrados!";
+ document.getElementById("msg").innerText=msg;
 }
 
-function login(){
-  auth.signInWithEmailAndPassword(email.value, senha.value);
+/* DICAS */
+const lista=[
+"Vacinas evitam gastos grandes",
+"Ração boa reduz veterinário",
+"Escovar dentes evita cirurgia",
+"Passeio mantém saúde"
+];
+function gerarDicas(){
+ dicas.innerHTML="";
+ lista.forEach(t=>{
+ dicas.innerHTML+=`
+ <div class="flip" onclick="this.classList.toggle('active')">
+  <div class="flip-inner">
+   <div class="frente">🐾 Dica</div>
+   <div class="verso">${t}</div>
+  </div>
+ </div>`;
+ });
+}
+gerarDicas();
+
+/* POSTS */
+let posts=JSON.parse(localStorage.getItem("posts"))||[];
+
+function salvarPost(editIndex=null){
+ let file=foto.files[0];
+ let reader=new FileReader();
+ reader.onload=e=>{
+  let post={
+   nome:nomePet.value,
+   texto:historia.value,
+   img:e.target.result,
+   likes:0
+  };
+  if(editIndex!==null) posts[editIndex]=post;
+  else posts.push(post);
+  localStorage.setItem("posts",JSON.stringify(posts));
+  renderPosts();
+ };
+ if(file) reader.readAsDataURL(file);
 }
 
-function postar(){
-  let file = arquivo.files[0];
-  let ref = storage.ref("posts/" + Date.now());
-  ref.put(file).then(()=>{
-    ref.getDownloadURL().then(url=>{
-      db.collection("posts").add({
-        pet: petNome.value,
-        url:url,
-        likes:0
-      });
-    });
-  });
+function renderPosts(){
+ feed.innerHTML="";
+ posts.forEach((p,i)=>{
+  feed.innerHTML+=`
+  <div class="post">
+   <h4>${p.nome}</h4>
+   <p>${p.texto}</p>
+   <img src="${p.img}">
+   <div class="actions">
+    <span class="like" onclick="curtir(${i})">❤️ ${p.likes}</span>
+    <button onclick="editar(${i})">✏️</button>
+    <button onclick="excluir(${i})">🗑</button>
+   </div>
+  </div>`;
+ });
+}
+renderPosts();
+
+function curtir(i){
+ posts[i].likes++;
+ localStorage.setItem("posts",JSON.stringify(posts));
+ renderPosts();
 }
 
-db.collection("posts").onSnapshot(snap=>{
-  feed.innerHTML="";
-  snap.forEach(doc=>{
-    let p=doc.data();
-    feed.innerHTML+=`
-      <div class="post">
-        <h4>${p.pet}</h4>
-        <img src="${p.url}" width="100%">
-        <button onclick="curtir('${doc.id}')">❤️ ${p.likes}</button>
-      </div>`;
-  });
-});
-
-function curtir(id){
-  db.collection("posts").doc(id).update({
-    likes: firebase.firestore.FieldValue.increment(1)
-  });
+function excluir(i){
+ if(confirm("Excluir post?")){
+  posts.splice(i,1);
+  localStorage.setItem("posts",JSON.stringify(posts));
+  renderPosts();
+ }
 }
 
-function grafico(){
-  new Chart(chart,{
-    type:'doughnut',
-    data:{
-      labels:['Alimentação','Saúde','Mimos'],
-      datasets:[{data:[alimentacao.value,saude.value,mimos.value]}]
-    }
-  });
+function editar(i){
+ nomePet.value=posts[i].nome;
+ historia.value=posts[i].texto;
+ foto.required=false;
+ salvarPost=i;
 }
 </script>
 
