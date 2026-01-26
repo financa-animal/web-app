@@ -3,172 +3,184 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Finança Animal</title>
+<title>🐾 Finança Animal</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Firebase versão compat (funciona fácil em HTML único) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
 <style>
 body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:linear-gradient(135deg,#f6d365,#fda085);
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:url("https://images.unsplash.com/photo-1518717758536-85ae29035b6d") no-repeat center/cover fixed;
 }
 header{
-    text-align:center;
-    color:white;
-    padding:12px;
-    font-size:22px;
-    font-weight:bold;
-    background:#4e342e;
+  background:#4b2e1e;
+  color:#fff;
+  padding:15px;
+  text-align:center;
+  font-size:22px;
 }
-.container{
-    display:flex;
-    flex-wrap:wrap;
-    gap:15px;
-    padding:15px;
-    max-width:1200px;
-    margin:auto;
+.card{
+  background:#fff;
+  margin:15px auto;
+  padding:15px;
+  border-radius:12px;
+  width:95%;
+  max-width:500px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
-.box{
-    background:white;
-    border-radius:14px;
-    padding:15px;
-    box-shadow:0 6px 15px rgba(0,0,0,0.15);
-    flex:1;
-    min-width:280px;
+input,button{
+  width:100%;
+  padding:8px;
+  margin:5px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
 button{
-    background:#6b4c2a;
-    color:white;
-    border:none;
-    padding:8px;
-    border-radius:8px;
-    cursor:pointer;
+  background:#5a3d2b;
+  color:white;
+  cursor:pointer;
 }
-input,textarea{width:100%;margin:6px 0;padding:6px}
-
-/* DICAS CARD FLIP */
-.tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.tip-card{perspective:1000px;height:90px}
-.tip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
-.tip-card.flip .tip-inner{transform:rotateY(180deg)}
-.tip-front,.tip-back{
-position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;
-display:flex;align-items:center;justify-content:center;text-align:center;padding:5px;color:white}
-.tip-front{background:#3d2b1f}
-.tip-back{background:#6b4c2a;transform:rotateY(180deg)}
-
-/* GALERIA */
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.post{background:#fafafa;padding:8px;border-radius:10px}
-.post img{width:100%;border-radius:8px;height:130px;object-fit:cover}
-
-.login-box{background:#fff3cd;padding:10px;text-align:center}
+.post{
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+.dicas{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.dica{
+  background:#5a3d2b;
+  color:white;
+  padding:15px;
+  border-radius:10px;
+  text-align:center;
+  transform-style:preserve-3d;
+  transition:0.6s;
+}
+.dica:hover{ transform:rotateY(180deg); }
 </style>
 </head>
+
 <body>
 
-<header>🐶 FINANÇA ANIMAL</header>
+<header>🐾 Finança Animal</header>
 
-<div class="login-box">
-<input id="user" placeholder="Seu nome">
-<button onclick="login()">Entrar para postar</button>
-<span id="status"></span>
+<div class="card">
+  <h3>👤 Login / Cadastro</h3>
+  <input id="email" placeholder="Email">
+  <input id="senha" type="password" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+  <button onclick="cadastro()">Criar Conta</button>
 </div>
 
-<div class="container">
-
-<div class="box">
-<h3>💰 Planejamento</h3>
-<input type="number" id="alimentacao" placeholder="Alimentação">
-<input type="number" id="saude" placeholder="Saúde">
-<input type="number" id="mimos" placeholder="Mimos">
-<button onclick="calcular()">Calcular</button>
-<canvas id="grafico"></canvas>
-<div id="emergencia"></div>
+<div class="card">
+  <h3>📸 Postar Foto ou Vídeo</h3>
+  <input id="petNome" placeholder="Nome do Pet">
+  <input type="file" id="arquivo">
+  <button onclick="postar()">Postar</button>
 </div>
 
-<div class="box">
-<h3>💡 Dicas</h3>
-<div class="tips-grid" id="tips"></div>
+<div class="card">
+  <h3>💰 Gastos do Pet</h3>
+  <input type="number" id="alimentacao" placeholder="Alimentação">
+  <input type="number" id="saude" placeholder="Saúde">
+  <input type="number" id="mimos" placeholder="Mimos">
+  <button onclick="grafico()">Analisar</button>
+  <canvas id="chart"></canvas>
 </div>
 
-<div class="box">
-<h3>📸 Momento Fofura</h3>
-<input type="file" id="foto">
-<button onclick="postFofura()">Postar</button>
-<div class="gallery" id="gallery"></div>
+<div class="card">
+  <h3>🧠 Dicas</h3>
+  <div class="dicas">
+    <div class="dica">💉 Vacinas evitam gastos grandes</div>
+    <div class="dica">🥩 Ração boa = menos veterinário</div>
+    <div class="dica">🦷 Escovar dentes evita cirurgia</div>
+    <div class="dica">🚶 Passeio mantém saúde</div>
+  </div>
 </div>
 
+<div class="card">
+  <h3>🐾 Momento Fofura</h3>
+  <div id="feed"></div>
 </div>
 
 <script>
-let currentUser=null, chart;
-
-/* LOGIN USUÁRIOS */
-function login(){
- if(!user.value) return alert("Digite seu nome");
- currentUser=user.value;
- status.innerText="Logado como "+currentUser;
-}
-
-/* CALCULADORA */
-function calcular(){
-let a=+alimentacao.value||0,s=+saude.value||0,m=+mimos.value||0,total=a+s+m;
-emergencia.innerText="Reserva emergência: R$ "+(total*0.2).toFixed(2);
-if(chart) chart.destroy();
-chart=new Chart(grafico,{type:'doughnut',data:{labels:['Alimentação','Saúde','Mimos'],datasets:[{data:[a,s,m]}]}});
-}
-
-/* DICAS FLIP */
-const tipsArr=["Guarde 20%","Vacinas evitam custos","Passeio é saúde","Boa ração economiza","Água sempre limpa","Brinquedos evitam ansiedade"];
-tips.innerHTML=tipsArr.slice(0,4).map(t=>`
-<div class="tip-card" onclick="this.classList.toggle('flip')">
-<div class="tip-inner">
-<div class="tip-front">Dica</div>
-<div class="tip-back">${t}</div>
-</div></div>`).join("");
-
-/* FOTOS PADRÃO */
-let defaultPhotos=[
-"https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
-"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2"
-];
-let posts=JSON.parse(localStorage.getItem("posts")||"null");
-if(!posts){ posts=defaultPhotos.map(p=>({user:"Finança Animal",img:p,likes:0,comments:[]})); localStorage.setItem("posts",JSON.stringify(posts)); }
-
-function loadPosts(){
-let posts=JSON.parse(localStorage.getItem("posts"));
-gallery.innerHTML="";
-posts.forEach((p,i)=>{
-gallery.innerHTML+=`
-<div class="post">
-<img src="${p.img}">
-<b>${p.user}</b><br>
-❤️ <span onclick="like(${i})">${p.likes}</span>
-</div>`;
-});
-}
-function like(i){
-let posts=JSON.parse(localStorage.getItem("posts"));
-posts[i].likes++;
-localStorage.setItem("posts",JSON.stringify(posts));
-loadPosts();
-}
-
-function postFofura(){
-if(!currentUser) return alert("Entre com seu nome primeiro");
-let f=foto.files[0]; if(!f) return;
-let r=new FileReader();
-r.onload=e=>{
-let posts=JSON.parse(localStorage.getItem("posts"));
-posts.push({user:currentUser,img:e.target.result,likes:0,comments:[]});
-localStorage.setItem("posts",JSON.stringify(posts));
-loadPosts();
+// 🔥 COLOQUE SUAS CHAVES DO FIREBASE AQUI
+const firebaseConfig = {
+  apiKey: "SUA_KEY",
+  authDomain: "SEU_DOMINIO",
+  projectId: "SEU_ID",
+  storageBucket: "SEU_BUCKET",
+  messagingSenderId: "ID",
+  appId: "APP_ID"
 };
-r.readAsDataURL(f);
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+function cadastro(){
+  auth.createUserWithEmailAndPassword(email.value, senha.value);
 }
 
-loadPosts();
+function login(){
+  auth.signInWithEmailAndPassword(email.value, senha.value);
+}
+
+function postar(){
+  let file = arquivo.files[0];
+  let ref = storage.ref("posts/" + Date.now());
+  ref.put(file).then(()=>{
+    ref.getDownloadURL().then(url=>{
+      db.collection("posts").add({
+        pet: petNome.value,
+        url:url,
+        likes:0
+      });
+    });
+  });
+}
+
+db.collection("posts").onSnapshot(snap=>{
+  feed.innerHTML="";
+  snap.forEach(doc=>{
+    let p=doc.data();
+    feed.innerHTML+=`
+      <div class="post">
+        <h4>${p.pet}</h4>
+        <img src="${p.url}" width="100%">
+        <button onclick="curtir('${doc.id}')">❤️ ${p.likes}</button>
+      </div>`;
+  });
+});
+
+function curtir(id){
+  db.collection("posts").doc(id).update({
+    likes: firebase.firestore.FieldValue.increment(1)
+  });
+}
+
+function grafico(){
+  new Chart(chart,{
+    type:'doughnut',
+    data:{
+      labels:['Alimentação','Saúde','Mimos'],
+      datasets:[{data:[alimentacao.value,saude.value,mimos.value]}]
+    }
+  });
+}
 </script>
+
 </body>
 </html>
