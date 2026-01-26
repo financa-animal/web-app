@@ -35,7 +35,7 @@ video{width:100%;border-radius:10px;margin-top:10px}
 <input id="health" type="number" placeholder="Saúde">
 <input id="extras" type="number" placeholder="Mimos">
 <button onclick="calc()">Analisar Gastos</button>
-<p id="alert"></p>
+<p id="alertBox"></p>
 <canvas id="chart"></canvas>
 </div>
 
@@ -71,9 +71,16 @@ video{width:100%;border-radius:10px;margin-top:10px}
 
 <script>
 let chart;
+
 function calc(){
-let f=+food.value||0,h=+health.value||0,e=+extras.value||0,total=f+h+e;
-alert.innerText=total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
+let f=+document.getElementById("food").value||0;
+let h=+document.getElementById("health").value||0;
+let e=+document.getElementById("extras").value||0;
+let total=f+h+e;
+
+document.getElementById("alertBox").innerText=
+total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
+
 if(chart)chart.destroy();
 chart=new Chart(document.getElementById("chart"),{
 type:'doughnut',
@@ -82,7 +89,9 @@ data:{labels:["Alimentação","Saúde","Mimos"],datasets:[{data:[f,h,e]}]}
 }
 
 const tipList=["Vacinas evitam gastos grandes","Ração boa reduz veterinário","Escovar dentes evita cirurgia","Passeio mantém saúde","Hidratação é essencial","Brincar reduz ansiedade"];
+
 function updateTips(){
+let tips=document.getElementById("tips");
 tips.innerHTML="";
 tipList.sort(()=>0.5-Math.random()).slice(0,4).forEach(t=>{
 tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
@@ -94,14 +103,16 @@ tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
 updateTips();
 
 function addCute(){
-let f=cuteUpload.files[0];if(!f)return;
-let r=new FileReader();r.onload=e=>cute.innerHTML+=`<img src="${e.target.result}" style="width:100%;margin-top:10px;border-radius:10px">`;
+let f=document.getElementById("cuteUpload").files[0];if(!f)return;
+let r=new FileReader();
+r.onload=e=>document.getElementById("cute").innerHTML+=`<img src="${e.target.result}" style="width:100%;margin-top:10px;border-radius:10px">`;
 r.readAsDataURL(f);
 }
 
 function addVideo(){
-let f=videoUpload.files[0];if(!f)return;
-let r=new FileReader();r.onload=e=>videos.innerHTML+=`<video src="${e.target.result}" controls loop></video>`;
+let f=document.getElementById("videoUpload").files[0];if(!f)return;
+let r=new FileReader();
+r.onload=e=>document.getElementById("videos").innerHTML+=`<video src="${e.target.result}" controls loop></video>`;
 r.readAsDataURL(f);
 }
 </script>
@@ -112,12 +123,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "COLE_AQUI",
-  authDomain: "COLE_AQUI",
-  projectId: "COLE_AQUI",
-  storageBucket: "COLE_AQUI",
-  messagingSenderId: "COLE_AQUI",
-  appId: "COLE_AQUI"
+  apiKey: "AIzaSyCtWTnPgwTreMjrthlXxGu0WOPYRE6W",
+  authDomain: "financa-animal.firebaseapp.com",
+  projectId: "financa-animal",
+  storageBucket: "financa-animal.appspot.com",
+  messagingSenderId: "693788312237",
+  appId: "1:693788312237:web:169d6407dc2eb3136fc24"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -126,6 +137,7 @@ const db = getFirestore(app);
 window.postStory = async function(){
 let name=petName.value,txt=story.value,file=photos.files[0];
 if(!name||!txt||!file)return alert("Preencha tudo");
+
 let reader=new FileReader();
 reader.onload=async e=>{
 await addDoc(collection(db,"stories"),{name,txt,img:e.target.result,likes:0,comments:[]});
@@ -136,6 +148,7 @@ reader.readAsDataURL(file);
 
 window.likeStory = async(id,likes)=>{await updateDoc(doc(db,"stories",id),{likes:likes+1});loadStories();}
 window.deleteStory = async(id)=>{await deleteDoc(doc(db,"stories",id));loadStories();}
+
 window.addComment = async(e,id)=>{
 e.preventDefault();
 let input=e.target.comment;
