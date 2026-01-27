@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,14 +9,14 @@
 <style>
 :root {
   --primary: #5FA8A0;
-  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-bg: rgba(255, 255, 255, 0.94);
   --text: #2b2b2b;
 }
 
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, sans-serif;
-  /* IMAGEM CORRETA: Planeta Terra e Animais Selvagens */
+  /* AGORA SIM: Link direto para a imagem do planeta e animais selvagens */
   background-color: #0d1b2a;
   background-image: url("https://img.freepik.com/vetores-gratis/projeto-de-modelo-de-plano-de-fundo-com-animais-selvagens-na-terra_1308-41221.jpg");
   background-size: cover;
@@ -26,6 +26,7 @@ body {
   color: var(--text);
 }
 
+/* O resto do design para combinar com o fundo escuro */
 .container {
   max-width: 600px;
   margin: auto;
@@ -39,16 +40,16 @@ header {
   font-size: 42px;
   font-weight: 900;
   color: white;
-  text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
 }
 
 .card {
   background: var(--card-bg);
   padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
   margin-bottom: 25px;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
 }
 
 .tips-container { perspective: 1000px; height: 80px; }
@@ -67,17 +68,20 @@ input, textarea {
 }
 
 button {
-  background: #ff9f1c; 
+  background: #ff9f1c; /* Laranja para destacar no azul do fundo */
   color: white; border: none;
   padding: 12px; border-radius: 10px; font-weight: bold;
   cursor: pointer; width: 100%; font-size: 16px;
+  box-shadow: 0 4px 0 #cc7a00;
 }
+button:active { transform: translateY(2px); box-shadow: none; }
 
+/* CHAT FIXO */
 .chat {
   position: fixed; right: 20px; bottom: 20px;
   width: 320px; height: 450px;
   background: white; border-radius: 20px;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 50px rgba(0,0,0,0.5);
   display: flex; flex-direction: column; z-index: 1000;
   transition: 0.4s ease;
 }
@@ -88,15 +92,16 @@ button {
   cursor: pointer; border-radius: 20px 20px 0 0;
 }
 
-.chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f0f4f8; }
-.bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; }
+.chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f8f9fa; }
+.bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 .user-me { align-self: flex-end; background: #d1e7dd; }
-.user-other { align-self: flex-start; background: #ffffff; }
+.user-other { align-self: flex-start; background: #ffffff; border: 1px solid #eee; }
 
 .minimized { height: 45px !important; width: 220px; }
 
 @media (max-width: 768px) {
   .chat { width: 90%; right: 5%; bottom: 0; }
+  header { font-size: 32px; }
 }
 </style>
 </head>
@@ -114,8 +119,8 @@ button {
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="hNome" placeholder="Nome do Pet"/>
-    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura..."></textarea>
-    <button onclick="postarHistoria()">Publicar</button>
+    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura do seu pet..."></textarea>
+    <button onclick="postarHistoria()">Publicar no Mural</button>
     <div id="mural" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
   </div>
 
@@ -124,7 +129,7 @@ button {
     <input type="number" id="g1" placeholder="Ração (R$)"/>
     <input type="number" id="g2" placeholder="Veterinário (R$)"/>
     <input type="number" id="g3" placeholder="Outros (R$)"/>
-    <button onclick="gerarGrafico()">Ver Gráfico</button>
+    <button onclick="gerarGrafico()">Ver Gráfico de Gastos</button>
     <div style="max-width:180px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
   </div>
 </div>
@@ -138,8 +143,8 @@ button {
   <div style="padding:10px; border-top:1px solid #eee;">
     <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px; height:25px;"/>
     <div style="display:flex; gap:5px;">
-      <input id="inputChat" placeholder="Mensagem..."/>
-      <button onclick="enviarMsg()" style="width:45px; background: var(--primary);">✈</button>
+      <input id="inputChat" placeholder="Mensagem..." style="margin:0;"/>
+      <button onclick="enviarMsg()" style="width:45px; background: var(--primary); padding:0; box-shadow:none;">✈</button>
     </div>
   </div>
 </div>
@@ -163,6 +168,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 signInAnonymously(auth);
 
+// CONFIGURAÇÃO DO CHAT (Coleção exata: chats/h2ybo1E66fhW8uiojbJy/mensagens)
 const chatID = "h2ybo1E66fhW8uiojbJy"; 
 
 window.postarHistoria = async () => {
@@ -178,7 +184,7 @@ onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) =
   const mural = document.getElementById('mural');
   mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
+    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd; font-size:14px;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
   });
 });
 
@@ -215,7 +221,7 @@ window.gerarGrafico = () => {
 };
 window.gerarGrafico();
 
-const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Proteja os animais! 🦁"];
+const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Respeite o Reino Animal! 🦁", "Cuidar é um ato de amor! ❤️"];
 let dIdx = 0;
 setInterval(() => {
   const el = document.getElementById('tipCard');
