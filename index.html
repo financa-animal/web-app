@@ -3,106 +3,73 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FofoPet - Reino Animal</title>
+<title>FofoPet - Mundo Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
   --primary: #5FA8A0;
   --card-bg: rgba(255, 255, 255, 0.94);
-  --text: #2b2b2b;
 }
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  /* IMAGEM DO REINO ANIMAL (PLANETA E BICHOS) - LINK DIRETO */
+  font-family: 'Segoe UI', sans-serif;
+  /* AQUI ESTÁ A MUDANÇA: Link estável do Planeta com Animais */
   background-color: #0d1b2a;
   background-image: url("https://img.freepik.com/free-vector/wild-animals-around-earth_1308-33315.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
-  color: var(--text);
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  padding-bottom: 120px;
-}
+.container { max-width: 600px; margin: auto; padding: 20px; padding-bottom: 120px; }
 
 header {
-  text-align: center;
-  padding: 20px 0;
-  font-size: 42px;
-  font-weight: 900;
-  color: white;
+  text-align: center; padding: 20px 0; font-size: 42px; font-weight: 900; color: white;
   text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
 }
 
 .card {
-  background: var(--card-bg);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-  margin-bottom: 25px;
-  backdrop-filter: blur(4px); /* Efeito suave de desfoque no fundo */
+  background: var(--card-bg); padding: 25px; border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4); margin-bottom: 25px;
+  backdrop-filter: blur(4px);
 }
 
-/* DICAS */
 .tips-container { perspective: 1000px; height: 80px; }
 .tip-card {
-  width: 100%; height: 100%;
-  background: var(--primary);
-  color: white; border-radius: 15px;
-  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%; background: var(--primary); color: white;
+  border-radius: 15px; display: flex; align-items: center; justify-content: center;
   text-align: center; padding: 10px; font-weight: 700;
   transition: transform 0.6s; transform-style: preserve-3d;
 }
 
-input, textarea {
-  width: 100%; padding: 12px; margin: 8px 0;
-  border-radius: 10px; border: 1px solid #ccc; box-sizing: border-box;
-}
+input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ccc; }
 
 button {
-  background: #ff9f1c; /* Laranja para destacar no azul */
-  color: white; border: none;
-  padding: 12px; border-radius: 10px; font-weight: bold;
-  cursor: pointer; width: 100%; font-size: 16px;
-  box-shadow: 0 4px 0 #cc7a00;
+  background: #ff9f1c; color: white; border: none; padding: 12px;
+  border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%;
 }
-button:active { transform: translateY(2px); box-shadow: none; }
 
-/* CHAT FIXO */
 .chat {
-  position: fixed; right: 20px; bottom: 20px;
-  width: 320px; height: 450px;
-  background: white; border-radius: 20px;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.6);
-  display: flex; flex-direction: column; z-index: 1000;
-  transition: 0.4s ease;
+  position: fixed; right: 20px; bottom: 20px; width: 320px; height: 450px;
+  background: white; border-radius: 20px; box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; z-index: 1000; transition: 0.4s;
 }
 
 .chat-header {
-  background: var(--primary); color: white; padding: 12px;
-  font-weight: bold; display: flex; justify-content: space-between;
-  cursor: pointer; border-radius: 20px 20px 0 0;
+  background: var(--primary); color: white; padding: 12px; font-weight: bold;
+  display: flex; justify-content: space-between; cursor: pointer; border-radius: 20px 20px 0 0;
 }
 
 .chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f8f9fa; }
 .bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; }
 .user-me { align-self: flex-end; background: #d1e7dd; }
 .user-other { align-self: flex-start; background: #ffffff; border: 1px solid #eee; }
-
 .minimized { height: 45px !important; width: 220px; }
 
-@media (max-width: 768px) {
-  .chat { width: 90%; right: 5%; bottom: 0; }
-  header { font-size: 32px; }
-}
+@media (max-width: 768px) { .chat { width: 90%; right: 5%; bottom: 0; } }
 </style>
 </head>
 <body>
@@ -112,15 +79,15 @@ button:active { transform: translateY(2px); box-shadow: none; }
 <div class="container">
   <div class="card">
     <div class="tips-container">
-      <div class="tip-card" id="tipCard">Respeite o Reino Animal! 🦁</div>
+      <div class="tip-card" id="tipCard">Proteja os animais selvagens! 🦁</div>
     </div>
   </div>
 
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="hNome" placeholder="Nome do Pet"/>
-    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura do seu pet..."></textarea>
-    <button onclick="postarHistoria()">Publicar no Mural</button>
+    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura..."></textarea>
+    <button onclick="postarHistoria()">Publicar</button>
     <div id="mural" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
   </div>
 
@@ -129,7 +96,7 @@ button:active { transform: translateY(2px); box-shadow: none; }
     <input type="number" id="g1" placeholder="Ração (R$)"/>
     <input type="number" id="g2" placeholder="Veterinário (R$)"/>
     <input type="number" id="g3" placeholder="Outros (R$)"/>
-    <button onclick="gerarGrafico()">Ver Gráfico de Gastos</button>
+    <button onclick="gerarGrafico()">Ver Gráfico</button>
     <div style="max-width:180px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
   </div>
 </div>
@@ -143,8 +110,8 @@ button:active { transform: translateY(2px); box-shadow: none; }
   <div style="padding:10px; border-top:1px solid #eee;">
     <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px; height:25px;"/>
     <div style="display:flex; gap:5px;">
-      <input id="inputChat" placeholder="Mensagem..." style="margin:0;"/>
-      <button onclick="enviarMsg()" style="width:45px; background: var(--primary); padding:0; box-shadow:none;">✈</button>
+      <input id="inputChat" placeholder="Mensagem..."/>
+      <button onclick="enviarMsg()" style="width:45px; background: var(--primary);">✈</button>
     </div>
   </div>
 </div>
@@ -183,7 +150,7 @@ onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) =
   const mural = document.getElementById('mural');
   mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd; font-size:14px;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
+    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
   });
 });
 
@@ -220,7 +187,7 @@ window.gerarGrafico = () => {
 };
 window.gerarGrafico();
 
-const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Proteja o Reino Animal! 🦁"];
+const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Respeite o Reino Animal! 🦁"];
 let dIdx = 0;
 setInterval(() => {
   const el = document.getElementById('tipCard');
