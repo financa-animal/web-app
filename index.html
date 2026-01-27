@@ -16,9 +16,9 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, sans-serif;
-  /* AGORA SIM: Link direto para a imagem do planeta e animais selvagens */
+  /* LINK REVISADO PARA GARANTIR O PLANETA COM ANIMAIS SELVAGENS */
   background-color: #0d1b2a;
-  background-image: url("https://img.freepik.com/vetores-gratis/projeto-de-modelo-de-plano-de-fundo-com-animais-selvagens-na-terra_1308-41221.jpg");
+  background-image: url("https://img.freepik.com/free-vector/wild-animals-around-earth_1308-33315.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -26,7 +26,6 @@ body {
   color: var(--text);
 }
 
-/* O resto do design para combinar com o fundo escuro */
 .container {
   max-width: 600px;
   margin: auto;
@@ -68,15 +67,13 @@ input, textarea {
 }
 
 button {
-  background: #ff9f1c; /* Laranja para destacar no azul do fundo */
+  background: #ff9f1c; 
   color: white; border: none;
   padding: 12px; border-radius: 10px; font-weight: bold;
   cursor: pointer; width: 100%; font-size: 16px;
   box-shadow: 0 4px 0 #cc7a00;
 }
-button:active { transform: translateY(2px); box-shadow: none; }
 
-/* CHAT FIXO */
 .chat {
   position: fixed; right: 20px; bottom: 20px;
   width: 320px; height: 450px;
@@ -93,7 +90,7 @@ button:active { transform: translateY(2px); box-shadow: none; }
 }
 
 .chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f8f9fa; }
-.bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; }
 .user-me { align-self: flex-end; background: #d1e7dd; }
 .user-other { align-self: flex-start; background: #ffffff; border: 1px solid #eee; }
 
@@ -101,7 +98,6 @@ button:active { transform: translateY(2px); box-shadow: none; }
 
 @media (max-width: 768px) {
   .chat { width: 90%; right: 5%; bottom: 0; }
-  header { font-size: 32px; }
 }
 </style>
 </head>
@@ -119,8 +115,8 @@ button:active { transform: translateY(2px); box-shadow: none; }
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="hNome" placeholder="Nome do Pet"/>
-    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura do seu pet..."></textarea>
-    <button onclick="postarHistoria()">Publicar no Mural</button>
+    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura..."></textarea>
+    <button onclick="postarHistoria()">Publicar</button>
     <div id="mural" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
   </div>
 
@@ -129,7 +125,7 @@ button:active { transform: translateY(2px); box-shadow: none; }
     <input type="number" id="g1" placeholder="Ração (R$)"/>
     <input type="number" id="g2" placeholder="Veterinário (R$)"/>
     <input type="number" id="g3" placeholder="Outros (R$)"/>
-    <button onclick="gerarGrafico()">Ver Gráfico de Gastos</button>
+    <button onclick="gerarGrafico()">Ver Gráfico</button>
     <div style="max-width:180px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
   </div>
 </div>
@@ -143,8 +139,8 @@ button:active { transform: translateY(2px); box-shadow: none; }
   <div style="padding:10px; border-top:1px solid #eee;">
     <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px; height:25px;"/>
     <div style="display:flex; gap:5px;">
-      <input id="inputChat" placeholder="Mensagem..." style="margin:0;"/>
-      <button onclick="enviarMsg()" style="width:45px; background: var(--primary); padding:0; box-shadow:none;">✈</button>
+      <input id="inputChat" placeholder="Mensagem..."/>
+      <button onclick="enviarMsg()" style="width:45px; background: var(--primary);">✈</button>
     </div>
   </div>
 </div>
@@ -168,7 +164,6 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 signInAnonymously(auth);
 
-// CONFIGURAÇÃO DO CHAT (Coleção exata: chats/h2ybo1E66fhW8uiojbJy/mensagens)
 const chatID = "h2ybo1E66fhW8uiojbJy"; 
 
 window.postarHistoria = async () => {
@@ -184,7 +179,7 @@ onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) =
   const mural = document.getElementById('mural');
   mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd; font-size:14px;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
+    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
   });
 });
 
@@ -221,7 +216,7 @@ window.gerarGrafico = () => {
 };
 window.gerarGrafico();
 
-const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Respeite o Reino Animal! 🦁", "Cuidar é um ato de amor! ❤️"];
+const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Respeite o Reino Animal! 🦁"];
 let dIdx = 0;
 setInterval(() => {
   const el = document.getElementById('tipCard');
@@ -229,7 +224,7 @@ setInterval(() => {
   setTimeout(() => {
     el.innerText = dicas[dIdx++ % dicas.length];
     el.style.transform = "rotateX(0deg)";
-  }, 500);
+  }, 5000);
 }, 5000);
 
 window.toggleChat = () => {
