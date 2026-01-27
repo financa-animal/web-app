@@ -3,82 +3,83 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FofoPet - Finança Animal</title>
+<title>FofoPet - Mundo Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
   --primary: #5FA8A0;
-  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-bg: rgba(255, 255, 255, 0.92); /* Leve transparência para ver o fundo */
   --text: #2b2b2b;
 }
 
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, sans-serif;
-  /* Aplicando a imagem da moldura de bichinhos que você enviou */
-  background-color: #f5f5f5;
-  background-image: url("https://img.freepik.com/vetores-premium/moldura-com-ilustracao-de-animais-fofos_530521-655.jpg");
+  /* Fundo Mundo Animal com Planeta Terra */
+  background-color: #0d1b2a;
+  background-image: url("https://img.freepik.com/vetores-gratis/projeto-de-modelo-de-plano-de-fundo-com-animais-selvagens-na-terra_1308-41221.jpg");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Mantém os bichinhos parados nas bordas */
+  background-attachment: fixed;
   background-repeat: no-repeat;
   color: var(--text);
 }
 
 .container {
-  max-width: 650px; /* Estreitado para encaixar melhor no centro da moldura */
+  max-width: 600px;
   margin: auto;
   padding: 20px;
-  padding-bottom: 100px;
+  padding-bottom: 120px;
 }
 
 header {
   text-align: center;
   padding: 20px 0;
-  font-size: 38px;
-  font-weight: 800;
-  color: var(--primary);
-  text-shadow: 1px 1px 0px #fff;
+  font-size: 42px;
+  font-weight: 900;
+  color: white;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
 }
 
 .card {
   background: var(--card-bg);
   padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
   margin-bottom: 25px;
-  border: 1px solid rgba(0,0,0,0.05);
+  backdrop-filter: blur(5px); /* Efeito de vidro embaçado */
 }
 
-/* DICAS DINÂMICAS */
+/* DICAS */
 .tips-container { perspective: 1000px; height: 80px; }
 .tip-card {
   width: 100%; height: 100%;
   background: var(--primary);
   color: white; border-radius: 15px;
   display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 10px; font-weight: 600;
+  text-align: center; padding: 10px; font-weight: 700;
   transition: transform 0.6s; transform-style: preserve-3d;
 }
 
-/* INPUTS E BOTÕES */
+/* CALCULADORA */
 input, textarea {
   width: 100%; padding: 12px; margin: 8px 0;
-  border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box;
+  border-radius: 10px; border: 1px solid #ccc; box-sizing: border-box;
 }
 button {
-  background: var(--primary); color: white; border: none;
+  background: #ff9f1c; /* Cor laranja para destacar no fundo azul */
+  color: white; border: none;
   padding: 12px; border-radius: 10px; font-weight: bold;
-  cursor: pointer; width: 100%;
+  cursor: pointer; width: 100%; font-size: 16px;
 }
 
-/* CHAT COMUNITÁRIO */
+/* CHAT */
 .chat {
   position: fixed; right: 20px; bottom: 20px;
   width: 320px; height: 450px;
   background: white; border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 50px rgba(0,0,0,0.4);
   display: flex; flex-direction: column; z-index: 1000;
   transition: 0.4s ease;
 }
@@ -87,16 +88,15 @@ button {
   font-weight: bold; display: flex; justify-content: space-between;
   cursor: pointer; border-radius: 20px 20px 0 0;
 }
-.chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #fdfdfd; }
-.bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; line-height: 1.4; }
+.chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f0f4f8; }
+.bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; }
 .user-me { align-self: flex-end; background: #d1e7dd; }
-.user-other { align-self: flex-start; background: #eee; }
+.user-other { align-self: flex-start; background: #ffffff; }
 
-.minimized { height: 45px !important; width: 200px; overflow: hidden; }
+.minimized { height: 45px !important; width: 220px; }
 
 @media (max-width: 768px) {
-  .chat { width: 90%; right: 5%; bottom: 0; border-radius: 15px 15px 0 0; }
-  header { font-size: 28px; }
+  .chat { width: 90%; right: 5%; bottom: 0; }
 }
 </style>
 </head>
@@ -108,40 +108,40 @@ button {
   
   <div class="card">
     <div class="tips-container">
-      <div class="tip-card" id="tipCard">Carregando dicas...</div>
+      <div class="tip-card" id="tipCard">Amamos todos os animais! 🌍</div>
     </div>
   </div>
 
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="hNome" placeholder="Nome do Pet"/>
-    <textarea id="hTexto" rows="3" placeholder="O que ele aprontou hoje?"></textarea>
+    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura do seu pet..."></textarea>
     <button onclick="postarHistoria()">Publicar</button>
-    <div id="mural" style="margin-top:20px; max-height: 200px; overflow-y: auto;"></div>
+    <div id="mural" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
   </div>
 
   <div class="card">
     <h3>💰 Controle Financeiro</h3>
     <input type="number" id="g1" placeholder="Ração (R$)"/>
     <input type="number" id="g2" placeholder="Veterinário (R$)"/>
-    <input type="number" id="g3" placeholder="Acessórios/Extras (R$)"/>
-    <button onclick="gerarGrafico()">Ver Gastos</button>
-    <div style="max-width:200px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
+    <input type="number" id="g3" placeholder="Outros (R$)"/>
+    <button onclick="gerarGrafico()">Ver Gráfico</button>
+    <div style="max-width:180px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
   </div>
 
 </div>
 
 <div class="chat" id="caixaChat">
   <div class="chat-header" onclick="toggleChat()">
-    <span>💬 Chat PetLover</span>
+    <span>💬 Chat da Galera</span>
     <span id="btnChat">—</span>
   </div>
   <div class="chat-messages" id="msgsChat"></div>
   <div style="padding:10px; border-top:1px solid #eee;">
-    <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px; height:30px;"/>
+    <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px; height:25px;"/>
     <div style="display:flex; gap:5px;">
-      <input id="inputChat" placeholder="Mensagem..." style="margin:0; height:35px;"/>
-      <button onclick="enviarMsg()" style="width:45px; padding:0;">✈</button>
+      <input id="inputChat" placeholder="Mensagem..."/>
+      <button onclick="enviarMsg()" style="width:45px; background: var(--primary);">✈</button>
     </div>
   </div>
 </div>
@@ -165,7 +165,8 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 signInAnonymously(auth);
 
-// --- MURAL ---
+const chatID = "h2ybo1E66fhW8uiojbJy"; 
+
 window.postarHistoria = async () => {
   const nome = document.getElementById('hNome').value;
   const texto = document.getElementById('hTexto').value;
@@ -174,18 +175,17 @@ window.postarHistoria = async () => {
     document.getElementById('hTexto').value = "";
   }
 };
+
 onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) => {
   const mural = document.getElementById('mural');
   mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #eee; font-size:14px;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
+    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
   });
 });
 
-// --- CHAT (Coleção específica h2ybo1E66fhW8uiojbJy) ---
-const chatID = "h2ybo1E66fhW8uiojbJy"; 
 window.enviarMsg = async () => {
-  const user = document.getElementById('nomeChat').value || "Anônimo";
+  const user = document.getElementById('nomeChat').value || "Explorador";
   const text = document.getElementById('inputChat').value;
   if(text && auth.currentUser) {
     await addDoc(collection(db, "chats", chatID, "mensagens"), { 
@@ -194,6 +194,7 @@ window.enviarMsg = async () => {
     document.getElementById('inputChat').value = "";
   }
 };
+
 onSnapshot(query(collection(db, "chats", chatID, "mensagens"), orderBy("data", "asc")), (snap) => {
   const cont = document.getElementById('msgsChat');
   cont.innerHTML = "";
@@ -204,7 +205,6 @@ onSnapshot(query(collection(db, "chats", chatID, "mensagens"), orderBy("data", "
   cont.scrollTop = cont.scrollHeight;
 });
 
-// --- GRÁFICO ---
 let myChart;
 window.gerarGrafico = () => {
   const v = [+document.getElementById('g1').value, +document.getElementById('g2').value, +document.getElementById('g3').value];
@@ -217,8 +217,7 @@ window.gerarGrafico = () => {
 };
 window.gerarGrafico();
 
-// --- DICAS ---
-const dicas = ["Ração de qualidade evita idas ao vet! 🍎", "Água fresca sempre disponível! 💧", "Passeios diários são essenciais! 🐕", "Brincar 15min reduz o estresse do pet! 🧶"];
+const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Proteja os animais selvagens! 🦁", "Seja o herói do seu pet! 🦸‍♂️"];
 let dIdx = 0;
 setInterval(() => {
   const el = document.getElementById('tipCard');
@@ -227,7 +226,7 @@ setInterval(() => {
     el.innerText = dicas[dIdx++ % dicas.length];
     el.style.transform = "rotateX(0deg)";
   }, 500);
-}, 4500);
+}, 5000);
 
 window.toggleChat = () => {
   const c = document.getElementById('caixaChat');
@@ -237,3 +236,4 @@ window.toggleChat = () => {
 </script>
 </body>
 </html>
+
