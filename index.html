@@ -20,6 +20,7 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Fundo temporário até você escolher o definitivo */
   background: 
     linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
     url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed;
@@ -51,102 +52,49 @@ header {
 }
 
 /* DICAS ROTATIVAS */
-.tips-container {
-  perspective: 1000px;
-  height: 80px;
-  margin-top: 10px;
-}
-
+.tips-container { perspective: 1000px; height: 80px; margin-top: 10px; }
 .tip-card {
-  width: 100%;
-  height: 100%;
-  background: var(--primary);
-  color: white;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 15px;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
+  width: 100%; height: 100%; background: var(--primary); color: white;
+  border-radius: 15px; display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 15px; font-weight: 600; font-size: 1.1rem;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d;
 }
 
-/* GUIA DE CUIDADOS */
-.blog-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-top: 15px;
-}
+/* GUIA E BLOG */
+.blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
 .article-card {
-  background: var(--soft);
-  padding: 15px;
-  border-radius: 15px;
-  font-size: 14px;
-  border-left: 4px solid var(--primary);
-  cursor: pointer;
-  transition: 0.3s;
+  background: var(--soft); padding: 15px; border-radius: 15px; font-size: 14px;
+  border-left: 4px solid var(--primary); cursor: pointer; transition: 0.3s;
 }
 .article-card:hover { transform: translateY(-3px); background: #ebf3f2; }
 .article-card h4 { margin: 0 0 8px 0; color: var(--primary); }
 
+/* SEÇÃO FAQ (NOVA) */
+.faq-item { border-bottom: 1px solid #eee; padding: 12px 0; cursor: pointer; }
+.faq-question { font-weight: bold; color: var(--primary); display: flex; justify-content: space-between; }
+.faq-answer { display: none; padding-top: 10px; font-size: 14px; line-height: 1.5; color: #555; }
+
 /* FINANCEIRO */
 .chart-wrap { max-width: 220px; margin: 20px auto; }
 .alert-box {
-  background: var(--alert-bg);
-  color: var(--alert-text);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #fed7d7;
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 15px;
-  display: none;
+  background: var(--alert-bg); color: var(--alert-text); padding: 12px;
+  border-radius: 10px; border: 1px solid #fed7d7; text-align: center; font-weight: bold; margin-bottom: 15px; display: none;
 }
 
 input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 12px;
-  border: 1.5px solid #eee;
-  box-sizing: border-box;
-  font-size: 16px;
+  width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1.5px solid #eee; box-sizing: border-box; font-size: 16px;
 }
 
 button {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-  transition: 0.2s;
+  background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s;
 }
 
 /* CHAT */
 .chat {
-  position: fixed;
-  right: 25px;
-  bottom: 85px; 
-  width: 360px;
-  height: 500px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
+  position: fixed; right: 25px; bottom: 85px; width: 360px; height: 500px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 1000;
 }
 .chat-header {
-  background: var(--primary); color: white; padding: 15px;
-  font-weight: bold; display: flex; justify-content: space-between;
-  cursor: pointer; border-radius: 20px 20px 0 0;
+  background: var(--primary); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; cursor: pointer; border-radius: 20px 20px 0 0;
 }
 .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
 .bubble { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 14px; }
@@ -156,23 +104,15 @@ button {
 
 /* FOOTER E MODAL */
 footer {
-  text-align: center;
-  padding: 30px;
-  background: rgba(255, 255, 255, 0.9);
-  margin-top: 50px;
-  border-top: 1px solid #ddd;
+  text-align: center; padding: 30px; background: rgba(255, 255, 255, 0.9); margin-top: 50px; border-top: 1px solid #ddd;
 }
 footer a { color: var(--primary); text-decoration: none; margin: 0 10px; font-size: 13px; font-weight: bold; }
 
 .modal {
-  display: none; position: fixed; z-index: 2000;
-  left: 0; top: 0; width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+  display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
 }
 .modal-content {
-  background-color: white; margin: 8% auto; padding: 30px;
-  border-radius: 25px; width: 85%; max-width: 550px;
-  max-height: 75vh; overflow-y: auto; position: relative;
+  background-color: white; margin: 8% auto; padding: 30px; border-radius: 25px; width: 85%; max-width: 550px; max-height: 75vh; overflow-y: auto; position: relative;
 }
 .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #bbb; }
 
@@ -229,6 +169,22 @@ footer a { color: var(--primary); text-decoration: none; margin: 0 10px; font-si
     </div>
   </div>
 
+  <div class="card">
+    <h3>❓ Perguntas Frequentes</h3>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">O que o FofoPet oferece? <span>+</span></div>
+      <div class="faq-answer">Oferecemos ferramentas de gestão de gastos, dicas diárias de cuidados e um mural comunitário para compartilhar histórias sobre seus animais de estimação.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">Como funciona o chat? <span>+</span></div>
+      <div class="faq-answer">Nosso chat é aberto para todos os usuários da comunidade trocarem experiências em tempo real. Lembre-se sempre de manter o respeito!</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">O site é gratuito? <span>+</span></div>
+      <div class="faq-answer">Sim! Todas as ferramentas de controle financeiro e dicas são 100% gratuitas para ajudar você a cuidar melhor do seu pet.</div>
+    </div>
+  </div>
+
 </div>
 
 <div class="chat" id="chatWindow">
@@ -273,13 +229,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// --- MODAIS (ARTIGOS E POLÍTICAS) ---
+// --- FAQ TOGGLE ---
+window.toggleFaq = (el) => {
+  const ans = el.querySelector('.faq-answer');
+  const icon = el.querySelector('span');
+  const isOpen = ans.style.display === "block";
+  ans.style.display = isOpen ? "none" : "block";
+  icon.innerText = isOpen ? "+" : "−";
+};
+
+// --- MODAIS ---
 window.abrirArtigo = (id) => {
   const texto = document.getElementById('textoPolitica');
   if(id === 1) {
     texto.innerHTML = `<h2>Saúde Preventiva</h2><p>As vacinas protegem contra doenças graves como a Cinomose e a Parvovirose. Consulte sempre um veterinário para manter o protocolo atualizado.</p>`;
   } else {
-    texto.innerHTML = `<h2>Alimentação Segura</h2><p>Melancia e maçã (sem sementes) são ótimas. Evite uvas, cebola e chocolate, que são altamente tóxicos para pets.</p>`;
+    texto.innerHTML = `<h2>Alimentação Segura</h2><p>Melancia e maçã (sem sementes) são ótimas. Evite uvas, cebola e chocolate, que são tóxicos para pets.</p>`;
   }
   document.getElementById('modalPolitica').style.display = "block";
 };
