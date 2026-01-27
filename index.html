@@ -4,108 +4,36 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FofoPet - Comunidade e Gestão</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-:root {
-  --primary: #5FA8A0;
-  --soft: #F4F8F7;
-  --card: rgba(255, 255, 255, 0.98);
-  --text: #2b2b2b;
-  --alert-bg: #fff5f5;
-  --alert-text: #e74c3c;
-}
+:root { --primary: #5FA8A0; --secondary: #e67e22; --soft: #F4F8F7; --card: rgba(255, 255, 255, 0.98); --text: #2b2b2b; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed; color: var(--text); }
+.container { max-width: 700px; margin: auto; padding: 20px 20px 120px 20px; }
+header { text-align: center; padding: 30px 0; font-size: 35px; font-weight: 800; color: var(--primary); }
+.card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); margin-bottom: 25px; }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: 
-    linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
-    url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed;
-  color: var(--text);
-}
+/* JOGO CAÇA-PALAVRAS */
+.word-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; margin: 15px auto; max-width: 350px; background: #ddd; border: 2px solid #ddd; }
+.cell { width: 100%; aspect-ratio: 1; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; user-select: none; font-size: 14px; }
+.cell.selected { background: var(--secondary); color: white; }
+.cell.found { background: var(--primary); color: white; }
+.word-list { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; }
+.word-item.done { text-decoration: line-through; color: #888; }
 
-.container {
-  max-width: 700px;
-  margin: auto;
-  padding: 20px;
-  padding-bottom: 120px;
-}
+/* CALCULADORA */
+.tool-box { background: var(--soft); padding: 20px; border-radius: 15px; text-align: center; border: 2px dashed var(--primary); }
+.result-water { font-size: 22px; font-weight: bold; color: var(--primary); margin-top: 10px; display: none; }
 
-header {
-  text-align: center;
-  padding: 40px 0;
-  font-size: 35px;
-  font-weight: 800;
-  color: var(--primary);
-  text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-}
-
-.card {
-  background: var(--card);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-  margin-bottom: 25px;
-}
-
-/* DICAS */
-.tips-container { perspective: 1000px; height: 80px; margin-top: 10px; }
-.tip-card {
-  width: 100%; height: 100%; background: var(--primary); color: white;
-  border-radius: 15px; display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 15px; font-weight: 600; font-size: 1.1rem;
-  transition: transform 0.6s; transform-style: preserve-3d;
-}
-
-/* BLOG */
-.blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-.article-card {
-  background: var(--soft); padding: 15px; border-radius: 15px; font-size: 14px;
-  border-left: 4px solid var(--primary); cursor: pointer; transition: 0.3s;
-}
-.article-card:hover { transform: scale(1.02); }
-
-/* FAQ */
-.faq-item { border-bottom: 1px solid #eee; padding: 12px 0; cursor: pointer; }
-.faq-question { font-weight: bold; color: var(--primary); display: flex; justify-content: space-between; }
-.faq-answer { display: none; padding-top: 10px; font-size: 14px; line-height: 1.5; color: #555; }
-
-/* INPUTS E BOTÕES */
-input, textarea {
-  width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1.5px solid #eee; box-sizing: border-box; font-size: 16px;
-}
-button {
-  background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%;
-}
-
-/* CHAT */
-.chat {
-  position: fixed; right: 25px; bottom: 85px; width: 360px; height: 500px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 1000;
-}
-.chat-header { background: var(--primary); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; cursor: pointer; border-radius: 20px 20px 0 0; }
-.chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.bubble { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 14px; }
-.user-me { align-self: flex-end; background: #e3f2fd; }
-.user-other { align-self: flex-start; background: #f1f1f1; }
-.minimized { height: 50px !important; width: 220px; overflow: hidden; }
-
-/* FOOTER */
-footer {
-  text-align: center; padding: 30px; background: rgba(255, 255, 255, 0.9); margin-top: 50px; border-top: 1px solid #ddd;
-}
-footer a { color: var(--primary); text-decoration: none; margin: 0 10px; font-size: 13px; font-weight: bold; }
-
-/* MODAL */
-.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
-.modal-content { background-color: white; margin: 8% auto; padding: 30px; border-radius: 25px; width: 85%; max-width: 550px; max-height: 75vh; overflow-y: auto; position: relative; }
-.close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #bbb; }
-
-@media (max-width: 768px) {
-  .chat { width: 100%; right: 0; bottom: 0; border-radius: 20px 20px 0 0; }
-  .blog-grid { grid-template-columns: 1fr; }
-}
+/* COMPONENTES GERAIS */
+.blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.article-card { background: var(--soft); padding: 15px; border-radius: 15px; border-left: 4px solid var(--primary); cursor: pointer; }
+input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1.5px solid #eee; box-sizing: border-box; }
+button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; }
+.chat { position: fixed; right: 25px; bottom: 85px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 1000; }
+.minimized { height: 50px !important; width: 200px; overflow: hidden; }
+footer { text-align: center; padding: 20px; background: rgba(255,255,255,0.9); margin-top: 40px; }
+.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+.modal-content { background: white; margin: 10% auto; padding: 30px; border-radius: 25px; width: 80%; max-width: 500px; position: relative; }
 </style>
 </head>
 <body>
@@ -113,204 +41,127 @@ footer a { color: var(--primary); text-decoration: none; margin: 0 10px; font-si
 <header>🐾 FofoPet</header>
 
 <div class="container">
-  
-  <div class="card">
-    <h3 style="margin:0">💡 Dica Rápida</h3>
-    <div class="tips-container">
-      <div class="tip-card" id="tipCard">Carregando amor...</div>
+    
+    <div class="card">
+        <h3>🎮 Desafio: Caça-Palavras Pet</h3>
+        <p style="font-size: 13px; color: #666;">Encontre: <b>GATO, CAO, PEIXE, AMOR</b></p>
+        <div class="word-grid" id="grid"></div>
+        <div class="word-list" id="wordList">
+            <span class="word-item" id="w-GATO">GATO</span>
+            <span class="word-item" id="w-CAO">CAO</span>
+            <span class="word-item" id="w-PEIXE">PEIXE</span>
+            <span class="word-item" id="w-AMOR">AMOR</span>
+        </div>
+        <button onclick="resetGame()" style="margin-top:15px; background:#888; font-size:12px;">Reiniciar Jogo</button>
     </div>
-  </div>
 
-  <div class="card">
-    <h3>📰 Guia de Cuidados</h3>
-    <div class="blog-grid">
-      <div class="article-card" onclick="abrirArtigo(1)">
-        <h4>🩺 Saúde Preventiva</h4>
-        <p>Por que vacinas anuais são essenciais?</p>
-      </div>
-      <div class="article-card" onclick="abrirArtigo(2)">
-        <h4>🍎 Alimentação</h4>
-        <p>Frutas seguras para o seu pet.</p>
-      </div>
+    <div class="card">
+        <h3>💧 Calculadora de Hidratação</h3>
+        <div class="tool-box">
+            <input type="number" id="pesoPet" placeholder="Peso do pet (kg)"/>
+            <button onclick="calcularAgua()" style="background: var(--secondary);">Calcular ml/dia</button>
+            <div id="resultadoAgua" class="result-water"></div>
+        </div>
     </div>
-  </div>
 
-  <div class="card">
-    <h3>📖 Mural de Histórias</h3>
-    <input id="histName" placeholder="Nome do Pet"/>
-    <textarea id="histText" rows="3" placeholder="Conte algo fofo..."></textarea>
-    <button onclick="salvarHistoria()">Publicar</button>
-    <div id="mural" style="margin-top:20px; max-height: 200px; overflow-y: auto;"></div>
-  </div>
-
-  <div class="card">
-    <h3>💰 Controle Financeiro</h3>
-    <div id="alertaGasto" style="background:#fff5f5; color:#e74c3c; padding:10px; border-radius:10px; display:none; margin-bottom:10px; text-align:center; font-weight:bold;">⚠️ Gastos elevados!</div>
-    <input type="number" id="vRacao" placeholder="Ração (R$)"/>
-    <input type="number" id="vVet" placeholder="Veterinário (R$)"/>
-    <input type="number" id="vExtra" placeholder="Outros (R$)"/>
-    <button onclick="calcularFinancas()">Ver Gráfico</button>
-    <div style="max-width:200px; margin:20px auto;"><canvas id="graficoPet"></canvas></div>
-  </div>
-
-  <div class="card">
-    <h3>❓ Perguntas Frequentes</h3>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question">O que o FofoPet oferece? <span>+</span></div>
-      <div class="faq-answer">Ferramentas de gestão, dicas e comunidade para tutores de pets.</div>
+    <div class="card">
+        <h3>📰 Guia de Cuidados</h3>
+        <div class="blog-grid">
+            <div class="article-card" onclick="abrirArtigo(1)"><h4>🩺 Saúde</h4><p>Vacinas anuais.</p></div>
+            <div class="article-card" onclick="abrirArtigo(2)"><h4>🍎 Dieta</h4><p>Frutas seguras.</p></div>
+        </div>
     </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question">O site é gratuito? <span>+</span></div>
-      <div class="faq-answer">Sim, 100% gratuito e focado em ajudar animais.</div>
+
+    <div class="card">
+        <h3>📖 Mural de Histórias</h3>
+        <input id="histName" placeholder="Nome do Pet"/><textarea id="histText" rows="2" placeholder="Conte algo fofo..."></textarea>
+        <button onclick="salvarHistoria()">Publicar</button>
+        <div id="mural" style="margin-top:15px; max-height: 150px; overflow-y: auto;"></div>
     </div>
-  </div>
 
-  <div class="card" id="contato">
-    <h3>📩 Fale Conosco</h3>
-    <p style="font-size: 14px; color: #666;">Dúvidas ou sugestões? Envie uma mensagem!</p>
-    <input type="email" id="emailContato" placeholder="Seu E-mail"/>
-    <textarea id="msgContato" rows="3" placeholder="Sua mensagem..."></textarea>
-    <button onclick="enviarContato()" style="background: #e67e22;">Enviar Mensagem</button>
-  </div>
+    <div class="card">
+        <h3>💰 Controle Financeiro</h3>
+        <input type="number" id="vRacao" placeholder="Ração (R$)"/><input type="number" id="vVet" placeholder="Vet (R$)"/>
+        <button onclick="calcularFinancas()">Atualizar Gráfico</button>
+        <div style="max-width:160px; margin:auto;"><canvas id="graficoPet"></canvas></div>
+    </div>
 
+    <div class="card">
+        <h3>📩 Contato</h3>
+        <input id="emailContato" placeholder="Seu e-mail"/><textarea id="msgContato" placeholder="Mensagem"></textarea>
+        <button onclick="enviarContato()" style="background: var(--secondary);">Enviar</button>
+    </div>
 </div>
 
-<div class="chat" id="chatWindow">
-  <div class="chat-header" onclick="toggleChat()">
-    <span>💬 Chat da Galera</span>
-    <span id="chatBtn">+</span>
-  </div>
-  <div class="chat-messages" id="chatContent"></div>
-  <div style="padding:15px; border-top:1px solid #eee;">
-    <input id="chatUser" placeholder="Seu apelido" style="font-size:12px; height:30px; margin-bottom:5px;"/>
-    <div style="display:flex; gap:5px;">
-      <input id="chatInput" placeholder="Sua mensagem..." style="margin:0;"/>
-      <button onclick="enviarChat()" style="width:50px; background: var(--primary);">✈</button>
+<div class="chat minimized" id="chatWindow">
+    <div style="background:var(--primary);color:white;padding:15px;cursor:pointer" onclick="toggleChat()">💬 Chat da Galera</div>
+    <div id="chatContent" style="flex:1;padding:10px;overflow-y:auto"></div>
+    <div style="padding:10px;border-top:1px solid #eee;display:flex">
+        <input id="chatInput" placeholder="Oi!" style="margin:0"/>
+        <button onclick="enviarChat()" style="width:40px;margin-left:5px">✈</button>
     </div>
-  </div>
 </div>
 
 <footer>
-  <p>© 2026 FofoPet - Comunidade Animal</p>
-  <a href="javascript:void(0)" onclick="abrirPolitica('sobre')">Sobre Nós</a> | 
-  <a href="javascript:void(0)" onclick="abrirPolitica('privacidade')">Privacidade</a> | 
-  <a href="javascript:void(0)" onclick="abrirPolitica('termos')">Termos</a>
+    <a href="#" onclick="abrirPolitica('sobre')">Sobre</a> | <a href="#" onclick="abrirPolitica('privacidade')">Privacidade</a> | <a href="#" onclick="abrirPolitica('termos')">Termos</a>
+    <p>© 2026 FofoPet</p>
 </footer>
 
-<div id="modalPolitica" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="fecharModal()">&times;</span>
-    <div id="textoPolitica"></div>
-  </div>
-</div>
+<div id="modalPolitica" class="modal"><div class="modal-content"><span onclick="fecharModal()" style="cursor:pointer;float:right">&times;</span><div id="textoPolitica"></div></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "SUA_API",
-  authDomain: "SEU_DOMINIO",
-  projectId: "SEU_ID"
-};
+const firebaseConfig = { apiKey: "SUA_API", authDomain: "SEU_DOMINIO", projectId: "SEU_ID" };
+const app = initializeApp(firebaseConfig); const db = getFirestore(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// --- CONTATO ---
-window.enviarContato = async () => {
-  const email = document.getElementById('emailContato').value;
-  const msg = document.getElementById('msgContato').value;
-  if(!email || !msg) return alert("Preencha todos os campos!");
-  await addDoc(collection(db, "mensagens_contato"), { email, msg, data: serverTimestamp() });
-  alert("Mensagem enviada com sucesso!");
-  document.getElementById('emailContato').value = "";
-  document.getElementById('msgContato').value = "";
-};
-
-// --- FAQ ---
-window.toggleFaq = (el) => {
-  const ans = el.querySelector('.faq-answer');
-  const icon = el.querySelector('span');
-  const isOpen = ans.style.display === "block";
-  ans.style.display = isOpen ? "none" : "block";
-  icon.innerText = isOpen ? "+" : "−";
-};
-
-// --- MODAIS ---
-window.abrirArtigo = (id) => {
-  const texto = document.getElementById('textoPolitica');
-  if(id === 1) { texto.innerHTML = `<h2>Saúde Preventiva</h2><p>Mantenha vacinas em dia para proteger seu pet contra doenças graves.</p>`; }
-  else { texto.innerHTML = `<h2>Alimentação</h2><p>Evite chocolate, uvas e cebola. Melancia é segura e refrescante.</p>`; }
-  document.getElementById('modalPolitica').style.display = "block";
-};
-
-window.abrirPolitica = (tipo) => {
-  const texto = document.getElementById('textoPolitica');
-  if(tipo === 'sobre') { texto.innerHTML = `<h2>Sobre Nós</h2><p>O FofoPet é uma plataforma dedicada a facilitar a vida de quem ama animais.</p>`; }
-  else if(tipo === 'privacidade') { texto.innerHTML = `<h2>Privacidade</h2><p>Usamos cookies para anúncios do AdSense e não vendemos seus dados.</p>`; }
-  else { texto.innerHTML = `<h2>Termos</h2><p>Respeite a todos no chat. Conteúdos ofensivos serão removidos.</p>`; }
-  document.getElementById('modalPolitica').style.display = "block";
-};
-window.fecharModal = () => document.getElementById('modalPolitica').style.display = "none";
-
-// --- MURAL ---
-window.salvarHistoria = async () => {
-  const nome = document.getElementById('histName').value;
-  const texto = document.getElementById('histText').value;
-  if(!nome || !texto) return;
-  await addDoc(collection(db, "mural"), { nome, texto, data: serverTimestamp() });
-  document.getElementById('histName').value = ""; document.getElementById('histText').value = "";
+// --- LÓGICA DO CAÇA-PALAVRAS ---
+const words = ["GATO", "CAO", "PEIXE", "AMOR"];
+const size = 10; let selectedCells = [];
+function initGrid() {
+    const grid = document.getElementById('grid'); grid.innerHTML = '';
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for(let i=0; i<size*size; i++) {
+        const cell = document.createElement('div'); cell.className = 'cell';
+        cell.innerText = letters[Math.floor(Math.random()*26)];
+        cell.onclick = () => {
+            cell.classList.toggle('selected');
+            checkWord();
+        };
+        grid.appendChild(cell);
+    }
+    // Simplificação: Inserindo palavras manualmente para o demo funcionar
+    insertWord("GATO", 0); insertWord("CAO", 12); insertWord("PEIXE", 34); insertWord("AMOR", 80);
 }
-onSnapshot(query(collection(db, "mural"), orderBy("data", "desc")), (snap) => {
-  const mural = document.getElementById('mural'); mural.innerHTML = "";
-  snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee"><strong>${doc.data().nome}</strong>: ${doc.data().texto}</div>`;
-  });
-});
-
-// --- CHAT ---
-window.enviarChat = async () => {
-  const user = document.getElementById('chatUser').value || "Anônimo";
-  const text = document.getElementById('chatInput').value;
-  if(!text) return;
-  await addDoc(collection(db, "chat_comunitario"), { user, text, data: serverTimestamp() });
-  document.getElementById('chatInput').value = "";
+function insertWord(w, start) {
+    const cells = document.querySelectorAll('.cell');
+    for(let i=0; i<w.length; i++) cells[start+i].innerText = w[i];
 }
-onSnapshot(query(collection(db, "chat_comunitario"), orderBy("data", "asc"), limit(50)), (snap) => {
-  const cont = document.getElementById('chatContent'); cont.innerHTML = "";
-  snap.forEach(doc => {
-    const d = doc.data();
-    const isMe = d.user === document.getElementById('chatUser').value;
-    cont.innerHTML += `<div class="bubble ${isMe ? 'user-me' : 'user-other'}"><strong>${d.user}:</strong> ${d.text}</div>`;
-  });
-  cont.scrollTop = cont.scrollHeight;
-});
-
-// --- DICAS ---
-const dicas = ["Água fresca sempre! 💧", "Passeios diários são saúde. 🚶‍♂️", "Ame seu pet! ❤️"];
-let i = 0;
-setInterval(() => {
-  const card = document.getElementById('tipCard');
-  if(card) {
-    card.style.transform = "rotateX(90deg)";
-    setTimeout(() => { card.innerText = dicas[i++ % dicas.length]; card.style.transform = "rotateX(0deg)"; }, 600);
-  }
-}, 4500);
-
-// --- FINANCEIRO ---
-let chartObj = null;
-window.calcularFinancas = () => {
-  const r = +document.getElementById('vRacao').value || 0;
-  const v = +document.getElementById('vVet').value || 0;
-  const e = +document.getElementById('vExtra').value || 0;
-  document.getElementById('alertaGasto').style.display = (r+v+e > 600) ? "block" : "none";
-  const ctx = document.getElementById('graficoPet');
-  if(chartObj) chartObj.destroy();
-  chartObj = new Chart(ctx, { type: 'doughnut', data: { labels: ['Ração', 'Vet', 'Extras'], datasets: [{ data:[r,v,e], backgroundColor:['#5FA8A0','#FFB6C1','#FFD700'] }] } });
+function checkWord() {
+    const sel = Array.from(document.querySelectorAll('.cell.selected')).map(c => c.innerText).join('');
+    words.forEach(w => {
+        if(sel.includes(w)) {
+            document.querySelectorAll('.cell.selected').forEach(c => { if(w.includes(c.innerText)) { c.classList.remove('selected'); c.classList.add('found'); }});
+            document.getElementById('w-'+w).classList.add('done');
+        }
+    });
 }
-window.calcularFinancas();
+window.resetGame = () => { document.querySelectorAll('.word-item').forEach(i=>i.classList.remove('done')); initGrid(); };
+initGrid();
+
+// --- OUTRAS FUNÇÕES ---
+window.calcularAgua = () => { const p = document.getElementById('pesoPet').value; const r = document.getElementById('resultadoAgua'); r.innerHTML = `💧 Beba ${p*60}ml hoje!`; r.style.display="block"; };
+window.abrirArtigo = (id) => { document.getElementById('textoPolitica').innerHTML = id===1 ? "<h2>Saúde</h2><p>Vacine seu pet.</p>" : "<h2>Dieta</h2><p>Melancia é bom.</p>"; document.getElementById('modalPolitica').style.display="block"; };
+window.abrirPolitica = (t) => { document.getElementById('textoPolitica').innerHTML = `<h2>${t}</h2><p>Conteúdo da política de ${t}.</p>`; document.getElementById('modalPolitica').style.display="block"; };
+window.fecharModal = () => document.getElementById('modalPolitica').style.display="none";
 window.toggleChat = () => document.getElementById('chatWindow').classList.toggle('minimized');
+window.calcularFinancas = () => {
+    const r = +document.getElementById('vRacao').value || 10;
+    if(window.myChart) window.myChart.destroy();
+    window.myChart = new Chart(document.getElementById('graficoPet'), { type:'doughnut', data:{ labels:['Gasto','Meta'], datasets:[{data:[r, 100], backgroundColor:['#5FA8A0','#eee']}] }});
+};
+window.calcularFinancas();
 </script>
 </body>
 </html>
