@@ -12,28 +12,22 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradie
 header { text-align: center; padding: 30px 0; font-size: 35px; font-weight: 800; color: var(--primary); }
 .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); margin-bottom: 25px; }
 
-/* JOGO CAÇA-PALAVRAS */
+/* JOGO CAÇA-PALAVRAS MELHORADO */
 .word-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; margin: 15px auto; max-width: 350px; background: #ddd; border: 2px solid #ddd; }
-.cell { width: 100%; aspect-ratio: 1; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; user-select: none; font-size: 14px; }
+.cell { width: 100%; aspect-ratio: 1; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; user-select: none; font-size: 14px; transition: 0.2s; }
+.cell:hover { background: #f0f0f0; }
 .cell.selected { background: var(--secondary); color: white; }
-.cell.found { background: var(--primary); color: white; }
-.word-list { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; }
-.word-item.done { text-decoration: line-through; color: #888; }
+.cell.found { background: var(--primary) !important; color: white !important; }
+.word-list { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; font-weight: bold; }
+.word-item.done { text-decoration: line-through; color: #bbb; }
 
-/* CALCULADORA */
+/* CALCULADORA E OUTROS */
 .tool-box { background: var(--soft); padding: 20px; border-radius: 15px; text-align: center; border: 2px dashed var(--primary); }
-.result-water { font-size: 22px; font-weight: bold; color: var(--primary); margin-top: 10px; display: none; }
-
-/* COMPONENTES GERAIS */
-.blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.article-card { background: var(--soft); padding: 15px; border-radius: 15px; border-left: 4px solid var(--primary); cursor: pointer; }
 input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1.5px solid #eee; box-sizing: border-box; }
 button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 .chat { position: fixed; right: 25px; bottom: 85px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 1000; }
 .minimized { height: 50px !important; width: 200px; overflow: hidden; }
-footer { text-align: center; padding: 20px; background: rgba(255,255,255,0.9); margin-top: 40px; }
-.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
-.modal-content { background: white; margin: 10% auto; padding: 30px; border-radius: 25px; width: 80%; max-width: 500px; position: relative; }
+footer { text-align: center; padding: 20px; background: rgba(255,255,255,0.9); margin-top: 40px; font-size: 12px; }
 </style>
 </head>
 <body>
@@ -43,16 +37,11 @@ footer { text-align: center; padding: 20px; background: rgba(255,255,255,0.9); m
 <div class="container">
     
     <div class="card">
-        <h3>🎮 Desafio: Caça-Palavras Pet</h3>
-        <p style="font-size: 13px; color: #666;">Encontre: <b>GATO, CAO, PEIXE, AMOR</b></p>
+        <h3>🎮 Caça-Palavras Pet Infinito</h3>
+        <p style="font-size: 13px; color: #666; text-align: center;">Clique nas letras para formar as palavras!</p>
+        <div class="word-list" id="wordList"></div>
         <div class="word-grid" id="grid"></div>
-        <div class="word-list" id="wordList">
-            <span class="word-item" id="w-GATO">GATO</span>
-            <span class="word-item" id="w-CAO">CAO</span>
-            <span class="word-item" id="w-PEIXE">PEIXE</span>
-            <span class="word-item" id="w-AMOR">AMOR</span>
-        </div>
-        <button onclick="resetGame()" style="margin-top:15px; background:#888; font-size:12px;">Reiniciar Jogo</button>
+        <button onclick="initGame()" style="margin-top:15px; background:#888;">Gerar Novo Tabuleiro</button>
     </div>
 
     <div class="card">
@@ -60,15 +49,7 @@ footer { text-align: center; padding: 20px; background: rgba(255,255,255,0.9); m
         <div class="tool-box">
             <input type="number" id="pesoPet" placeholder="Peso do pet (kg)"/>
             <button onclick="calcularAgua()" style="background: var(--secondary);">Calcular ml/dia</button>
-            <div id="resultadoAgua" class="result-water"></div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h3>📰 Guia de Cuidados</h3>
-        <div class="blog-grid">
-            <div class="article-card" onclick="abrirArtigo(1)"><h4>🩺 Saúde</h4><p>Vacinas anuais.</p></div>
-            <div class="article-card" onclick="abrirArtigo(2)"><h4>🍎 Dieta</h4><p>Frutas seguras.</p></div>
+            <div id="resultadoAgua" style="margin-top:10px; font-weight:bold; color:var(--primary); display:none;"></div>
         </div>
     </div>
 
@@ -82,7 +63,7 @@ footer { text-align: center; padding: 20px; background: rgba(255,255,255,0.9); m
     <div class="card">
         <h3>💰 Controle Financeiro</h3>
         <input type="number" id="vRacao" placeholder="Ração (R$)"/><input type="number" id="vVet" placeholder="Vet (R$)"/>
-        <button onclick="calcularFinancas()">Atualizar Gráfico</button>
+        <button onclick="calcularFinancas()">Ver Gráfico</button>
         <div style="max-width:160px; margin:auto;"><canvas id="graficoPet"></canvas></div>
     </div>
 
@@ -94,20 +75,17 @@ footer { text-align: center; padding: 20px; background: rgba(255,255,255,0.9); m
 </div>
 
 <div class="chat minimized" id="chatWindow">
-    <div style="background:var(--primary);color:white;padding:15px;cursor:pointer" onclick="toggleChat()">💬 Chat da Galera</div>
-    <div id="chatContent" style="flex:1;padding:10px;overflow-y:auto"></div>
+    <div style="background:var(--primary);color:white;padding:15px;cursor:pointer" onclick="toggleChat()">💬 Chat Comunitário</div>
+    <div id="chatContent" style="flex:1;padding:10px;overflow-y:auto; font-size: 14px;"></div>
     <div style="padding:10px;border-top:1px solid #eee;display:flex">
-        <input id="chatInput" placeholder="Oi!" style="margin:0"/>
+        <input id="chatInput" placeholder="Mensagem..." style="margin:0"/>
         <button onclick="enviarChat()" style="width:40px;margin-left:5px">✈</button>
     </div>
 </div>
 
 <footer>
-    <a href="#" onclick="abrirPolitica('sobre')">Sobre</a> | <a href="#" onclick="abrirPolitica('privacidade')">Privacidade</a> | <a href="#" onclick="abrirPolitica('termos')">Termos</a>
-    <p>© 2026 FofoPet</p>
+    <p>© 2026 FofoPet - <a href="#">Privacidade</a> | <a href="#">Termos</a></p>
 </footer>
-
-<div id="modalPolitica" class="modal"><div class="modal-content"><span onclick="fecharModal()" style="cursor:pointer;float:right">&times;</span><div id="textoPolitica"></div></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -116,50 +94,76 @@ import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTim
 const firebaseConfig = { apiKey: "SUA_API", authDomain: "SEU_DOMINIO", projectId: "SEU_ID" };
 const app = initializeApp(firebaseConfig); const db = getFirestore(app);
 
-// --- LÓGICA DO CAÇA-PALAVRAS ---
-const words = ["GATO", "CAO", "PEIXE", "AMOR"];
-const size = 10; let selectedCells = [];
-function initGrid() {
+// --- NOVALÓGICA DO CAÇA-PALAVRAS DINÂMICO ---
+const bancoDePalavras = ["GATO", "CAO", "PEIXE", "AMOR", "OSSO", "MIAU", "AUAU", "PATA", "BOLA", "AGUA", "VET", "FOFO"];
+let palavrasAtuais = [];
+const size = 10;
+
+window.initGame = () => {
     const grid = document.getElementById('grid'); grid.innerHTML = '';
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    for(let i=0; i<size*size; i++) {
-        const cell = document.createElement('div'); cell.className = 'cell';
-        cell.innerText = letters[Math.floor(Math.random()*26)];
-        cell.onclick = () => {
-            cell.classList.toggle('selected');
-            checkWord();
-        };
-        grid.appendChild(cell);
+    const listCont = document.getElementById('wordList'); listCont.innerHTML = '';
+    palavrasAtuais = [...bancoDePalavras].sort(() => 0.5 - Math.random()).slice(0, 4);
+    
+    // Criar Grid Vazio
+    let matrix = Array(size).fill().map(() => Array(size).fill(''));
+
+    // Inserir Palavras
+    palavrasAtuais.forEach((word) => {
+        let row = Math.floor(Math.random() * size);
+        let col = Math.floor(Math.random() * (size - word.length));
+        for(let i=0; i<word.length; i++) matrix[row][col+i] = word[i];
+        listCont.innerHTML += `<span class="word-item" id="w-${word}">${word}</span> `;
+    });
+
+    // Preencher com letras aleatórias
+    for(let r=0; r<size; r++) {
+        for(let c=0; c<size; c++) {
+            if(matrix[r][c] === '') matrix[r][c] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)];
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.innerText = matrix[r][c];
+            cell.onclick = () => {
+                cell.classList.toggle('selected');
+                verificarPalavras();
+            };
+            grid.appendChild(cell);
+        }
     }
-    // Simplificação: Inserindo palavras manualmente para o demo funcionar
-    insertWord("GATO", 0); insertWord("CAO", 12); insertWord("PEIXE", 34); insertWord("AMOR", 80);
-}
-function insertWord(w, start) {
-    const cells = document.querySelectorAll('.cell');
-    for(let i=0; i<w.length; i++) cells[start+i].innerText = w[i];
-}
-function checkWord() {
-    const sel = Array.from(document.querySelectorAll('.cell.selected')).map(c => c.innerText).join('');
-    words.forEach(w => {
-        if(sel.includes(w)) {
-            document.querySelectorAll('.cell.selected').forEach(c => { if(w.includes(c.innerText)) { c.classList.remove('selected'); c.classList.add('found'); }});
-            document.getElementById('w-'+w).classList.add('done');
+};
+
+function verificarPalavras() {
+    const selecionadas = Array.from(document.querySelectorAll('.cell.selected'));
+    const str = selecionadas.map(c => c.innerText).join('');
+    
+    palavrasAtuais.forEach(p => {
+        if(str.includes(p)) {
+            selecionadas.forEach(c => {
+                if(p.includes(c.innerText)) {
+                    c.classList.remove('selected');
+                    c.classList.add('found');
+                }
+            });
+            const item = document.getElementById('w-'+p);
+            if(item) item.classList.add('done');
         }
     });
 }
-window.resetGame = () => { document.querySelectorAll('.word-item').forEach(i=>i.classList.remove('done')); initGrid(); };
-initGrid();
 
-// --- OUTRAS FUNÇÕES ---
-window.calcularAgua = () => { const p = document.getElementById('pesoPet').value; const r = document.getElementById('resultadoAgua'); r.innerHTML = `💧 Beba ${p*60}ml hoje!`; r.style.display="block"; };
-window.abrirArtigo = (id) => { document.getElementById('textoPolitica').innerHTML = id===1 ? "<h2>Saúde</h2><p>Vacine seu pet.</p>" : "<h2>Dieta</h2><p>Melancia é bom.</p>"; document.getElementById('modalPolitica').style.display="block"; };
-window.abrirPolitica = (t) => { document.getElementById('textoPolitica').innerHTML = `<h2>${t}</h2><p>Conteúdo da política de ${t}.</p>`; document.getElementById('modalPolitica').style.display="block"; };
-window.fecharModal = () => document.getElementById('modalPolitica').style.display="none";
+// --- INICIALIZAÇÃO E OUTRAS FUNÇÕES ---
+initGame();
+window.calcularAgua = () => { 
+    const p = document.getElementById('pesoPet').value; 
+    const r = document.getElementById('resultadoAgua'); 
+    r.innerHTML = `💧 Seu pet deve beber ${p*60}ml por dia.`; 
+    r.style.display="block"; 
+};
 window.toggleChat = () => document.getElementById('chatWindow').classList.toggle('minimized');
 window.calcularFinancas = () => {
-    const r = +document.getElementById('vRacao').value || 10;
     if(window.myChart) window.myChart.destroy();
-    window.myChart = new Chart(document.getElementById('graficoPet'), { type:'doughnut', data:{ labels:['Gasto','Meta'], datasets:[{data:[r, 100], backgroundColor:['#5FA8A0','#eee']}] }});
+    window.myChart = new Chart(document.getElementById('graficoPet'), { 
+        type:'doughnut', 
+        data:{ labels:['Gasto','Meta'], datasets:[{data:[document.getElementById('vRacao').value || 10, 100], backgroundColor:['#5FA8A0','#eee']}] }
+    });
 };
 window.calcularFinancas();
 </script>
