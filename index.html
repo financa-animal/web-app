@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FofoPet - O Portal do seu Melhor Amigo</title>
+    <title>FofoPet - O Portal do seu Pet</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #5FA8A0; --secondary: #e67e22; --soft: #F4F8F7; --card: #ffffff; --text: #2b2b2b; }
@@ -13,35 +13,38 @@
         .card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
         
         /* DICAS E GUIAS */
-        .tip-card { background: var(--primary); color: white; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; min-height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(95, 168, 160, 0.3); }
-        .guia-box { flex: 1; background: #ffffff; padding: 12px; border-radius: 10px; font-size: 11px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .tip-card { background: var(--primary); color: white; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; min-height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .guia-box { flex: 1; background: #ffffff; padding: 12px; border-radius: 10px; font-size: 11px; border-left: 5px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
 
         /* JOGOS: CAÇA-PALAVRAS E CRUZADINHA */
         .game-grid { display: grid; gap: 2px; background: #bbb; padding: 3px; margin: 15px auto; width: fit-content; border-radius: 4px; }
-        .cell, .cw-cell { width: 30px; height: 30px; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .cell { cursor: pointer; font-size: 13px; user-select: none; border-radius: 2px; }
+        .cell, .cw-cell { width: 32px; height: 32px; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .cell { cursor: pointer; font-size: 14px; user-select: none; }
         .cell.selected { background: var(--secondary); color: white; }
         .cell.found { background: var(--primary) !important; color: white; }
-        .cw-cell.black { background: #444; }
-        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 18px; outline: none; background: transparent; }
+        
+        /* AJUSTE CRUZADINHA: CONTRASTE MÁXIMO */
+        .cw-cell.black { background: #333; }
+        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 20px; color: #000; outline: none; background: transparent; }
         .correct { background: #d4edda !important; }
 
         /* MODAL */
         .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 80%; max-width: 450px; position: relative; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 85%; max-width: 450px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
         /* FORMULÁRIOS */
-        input, textarea { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #eee; background: #fafafa; box-sizing: border-box; font-size: 13px; }
+        input, textarea { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
         button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
         .btn-sec { background: var(--secondary); }
 
-        /* CHAT E RODAPÉ */
+        /* CHAT E FOOTER */
         .chat-container { position: fixed; right: 20px; bottom: 0; width: 280px; z-index: 2000; }
         .chat-header { background: var(--primary); color: white; padding: 12px; border-radius: 10px 10px 0 0; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         .chat-body { background: white; height: 300px; display: none; border: 1px solid #ddd; flex-direction: column; padding: 10px; border-bottom: none; }
         .chat-body.active { display: flex; }
-        footer { background: rgba(255,255,255,0.8); padding: 20px; text-align: center; font-size: 11px; border-top: 1px solid #eee; }
-        .footer-links a { color: var(--primary); text-decoration: none; margin: 0 8px; font-weight: bold; cursor: pointer; }
+        footer { padding: 30px 20px; text-align: center; font-size: 12px; }
+        .footer-links { margin-bottom: 10px; }
+        .footer-links a { color: var(--primary); text-decoration: none; margin: 0 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -49,72 +52,63 @@
 <header>🐾 FofoPet</header>
 
 <div class="container">
-    
     <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
         <div class="tip-card" id="tipCard" onclick="nextTip()">Carregando...</div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <div class="guia-box" style="border-left: 5px solid var(--primary);">
+            <div class="guia-box" style="border-left-color: var(--primary);">
                 <strong style="color: var(--primary);">🩺 Saúde</strong><br><span id="guiaSaude">...</span>
             </div>
-            <div class="guia-box" style="border-left: 5px solid var(--secondary);">
-                <strong style="color: var(--secondary);">🍎 Dieta</strong><br><span id="guiaAlim">...</span>
+            <div class="guia-box" style="border-left-color: var(--secondary);">
+                <strong style="color: var(--secondary);">🍎 Alimentação</strong><br><span id="guiaAlim">...</span>
             </div>
         </div>
     </div>
 
     <div class="card">
-        <h4 style="margin:0 0 10px 0">🔍 Caça-Palavras Pet</h4>
+        <h4 style="margin:0 0 10px 0">🔍 Caça-Palavras Infinito</h4>
         <div id="cpList" style="text-align:center; font-weight:bold; color:var(--secondary); font-size:11px; margin-bottom:8px;"></div>
         <div class="game-grid" id="cpGrid" style="grid-template-columns: repeat(10, 1fr);"></div>
-        <button onclick="initCP()" style="background:#888; font-size:11px; padding: 8px;">Gerar Novo Jogo</button>
+        <button onclick="initCP()" style="background:#888; font-size:11px; padding: 8px;">Gerar Novo Desafio</button>
     </div>
 
     <div class="card">
         <h4 style="margin: 0;">🧩 Cruzadinha Pet</h4>
-        <div class="game-grid" id="cwGrid" style="grid-template-columns: repeat(11, 30px);"></div>
-        <p style="font-size: 10px; color: #777;">Dicas: 1. Amigo fiel • 2. Miau • 3. No pescoço • 4. Médico</p>
+        <div class="game-grid" id="cwGrid" style="grid-template-columns: repeat(11, 32px);"></div>
+        <p style="font-size: 11px; color: #666;">Dicas: 1. Melhor amigo • 2. Miau • 3. No pescoço • 4. Médico</p>
         <button onclick="checkCW()" class="btn-sec">Verificar Respostas</button>
     </div>
 
     <div class="card">
-        <h4>💰 Gastos do Mês</h4>
+        <h4>💰 Controle Financeiro</h4>
         <input type="number" id="vRacao" placeholder="Ração (R$)">
         <input type="number" id="vVet" placeholder="Veterinário (R$)">
-        <input type="number" id="vMimos" placeholder="Mimos e Extras (R$)">
-        <button onclick="updateChart()">Ver Gráfico de Gastos</button>
-        <div id="alerta" style="display:none; color: red; font-size: 11px; margin-top: 8px; text-align: center; font-weight: bold;">⚠️ Atenção: Orçamento Excedido!</div>
-        <div style="max-width: 150px; margin: 15px auto;"><canvas id="petChart"></canvas></div>
+        <input type="number" id="vMimos" placeholder="Mimos/Extras (R$)">
+        <button onclick="updateChart()">Ver Gastos</button>
+        <div style="max-width: 150px; margin: 20px auto;"><canvas id="petChart"></canvas></div>
     </div>
 
     <div class="card">
-        <h4>💧 Calculadora de Água</h4>
-        <input type="number" id="pesoPet" placeholder="Peso do pet (kg)">
-        <button onclick="calcAgua()">Calcular Meta Diária</button>
-        <div id="resAgua" style="margin-top: 10px; color: var(--primary); font-weight: bold; text-align: center; display: none;"></div>
-    </div>
-
-    <div class="card">
-        <h4>📖 Mural de Histórias</h4>
-        <input placeholder="Nome do Pet">
-        <textarea rows="2" placeholder="Sua história favorita..."></textarea>
+        <h4>📖 História com seu Pet</h4>
+        <input placeholder="Nome do seu amigo">
+        <textarea rows="2" placeholder="Qual a melhor lembrança com ele?"></textarea>
         <button>Publicar no Mural</button>
     </div>
 </div>
 
 <div id="txtModal" class="modal">
     <div class="modal-content">
-        <span style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px" onclick="closeModal()">&times;</span>
+        <span style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:24px; color:#aaa" onclick="closeModal()">&times;</span>
         <h3 id="modalTitle" style="color:var(--primary); margin-top:0"></h3>
-        <div id="modalText" style="line-height:1.6; color:#555; text-align:justify; font-size:14px"></div>
+        <div id="modalText" style="line-height:1.6; color:#444; text-align:justify; font-size:15px"></div>
     </div>
 </div>
 
 <div class="chat-container">
     <div class="chat-header" onclick="toggleChat()">💬 Chat da Galera <span id="chatIcon">+</span></div>
     <div class="chat-body" id="chatBody">
-        <div style="flex:1; overflow-y:auto; color:#999; font-size:11px; text-align:center">Conectando...</div>
-        <input type="text" placeholder="Apelido..." style="font-size:11px; padding: 8px;">
-        <input type="text" placeholder="Mensagem..." style="font-size:11px; padding: 8px;">
+        <div style="flex:1; overflow-y:auto; color:#999; font-size:11px; text-align:center">Seja bem-vindo à nossa comunidade!</div>
+        <input type="text" placeholder="Seu apelido..." style="font-size:12px;">
+        <input type="text" placeholder="Escreva aqui..." style="font-size:12px;">
     </div>
 </div>
 
@@ -125,28 +119,36 @@
         <a onclick="openModal('termos')">Termos</a> | 
         <a onclick="openModal('contato')">Contato</a>
     </div>
-    <div style="margin-top: 15px; opacity: 0.6;">© 2026 FofoPet - Comunidade Animal</div>
+    <div style="margin-top: 15px; opacity: 0.7;">© 2026 FofoPet - Comunidade Animal</div>
 </footer>
 
 <script>
-// --- DICAS E GUIAS (ROTAÇÃO) ---
-const listaDicas = [
-    { d: "Escove os dentes do seu pet 🦷", s: "Check-ups anuais previnem doenças.", a: "Evite dar doces ou temperos fortes." },
-    { d: "Passeios diários evitam estresse 🐕", s: "Mantenha o antipulgas em dia.", a: "Água fresca ajuda na função renal." },
-    { d: "Brincadeiras gastam energia! 🎾", s: "Limpe as patinhas após o passeio.", a: "Meça a ração para evitar a obesidade." }
+// --- TEXTOS ACOLHEDORES ---
+const txts = {
+    sobre: { t: "Nossa História", d: "O FofoPet nasceu de um coração apaixonado por focinhos! Nossa missão é unir tutores em uma rede de carinho e cuidado, oferecendo ferramentas que tornam a rotina com seu melhor amigo mais leve, organizada e divertida. Porque cada lambida merece ser celebrada!" },
+    privacidade: { t: "Carinho com seus Dados", d: "Sua confiança é nosso maior patrimônio. Não vendemos informações e não rastreamos você. Seus dados financeiros são processados localmente no seu aparelho para garantir que o que é seu, continue sendo apenas seu. Sua paz é a nossa!" },
+    termos: { t: "Combinados de Amizade", d: "Nosso portal é um espaço de apoio e alegria. As calculadoras e dicas são para fins informativos e recreativos. Lembre-se: o carinho é livre, mas a saúde do seu pet deve sempre ser acompanhada por um veterinário de confiança!" },
+    contato: { t: "Vamos Conversar?", d: "Tem uma ideia, uma crítica ou quer apenas compartilhar uma foto fofa? Nossa equipe está pronta para te ouvir com todo carinho. Mande um e-mail para: <b>contato@fofopet.com.br</b>. Respondemos rapidinho!" }
+};
+
+// --- ROTAÇÃO DE DICAS E GUIAS ---
+const dicasList = [
+    { d: "Escove os dentes do seu pet 🦷", s: "Check-ups evitam sustos futuros.", a: "Evite alimentos com muito tempero." },
+    { d: "Passeios diários evitam estresse 🐕", s: "Antipulgas é saúde preventiva.", a: "Água fresca é vital para os rins." },
+    { d: "Brincadeiras gastam energia! 🎾", s: "Limpe as orelhas semanalmente.", a: "Meça a ração para evitar peso extra." }
 ];
 let tipIdx = 0;
 function nextTip() {
-    const item = listaDicas[tipIdx];
+    const item = dicasList[tipIdx];
     document.getElementById('tipCard').innerText = item.d;
     document.getElementById('guiaSaude').innerText = item.s;
     document.getElementById('guiaAlim').innerText = item.a;
-    tipIdx = (tipIdx + 1) % listaDicas.length;
+    tipIdx = (tipIdx + 1) % dicasList.length;
 }
 setInterval(nextTip, 6000); nextTip();
 
-// --- CAÇA-PALAVRAS INFINITO ---
-const bancoCP = ["AMOR", "VACINA", "BANHO", "GATO", "CAO", "TOSA", "PEIXE", "OSSO"];
+// --- CAÇA-PALAVRAS ---
+const bancoCP = ["AMOR", "GATO", "CAO", "BANHO", "TOSA", "VACINA", "PEIXE", "OSSO"];
 let cpWords = [];
 function initCP() {
     const g = document.getElementById('cpGrid'); g.innerHTML = '';
@@ -164,15 +166,15 @@ function checkCP() {
     cpWords.forEach(p => { if(sel.includes(p)) document.querySelectorAll('.cell.selected').forEach(c => { if(p.includes(c.innerText)) c.classList.add('found'); }); });
 }
 
-// --- CRUZADINHA (ALTA VISIBILIDADE) ---
-const cwData = [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,0,'V'],[7,1,'E'],[7,2,'T']];
+// --- CRUZADINHA (LETRAS BEM VISÍVEIS) ---
+const cwData = [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,0,'V'],[7,1,'E'],[7,2,'T'],[7,3,'E']];
 function initCW() {
     const g = document.getElementById('cwGrid'); g.innerHTML = '';
     for(let r=0; r<8; r++) {
         for(let c=0; c<11; c++) {
             const d = cwData.find(x => x[0]===r && x[1]===c);
             const div = document.createElement('div'); div.className = d ? 'cw-cell' : 'cw-cell black';
-            if(d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}">`;
+            if(d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}" style="font-weight:900;">`;
             g.appendChild(div);
         }
     }
@@ -184,12 +186,11 @@ function checkCW() {
     });
 }
 
-// --- FINANCEIRO E UTILITÁRIOS ---
+// --- FINANCEIRO E FUNÇÕES ---
 function updateChart() {
     const r = parseFloat(document.getElementById('vRacao').value) || 0;
     const v = parseFloat(document.getElementById('vVet').value) || 0;
     const m = parseFloat(document.getElementById('vMimos').value) || 0;
-    document.getElementById('alerta').style.display = (r+v+m) > 500 ? 'block' : 'none';
     if(window.pChart) window.pChart.destroy();
     window.pChart = new Chart(document.getElementById('petChart'), {
         type: 'doughnut',
@@ -197,18 +198,9 @@ function updateChart() {
         options: { plugins: { legend: { display: false } } }
     });
 }
-
-const txts = {
-    sobre: { t: "Sobre o FofoPet", d: "Somos um portal dedicado ao bem-estar animal. Criamos ferramentas interativas para ajudar tutores no cuidado diário com saúde e diversão." },
-    privacidade: { t: "Privacidade", d: "Seus dados financeiros são processados apenas localmente. Não coletamos informações pessoais sem sua permissão." },
-    termos: { t: "Termos", d: "O uso do portal é recreativo. Nossas calculadoras não substituem diagnósticos veterinários profissionais." },
-    contato: { t: "Contato", d: "Dúvidas ou sugestões? Escreva para nós: <b>contato@fofopet.com.br</b>." }
-};
-
 function openModal(id) { document.getElementById('modalTitle').innerText = txts[id].t; document.getElementById('modalText').innerHTML = txts[id].d; document.getElementById('txtModal').style.display = 'flex'; }
 function closeModal() { document.getElementById('txtModal').style.display = 'none'; }
 function toggleChat() { const b = document.getElementById('chatBody'); b.classList.toggle('active'); document.getElementById('chatIcon').innerText = b.classList.contains('active') ? '-' : '+'; }
-function calcAgua() { const p = document.getElementById('pesoPet').value; const res = document.getElementById('resAgua'); res.innerHTML = `💧 Meta: ${p*60}ml por dia!`; res.style.display = 'block'; }
 
 initCP(); initCW(); updateChart();
 </script>
