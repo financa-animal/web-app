@@ -21,8 +21,8 @@ body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: 
-    linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)),
-    url("https://img.freepik.com/vetores-gratis/projeto-de-modelo-de-plano-de-fundo-com-muitos-brinquedos-na-prateleira_1308-40394.jpg") center/cover no-repeat fixed;
+    linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
+    url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed;
   color: var(--text);
 }
 
@@ -72,10 +72,9 @@ header {
   font-size: 1.1rem;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
-  box-sizing: border-box;
 }
 
-/* SEÇÃO BLOG (ADICIONADA) */
+/* GUIA DE CUIDADOS */
 .blog-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -95,11 +94,7 @@ header {
 .article-card h4 { margin: 0 0 8px 0; color: var(--primary); }
 
 /* FINANCEIRO */
-.chart-wrap {
-  max-width: 220px;
-  margin: 20px auto;
-}
-
+.chart-wrap { max-width: 220px; margin: 20px auto; }
 .alert-box {
   background: var(--alert-bg);
   color: var(--alert-text);
@@ -148,34 +143,18 @@ button {
   flex-direction: column;
   z-index: 1000;
 }
-
 .chat-header {
-  background: var(--primary);
-  color: white;
-  padding: 15px;
-  font-weight: bold;
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  border-radius: 20px 20px 0 0;
+  background: var(--primary); color: white; padding: 15px;
+  font-weight: bold; display: flex; justify-content: space-between;
+  cursor: pointer; border-radius: 20px 20px 0 0;
 }
-
-.chat-messages {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+.chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
 .bubble { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 14px; }
 .user-me { align-self: flex-end; background: #e3f2fd; }
 .user-other { align-self: flex-start; background: #f1f1f1; }
-
 .minimized { height: 50px !important; width: 220px; overflow: hidden; }
 
-/* POLÍTICAS E FOOTER */
+/* FOOTER E MODAL */
 footer {
   text-align: center;
   padding: 30px;
@@ -183,27 +162,17 @@ footer {
   margin-top: 50px;
   border-top: 1px solid #ddd;
 }
-footer a { color: var(--primary); text-decoration: none; margin: 0 15px; font-size: 14px; font-weight: bold; }
+footer a { color: var(--primary); text-decoration: none; margin: 0 10px; font-size: 13px; font-weight: bold; }
 
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 2000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
+  display: none; position: fixed; z-index: 2000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
 }
 .modal-content {
-  background-color: white;
-  margin: 8% auto;
-  padding: 30px;
-  border-radius: 25px;
-  width: 85%;
-  max-width: 550px;
-  max-height: 75vh;
-  overflow-y: auto;
-  position: relative;
+  background-color: white; margin: 8% auto; padding: 30px;
+  border-radius: 25px; width: 85%; max-width: 550px;
+  max-height: 75vh; overflow-y: auto; position: relative;
 }
 .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #bbb; }
 
@@ -231,7 +200,7 @@ footer a { color: var(--primary); text-decoration: none; margin: 0 15px; font-si
     <div class="blog-grid">
       <div class="article-card" onclick="abrirArtigo(1)">
         <h4>🩺 Saúde Preventiva</h4>
-        <p>Por que as vacinas anuais são essenciais?</p>
+        <p>Por que vacinas anuais são essenciais?</p>
       </div>
       <div class="article-card" onclick="abrirArtigo(2)">
         <h4>🍎 Alimentação</h4>
@@ -241,20 +210,20 @@ footer a { color: var(--primary); text-decoration: none; margin: 0 15px; font-si
   </div>
 
   <div class="card">
-    <h3>📖 História do seu Pet</h3>
+    <h3>📖 Mural de Histórias</h3>
     <input id="histName" placeholder="Nome do Pet"/>
-    <textarea id="histText" rows="3" placeholder="Conte uma história engraçada..."></textarea>
-    <button onclick="salvarHistoria()">Publicar História</button>
-    <div id="mural" style="margin-top:20px;"></div>
+    <textarea id="histText" rows="3" placeholder="Conte uma história do seu pet..."></textarea>
+    <button onclick="salvarHistoria()">Publicar no Mural</button>
+    <div id="mural" style="margin-top:20px; max-height: 200px; overflow-y: auto;"></div>
   </div>
 
   <div class="card">
-    <h3>💰 Gastos do Mês</h3>
-    <div id="alertaGasto" class="alert-box">⚠️ Cuidado! Gastos elevados detectados.</div>
+    <h3>💰 Controle Financeiro</h3>
+    <div id="alertaGasto" class="alert-box">⚠️ Atenção: Gastos elevados este mês!</div>
     <input type="number" id="vRacao" placeholder="Ração (R$)"/>
     <input type="number" id="vVet" placeholder="Veterinário (R$)"/>
     <input type="number" id="vExtra" placeholder="Outros (R$)"/>
-    <button onclick="calcularFinancas()">Ver Gráfico</button>
+    <button onclick="calcularFinancas()">Ver Gráfico de Gastos</button>
     <div class="chart-wrap">
       <canvas id="graficoPet"></canvas>
     </div>
@@ -271,7 +240,7 @@ footer a { color: var(--primary); text-decoration: none; margin: 0 15px; font-si
   <div style="padding:15px; border-top:1px solid #eee;">
     <input id="chatUser" placeholder="Seu apelido" style="font-size:12px; height:30px; margin-bottom:5px;"/>
     <div style="display:flex; gap:5px;">
-      <input id="chatInput" placeholder="Oi pessoal! 👋" style="margin:0;"/>
+      <input id="chatInput" placeholder="Sua mensagem..." style="margin:0;"/>
       <button onclick="enviarChat()" style="width:50px; background: var(--primary);">✈</button>
     </div>
   </div>
@@ -279,8 +248,9 @@ footer a { color: var(--primary); text-decoration: none; margin: 0 15px; font-si
 
 <footer>
   <p>© 2026 FofoPet - Comunidade Animal</p>
+  <a href="javascript:void(0)" onclick="abrirPolitica('sobre')">Sobre Nós</a> | 
   <a href="javascript:void(0)" onclick="abrirPolitica('privacidade')">Privacidade</a> | 
-  <a href="javascript:void(0)" onclick="abrirPolitica('termos')">Termos de Uso</a>
+  <a href="javascript:void(0)" onclick="abrirPolitica('termos')">Termos</a>
 </footer>
 
 <div id="modalPolitica" class="modal">
@@ -303,29 +273,29 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// --- ARTIGOS DO BLOG ---
+// --- MODAIS (ARTIGOS E POLÍTICAS) ---
 window.abrirArtigo = (id) => {
-  const modal = document.getElementById('modalPolitica');
   const texto = document.getElementById('textoPolitica');
   if(id === 1) {
-    texto.innerHTML = `<h2>Saúde Preventiva</h2><p>Manter as vacinas em dia evita gastos inesperados com internações. Vacinas como a V10 e a Antirrábica são a base da saúde do seu cão.</p>`;
+    texto.innerHTML = `<h2>Saúde Preventiva</h2><p>As vacinas protegem contra doenças graves como a Cinomose e a Parvovirose. Consulte sempre um veterinário para manter o protocolo atualizado.</p>`;
   } else {
-    texto.innerHTML = `<h2>Alimentação Segura</h2><p>Melancia e Maçã (sem sementes) são ótimas para hidratar seu pet. Evite sempre uvas e chocolate, que são tóxicos.</p>`;
+    texto.innerHTML = `<h2>Alimentação Segura</h2><p>Melancia e maçã (sem sementes) são ótimas. Evite uvas, cebola e chocolate, que são altamente tóxicos para pets.</p>`;
   }
-  modal.style.display = "block";
+  document.getElementById('modalPolitica').style.display = "block";
 };
 
-// --- POLÍTICAS ---
 window.abrirPolitica = (tipo) => {
-  const modal = document.getElementById('modalPolitica');
   const texto = document.getElementById('textoPolitica');
-  if(tipo === 'privacidade') {
-    texto.innerHTML = `<h2>Privacidade</h2><p>O FofoPet utiliza cookies para melhorar sua experiência e exibir anúncios via Google AdSense.</p>`;
+  if(tipo === 'sobre') {
+    texto.innerHTML = `<h2>Sobre o FofoPet</h2><p>O FofoPet nasceu da paixão pelos animais. Somos uma comunidade dedicada a facilitar a gestão financeira e o compartilhamento de histórias entre tutores.</p>`;
+  } else if(tipo === 'privacidade') {
+    texto.innerHTML = `<h2>Privacidade</h2><p>Valorizamos sua segurança. Utilizamos cookies para personalizar anúncios via Google AdSense e melhorar sua navegação.</p>`;
   } else {
-    texto.innerHTML = `<h2>Termos</h2><p>Respeite os outros usuários no chat e mural. O uso das ferramentas é para fins informativos.</p>`;
+    texto.innerHTML = `<h2>Termos de Uso</h2><p>Ao postar no mural ou chat, você concorda em manter um ambiente respeitoso. Conteúdo inadequado será removido.</p>`;
   }
-  modal.style.display = "block";
+  document.getElementById('modalPolitica').style.display = "block";
 };
+
 window.fecharModal = () => document.getElementById('modalPolitica').style.display = "none";
 
 // --- MURAL ---
@@ -334,8 +304,7 @@ window.salvarHistoria = async () => {
   const texto = document.getElementById('histText').value;
   if(!nome || !texto) return;
   await addDoc(collection(db, "mural"), { nome, texto, data: serverTimestamp() });
-  document.getElementById('histName').value = "";
-  document.getElementById('histText').value = "";
+  document.getElementById('histName').value = ""; document.getElementById('histText').value = "";
 }
 onSnapshot(query(collection(db, "mural"), orderBy("data", "desc")), (snap) => {
   const mural = document.getElementById('mural'); mural.innerHTML = "";
@@ -377,7 +346,7 @@ setInterval(() => {
   }
 }, 4500);
 
-// --- GRÁFICO ---
+// --- FINANCEIRO ---
 let chartObj = null;
 window.calcularFinancas = () => {
   const r = +document.getElementById('vRacao').value || 0;
@@ -388,13 +357,12 @@ window.calcularFinancas = () => {
   if(chartObj) chartObj.destroy();
   chartObj = new Chart(ctx, {
     type: 'doughnut',
-    data: { labels: ['Ração', 'Vet', 'Extras'], datasets: [{ data:[r,v,e], backgroundColor:['#5FA8A0','#FFB6C1','#FFD700'] }] }
+    data: { labels: ['Ração', 'Vet', 'Extras'], datasets: [{ data:[r,v,e], backgroundColor:['#5FA8A0','#FFB6C1','#FFD700'] }] },
+    options: { plugins: { legend: { position: 'bottom' } } }
   });
 }
 window.calcularFinancas();
-window.toggleChat = () => {
-  document.getElementById('chatWindow').classList.toggle('minimized');
-};
+window.toggleChat = () => document.getElementById('chatWindow').classList.toggle('minimized');
 </script>
 </body>
 </html>
