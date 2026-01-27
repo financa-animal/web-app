@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FofoPet - O Portal do seu Pet</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-:root { --primary: #5FA8A0; --secondary: #e67e22; --soft: #F4F8F7; --card: rgba(255, 255, 255, 0.98); --text: #2b2b2b; }
-body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed; color: var(--text); }
-.container { max-width: 700px; margin: auto; padding: 20px 20px 120px 20px; }
-header { text-align: center; padding: 25px 0; font-size: 35px; font-weight: 800; color: var(--primary); }
-.card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); margin-bottom: 25px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FofoPet - Portal Interativo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --primary: #5FA8A0; --secondary: #e67e22; --soft: #F4F8F7; --card: rgba(255, 255, 255, 0.98); --text: #2b2b2b; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed; color: var(--text); }
+        .container { max-width: 700px; margin: auto; padding: 20px 20px 120px 20px; }
+        header { text-align: center; padding: 25px 0; font-size: 35px; font-weight: 800; color: var(--primary); }
+        .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); margin-bottom: 25px; }
+        
+        /* DICAS E GUIAS */
+        .tip-box { background: var(--primary); color: white; padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; margin-bottom: 10px; }
+        .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .guide-item { background: var(--soft); padding: 10px; border-radius: 10px; border-left: 4px solid var(--primary); font-size: 13px; cursor: pointer; }
 
-/* DICA PET DINÂMICA */
-.tip-box { background: var(--primary); color: white; padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; min-height: 40px; display: flex; align-items: center; justify-content: center; transition: 0.5s; }
+        /* JOGOS: CAÇA-PALAVRAS */
+        .word-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; max-width: 320px; margin: 10px auto; background: #ddd; }
+        .cell { width: 100%; aspect-ratio: 1; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .cell.selected { background: var(--secondary); color: white; }
+        .cell.found { background: var(--primary) !important; color: white; }
 
-/* GUIA DE CUIDADOS */
-.guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-.guide-item { background: var(--soft); padding: 12px; border-radius: 12px; border-left: 4px solid var(--primary); font-size: 14px; cursor: pointer; transition: 0.2s; }
-.guide-item:hover { transform: scale(1.02); }
+        /* JOGOS: CRUZADINHA */
+        .cw-grid { display: grid; grid-template-columns: repeat(11, 28px); gap: 2px; margin: 15px auto; width: fit-content; background: #ddd; padding: 2px; }
+        .cw-cell { width: 28px; height: 28px; background: white; position: relative; }
+        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: bold; text-transform: uppercase; background: transparent; padding: 0; }
+        .cw-cell.black { background: #444; }
+        .correct { background: #d4edda !important; }
 
-/* JOGOS */
-.game-area { border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px; }
-.word-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; max-width: 320px; margin: 10px auto; background: #ddd; }
-.cell { width: 100%; aspect-ratio: 1; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 14px; }
-.cell.selected { background: var(--secondary); color: white; }
-.cell.found { background: var(--primary) !important; color: white; }
-.cw-grid { display: grid; grid-template-columns: repeat(11, 28px); gap: 2px; margin: 15px auto; width: fit-content; background: #ddd; }
-.cw-cell { width: 28px; height: 28px; background: white; position: relative; }
-.cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: bold; text-transform: uppercase; background: transparent; }
-.cw-cell.black { background: #444; }
-.correct { background: #d4edda !important; }
-
-/* INTERFACE GERAL */
-button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
-input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1.5px solid #eee; box-sizing: border-box; }
-.chat { position: fixed; right: 25px; bottom: 85px; width: 300px; height: 400px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 1000; }
-.minimized { height: 50px !important; width: 180px; }
-</style>
+        /* FORMULÁRIOS E BOTÕES */
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1.5px solid #eee; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
+        .btn-sec { background: var(--secondary); }
+        
+        /* CHAT FLUTUANTE */
+        .chat { position: fixed; right: 25px; bottom: 85px; width: 280px; height: 350px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 1000; transition: 0.3s; }
+        .minimized { height: 50px !important; width: 180px; overflow: hidden; }
+    </style>
 </head>
 <body>
 
@@ -46,99 +47,90 @@ input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px
 <div class="container">
     
     <div class="card">
-        <h4 style="margin:0 0 10px 0;">💡 Dica Pet do Dia</h4>
-        <div class="tip-box" id="tipDisplay">Carregando dica fofa...</div>
-    </div>
-
-    <div class="card">
-        <h4 style="margin:0 0 10px 0;">🩺 Guia de Cuidados</h4>
+        <h4 style="margin-top:0">💡 Dica Pet</h4>
+        <div class="tip-box" id="tipDisplay">Carregando...</div>
         <div class="guide-grid">
-            <div class="guide-item" onclick="alert('Dica: Vacinas em dia evitam doenças graves!')">
-                <strong>Saúde</strong><br>Importância da Vacinação
-            </div>
-            <div class="guide-item" onclick="alert('Dica: Chocolate e uvas são tóxicos para pets!')">
-                <strong>Dieta</strong><br>Alimentos Proibidos
-            </div>
+            <div class="guide-item" onclick="alert('Mantenha as vacinas em dia!')"><strong>Saúde</strong><br>Vacinação</div>
+            <div class="guide-item" onclick="alert('Evite dar doces ao seu pet!')"><strong>Dieta</strong><br>Alimentação</div>
         </div>
     </div>
 
     <div class="card">
-        <h4 style="margin:0;">🔍 Caça-Palavras Pet</h4>
-        <div id="cpWords" style="font-size:12px; margin:10px 0; text-align:center; font-weight:bold;"></div>
+        <h4>🔍 Caça-Palavras Pet</h4>
+        <div id="cpList" style="text-align:center; font-weight:bold; margin-bottom:10px; font-size:12px"></div>
         <div class="word-grid" id="cpGrid"></div>
-        <button onclick="initCP()" style="background:#888; font-size:11px;">Novo Tabuleiro</button>
+        <button onclick="initCP()" style="background:#888; font-size:11px">Novo Tabuleiro</button>
     </div>
 
     <div class="card">
-        <h4 style="margin:0;">🧩 Cruzadinha Pet</h4>
+        <h4>🧩 Cruzadinha Pet</h4>
         <div class="cw-grid" id="cwGrid"></div>
-        <p style="font-size:12px; color:#666;">Dicas: 1. Melhor amigo • 2. Faz miau • 3. Usa no pescoço • 4. Médico de pets</p>
-        <button onclick="checkCW()" style="background: var(--secondary);">Verificar Respostas</button>
+        <p style="font-size:11px; color:#666">Dicas: 1. Amigo fiel (3) • 2. Faz miau (4) • 3. No pescoço (7) • 4. Médico (11)</p>
+        <button onclick="checkCW()" class="btn-sec">Verificar Respostas</button>
     </div>
 
     <div class="card">
-        <h4>💧 Hidratação Diária</h4>
-        <input type="number" id="peso" placeholder="Peso do pet (kg)"/>
-        <button onclick="calcH2O()">Quanto ele deve beber?</button>
-        <div id="resH2O" style="margin-top:10px; font-weight:bold; color:var(--primary); display:none; text-align:center;"></div>
+        <h4>💧 Calculadora de Hidratação</h4>
+        <input type="number" id="peso" placeholder="Peso do pet (kg)">
+        <button onclick="calcH2O()">Calcular ml/dia</button>
+        <div id="resH2O" style="margin-top:10px; font-weight:bold; color:var(--primary); display:none; text-align:center"></div>
     </div>
 
     <div class="card">
         <h4>💰 Gastos do Mês</h4>
-        <input type="number" id="vRacao" placeholder="Ração (R$)"/>
-        <button onclick="updateChart()">Gerar Gráfico</button>
-        <div style="max-width:160px; margin:20px auto;"><canvas id="petChart"></canvas></div>
+        <input type="number" id="vRacao" placeholder="Ração (R$)">
+        <input type="number" id="vVet" placeholder="Veterinário (R$)">
+        <input type="number" id="vMimos" placeholder="Mimos/Extras (R$)">
+        <button onclick="updateChart()">Gerar Gráfico Colorido</button>
+        
+        <div id="alertaGasto" style="display:none; margin-top:10px; padding:10px; background:#f8d7da; color:#721c24; border-radius:10px; font-size:12px; text-align:center">
+            ⚠️ Seus gastos estão acima do planejado!
+        </div>
+
+        <div style="max-width:180px; margin:20px auto;">
+            <canvas id="petChart"></canvas>
+        </div>
     </div>
 
     <div class="card">
-        <h4>📩 Fale Conosco</h4>
-        <input type="email" placeholder="Seu e-mail"/>
-        <textarea placeholder="Sua dúvida..."></textarea>
-        <button style="background:var(--secondary)">Enviar</button>
+        <h4>📖 Mural de Histórias</h4>
+        <input placeholder="Nome do Pet">
+        <textarea rows="2" placeholder="Conte algo fofo..."></textarea>
+        <button onclick="alert('Publicado!')">Publicar</button>
     </div>
 </div>
 
 <div class="chat minimized" id="chatWin">
-    <div style="background:var(--primary);color:white;padding:15px;cursor:pointer;border-radius:20px 20px 0 0;" onclick="toggleChat()">💬 Chat Galera</div>
-    <div style="flex:1; padding:15px; color:#ccc; font-size:12px;">Seja bem-vindo à comunidade!</div>
+    <div style="background:var(--primary);color:white;padding:15px;cursor:pointer" onclick="toggleChat()">💬 Chat Comunitário</div>
+    <div style="padding:20px; color:#ccc; font-size:12px">Aguardando mensagens...</div>
 </div>
 
 <script>
-// --- DICAS AUTOMÁTICAS ---
-const dicas = ["Troque a água do pet 2x ao dia! 💧", "Passeios estimulam a mente. 🐕", "Escove os dentes do seu pet! 🪥", "Ame e dê muito carinho! ❤️"];
+// --- DICAS ---
+const dicas = ["Água fresca sempre!", "Passeie nos horários frescos.", "Ame seu pet todos os dias!"];
 let dIdx = 0;
-function rotateTips() {
-    const box = document.getElementById('tipDisplay');
-    box.style.opacity = 0;
-    setTimeout(() => {
-        box.innerText = dicas[dIdx++ % dicas.length];
-        box.style.opacity = 1;
-    }, 500);
-}
-setInterval(rotateTips, 4000); rotateTips();
+setInterval(() => { document.getElementById('tipDisplay').innerText = dicas[dIdx++ % dicas.length]; }, 4000);
+document.getElementById('tipDisplay').innerText = dicas[0];
 
 // --- CAÇA-PALAVRAS ---
-const cpLib = ["GATO", "CAO", "OSSO", "PATA", "AMOR", "BOLA"];
-let activeWords = [];
+const cpWords = ["GATO", "CAO", "PATA", "OSSO"];
 function initCP() {
-    const grid = document.getElementById('cpGrid'); grid.innerHTML = '';
-    const list = document.getElementById('cpWords'); list.innerHTML = '';
-    activeWords = cpLib.sort(() => 0.5 - Math.random()).slice(0, 3);
-    activeWords.forEach(w => list.innerHTML += `<span>${w} </span>`);
+    const g = document.getElementById('cpGrid'); g.innerHTML = '';
+    const l = document.getElementById('cpList'); l.innerHTML = cpWords.join(" • ");
     for(let i=0; i<100; i++) {
         const c = document.createElement('div'); c.className = 'cell';
         c.innerText = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)];
         c.onclick = () => { c.classList.toggle('selected'); checkCP(); };
-        grid.appendChild(c);
+        g.appendChild(c);
     }
 }
 function checkCP() {
     const sel = Array.from(document.querySelectorAll('.cell.selected')).map(c => c.innerText).join('');
-    activeWords.forEach(p => { if(sel.includes(p)) document.querySelectorAll('.cell.selected').forEach(c => { if(p.includes(c.innerText)) c.classList.add('found'); }); });
+    cpWords.forEach(p => { if(sel.includes(p)) document.querySelectorAll('.cell.selected').forEach(c => { if(p.includes(c.innerText)) c.classList.add('found'); }); });
 }
 
-// --- CRUZADINHA ---
-const cwData = [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,0,'V'],[7,1,'E'],[7,2,'T'],[7,3,'E'],[7,4,'R']];
+// --- CRUZADINHA (CORREÇÃO) ---
+const cwData = [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,0,'V'],[7,1,'E'],[7,2,'T'],[7,3,'E'],[7,4,'R'],[7,5,'I'],[7,6,'N'],[7,7,'A'],[7,8,'R'],[7,9,'I'],[7,10,'O']];
 function initCW() {
     const g = document.getElementById('cwGrid'); g.innerHTML = '';
     for(let r=0; r<8; r++) {
@@ -151,15 +143,35 @@ function initCW() {
         }
     }
 }
-function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
+function checkCW() {
+    document.querySelectorAll('.cw-cell input').forEach(i => {
+        if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct');
+        else if(i.value !== "") i.style.background = "#f8d7da";
+    });
+}
+
+// --- FINANCEIRO (CORREÇÃO) ---
+function updateChart() {
+    const r = parseFloat(document.getElementById('vRacao').value) || 0;
+    const v = parseFloat(document.getElementById('vVet').value) || 0;
+    const m = parseFloat(document.getElementById('vMimos').value) || 0;
+    document.getElementById('alertaGasto').style.display = (r+v+m) > 500 ? 'block' : 'none';
+    
+    if(window.pChart) window.pChart.destroy();
+    window.pChart = new Chart(document.getElementById('petChart'), {
+        type: 'pie',
+        data: { labels: ['Ração', 'Vet', 'Mimos'], datasets: [{ data: [r, v, m], backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f'] }] }
+    });
+}
 
 // --- UTILITÁRIOS ---
-window.calcH2O = () => { const p = document.getElementById('peso').value; const r = document.getElementById('resH2O'); r.innerHTML = `💧 Meta: ${p*60}ml de água hoje!`; r.style.display="block"; };
-window.toggleChat = () => document.getElementById('chatWin').classList.toggle('minimized');
-window.updateChart = () => {
-    if(window.petChartObj) window.petChartObj.destroy();
-    window.petChartObj = new Chart(document.getElementById('petChart'), { type:'doughnut', data:{ labels:['Gasto','Meta'], datasets:[{data:[document.getElementById('vRacao').value || 10, 100], backgroundColor:['#5FA8A0','#eee']}] }});
+window.calcH2O = () => { 
+    const p = document.getElementById('peso').value; 
+    const res = document.getElementById('resH2O');
+    res.innerHTML = `💧 Seu pet deve beber ${p*60}ml por dia!`; 
+    res.style.display = "block";
 };
+window.toggleChat = () => document.getElementById('chatWin').classList.toggle('minimized');
 
 initCP(); initCW(); updateChart();
 </script>
