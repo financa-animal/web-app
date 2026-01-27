@@ -1,223 +1,266 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FofoPet 🐾</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FofoPet</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<!-- Chart + PDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 body{
- margin:0;
- font-family:Poppins;
- background:#f4f7f6 url("https://i.imgur.com/8Km9tLL.png") no-repeat bottom right fixed;
- background-size:220px;
- color:#333;
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:url("https://images.unsplash.com/photo-1517849845537-4d257902454a") center/cover fixed;
+}
+
+/* Camada clara sobre o fundo */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.85);
+  z-index:-1;
 }
 
 header{
- background:linear-gradient(90deg,#6a9c89,#a7c4bc);
- padding:15px;
- text-align:center;
- font-size:22px;
- font-weight:700;
- color:white;
+  text-align:center;
+  padding:15px;
+  font-weight:bold;
+  font-size:22px;
+  color:#444;
 }
 
-.container{max-width:750px;margin:auto;padding:15px}
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:10px;
+}
 
 .card{
- background:white;
- border-radius:16px;
- padding:12px;
- margin-bottom:15px;
- box-shadow:0 4px 10px rgba(0,0,0,0.08)
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  margin-bottom:20px;
 }
 
-textarea,input{
- width:100%;
- padding:8px;
- margin-top:6px;
- border-radius:8px;
- border:1px solid #ddd
+input, textarea{
+  width:100%;
+  padding:8px;
+  margin:5px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
 }
 
 button{
- background:#6a9c89;
- border:none;
- padding:8px 14px;
- border-radius:20px;
- color:white;
- margin-top:8px;
- cursor:pointer
+  background:#6aa9a1;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
 }
 
-.post-img{width:100%;border-radius:12px;margin-top:8px}
-.like{color:#6a9c89;font-weight:bold;cursor:pointer}
-
-.small{font-size:12px;color:#666}
+/* DICAS GIRANDO */
+.tip-box{
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  transition:0.5s;
+}
 
 /* CHAT LATERAL */
-.chat-fixed{
- position:fixed;
- right:10px;
- bottom:10px;
- width:280px;
- background:white;
- border-radius:16px;
- box-shadow:0 4px 12px rgba(0,0,0,0.2);
- padding:10px
-}
-.chat-box{height:200px;overflow-y:auto}
-
-/* DICAS */
-.tip-card{
- background:#e8f1f2;
- padding:15px;
- border-radius:16px;
- text-align:center;
- font-weight:500;
- margin-bottom:10px;
+.chat{
+  position:fixed;
+  right:0;
+  top:80px;
+  width:320px;
+  height:70%;
+  background:white;
+  box-shadow:-4px 0 10px rgba(0,0,0,0.1);
+  border-radius:12px 0 0 12px;
+  display:flex;
+  flex-direction:column;
 }
 
-@media(max-width:900px){
- .chat-fixed{position:static;width:100%;margin-bottom:15px}
+.chat-header{
+  background:#6aa9a1;
+  color:white;
+  padding:10px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.chat-messages{
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
+}
+
+.chat input{
+  width:90%;
+  margin:5px;
+}
+
+.minimized{
+  height:40px !important;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .chat{ width:100%; top:auto; bottom:0; height:50%; }
 }
 </style>
 </head>
 
 <body>
+
 <header>🐾 FofoPet</header>
 
 <div class="container">
 
-<!-- HISTÓRIA -->
+<!-- HISTÓRIAS -->
 <div class="card">
-<h3>História do seu pet</h3>
-<input id="name" placeholder="Nome do pet">
-<textarea id="story" placeholder="Conte a história"></textarea>
-<input id="image" placeholder="Link da foto">
-<button onclick="addPost()">Postar</button>
+  <h3>História do seu pet</h3>
+  <input id="petNome" placeholder="Nome do pet">
+  <textarea id="petHistoria" placeholder="Conte a história"></textarea>
+  <button onclick="postarHistoria()">Postar</button>
+  <div id="feedHistorias"></div>
 </div>
 
-<div id="posts"></div>
-
-<!-- CALCULADORA -->
+<!-- FINANCEIRO -->
 <div class="card">
-<h3>Calculadora de Gastos</h3>
-<input id="food" placeholder="Ração">
-<input id="vet" placeholder="Veterinário">
-<input id="toy" placeholder="Brinquedos">
-<button onclick="calc()">Calcular</button>
-<canvas id="grafico"></canvas>
-<button onclick="gerarPDF()">Salvar em PDF</button>
+  <h3>Calculadora de Gastos</h3>
+  <input id="racao" type="number" placeholder="Ração">
+  <input id="vet" type="number" placeholder="Veterinário">
+  <input id="brinq" type="number" placeholder="Brinquedos">
+  <button onclick="calcular()">Calcular</button>
+  <canvas id="grafico" width="200"></canvas>
+  <p id="alerta" style="color:red;font-weight:bold;"></p>
+  <button onclick="salvarPDF()">Salvar em PDF</button>
 </div>
 
 <!-- DICAS -->
 <div class="card">
-<h3>Dicas para seu pet</h3>
-<div id="tips"></div>
+  <h3>Dicas para seu pet</h3>
+  <div class="tip-box" id="tipBox">Carregando...</div>
 </div>
 
 </div>
 
-<!-- CHAT FIXO -->
-<div class="chat-fixed">
-<h4>Chat 💬</h4>
-<div class="chat-box" id="chat"></div>
-<input id="msg" placeholder="Digite..." onkeypress="if(event.key==='Enter')sendMsg()">
-<button onclick="sendMsg()">Enviar</button>
+<!-- CHAT -->
+<div class="chat" id="chatBox">
+  <div class="chat-header">
+    Chat Fofo
+    <button onclick="toggleChat()">—</button>
+  </div>
+  <div class="chat-messages" id="chatMensagens"></div>
+  <input id="chatInput" placeholder="Mensagem">
+  <button onclick="enviarMsg()">Enviar</button>
 </div>
 
+<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, arrayUnion, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig={
- apiKey:"AIzaSyCtwYxRgTmrTyjqHGX6P0VPYER",
- authDomain:"financa-animal.firebaseapp.com",
- projectId:"financa-animal"
+/* 🔥 COLE SUA CONFIG AQUI */
+const firebaseConfig = {
+  apiKey: "SUA_KEY",
+  authDomain: "SEU_DOMINIO",
+  projectId: "SEU_ID"
 };
 
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-const banned=["sexo","porn","morte","matar","violencia","idiota","burro"];
+/* HISTÓRIAS */
+window.postarHistoria = async () => {
+  const nome = petNome.value;
+  const historia = petHistoria.value;
+  if(!historia) return;
+  await addDoc(collection(db,"historias"),{nome,historia});
+};
 
-window.addPost=async()=>{
- const n=name.value,s=story.value,i=image.value;
- if(banned.some(w=>s.toLowerCase().includes(w)))return alert("Texto bloqueado");
- await addDoc(collection(db,"posts"),{n,s,i,likes:0,comments:[]});
-}
+onSnapshot(collection(db,"historias"), snap=>{
+  feedHistorias.innerHTML="";
+  snap.forEach(doc=>{
+    const d = doc.data();
+    feedHistorias.innerHTML += `<p><b>${d.nome}</b>: ${d.historia}</p>`;
+  });
+});
 
-onSnapshot(collection(db,"posts"),snap=>{
- posts.innerHTML="";
- snap.forEach(d=>{
-  const p=d.data();
-  posts.innerHTML+=`<div class="card"><b>${p.n}</b><p>${p.s}</p>
-  ${p.i?`<img src="${p.i}" class="post-img">`:""}
-  <div class="like" onclick="likePost('${d.id}')">❤️ ${p.likes}</div>
-  <input placeholder="Comentar" onkeypress="if(event.key==='Enter')comment('${d.id}',this.value)">
-  ${p.comments.map(c=>`<div class="small">💬 ${c}</div>`).join("")}</div>`;
- })
-})
+/* CHAT */
+window.enviarMsg = async () =>{
+  const msg = chatInput.value;
+  if(!msg) return;
+  await addDoc(collection(db,"chat"),{msg});
+  chatInput.value="";
+};
 
-window.likePost=async(id)=>{
- const r=doc(db,"posts",id);
- const s=await getDoc(r);
- await updateDoc(r,{likes:s.data().likes+1});
-}
+onSnapshot(collection(db,"chat"), snap=>{
+  chatMensagens.innerHTML="";
+  snap.forEach(doc=>{
+    chatMensagens.innerHTML += `<div>${doc.data().msg}</div>`;
+  });
+});
+</script>
 
-window.comment=async(id,t)=>{
- if(banned.some(w=>t.toLowerCase().includes(w)))return alert("Comentário bloqueado");
- await updateDoc(doc(db,"posts",id),{comments:arrayUnion(t)});
-}
-
-window.sendMsg=async()=>{
- const text=msg.value;
- if(banned.some(w=>text.toLowerCase().includes(w)))return;
- await addDoc(collection(db,"chat"),{text});
- msg.value="";
-}
-
-onSnapshot(collection(db,"chat"),s=>{
- chat.innerHTML="";
- s.forEach(d=>chat.innerHTML+=`<div>💬 ${d.data().text}</div>`);
-})
-
-// GRÁFICO REDONDO
-window.calc=()=>{
- let f=+food.value,v=+vet.value,t=+toy.value;
- let total=f+v+t;
- new Chart(grafico,{type:'pie',data:{labels:['Ração','Vet','Brinq'],datasets:[{data:[f,v,t]}]}});
- if(total>500)alert("⚠️ Seus gastos estão altos este mês!");
-}
-
-// PDF
-window.gerarPDF=()=>{
- const {jsPDF}=window.jspdf;
- const doc=new jsPDF();
- doc.text("Relatório de Gastos do Pet",10,10);
- doc.save("gastos.pdf");
-}
-
-// DICAS ROTATIVAS
-const dicas=[
-"Água fresca sempre disponível 🥤",
+<script>
+/* DICAS ROTATIVAS */
+const tips=[
+"Água fresca sempre disponível 💧",
 "Passeios evitam ansiedade 🐕",
-"Vacinas em dia salvam vidas 💉",
+"Vacinas salvam vidas 💉",
 "Brincar fortalece o vínculo ❤️"
 ];
+let i=0;
+setInterval(()=>{
+  tipBox.innerText=tips[i];
+  i=(i+1)%tips.length;
+},3000);
 
-function loadTips(){
- tips.innerHTML="";
- dicas.forEach(d=>tips.innerHTML+=`<div class="tip-card">${d}</div>`);
+/* GRÁFICO */
+let chart;
+function calcular(){
+  const r=+racao.value||0;
+  const v=+vet.value||0;
+  const b=+brinq.value||0;
+  const total=r+v+b;
+
+  if(total>500) alerta.innerText="⚠ Gasto alto esse mês!";
+  else alerta.innerText="";
+
+  const ctx=document.getElementById("grafico");
+  if(chart) chart.destroy();
+  chart=new Chart(ctx,{
+    type:"doughnut",
+    data:{labels:["Ração","Vet","Brinq"],
+    datasets:[{data:[r,v,b]}]}
+  });
 }
-loadTips();
-setInterval(loadTips,6000);
+
+/* PDF */
+function salvarPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc=new jsPDF();
+  doc.text("Relatório FofoPet",20,20);
+  doc.text("Ração: "+racao.value,20,40);
+  doc.text("Vet: "+vet.value,20,50);
+  doc.text("Brinquedos: "+brinq.value,20,60);
+  doc.save("gastos.pdf");
+}
+
+/* CHAT MINIMIZAR */
+function toggleChat(){
+  chatBox.classList.toggle("minimized");
+}
 </script>
+
 </body>
 </html>
