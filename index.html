@@ -22,6 +22,7 @@ canvas{max-width:300px;margin:auto;display:block}
 .tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 .tip-card{perspective:1000px;height:100px;}
 .tip-inner{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d;}
+.tip-card:hover .tip-inner{transform:rotateY(180deg);}
 .tip-front,.tip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:5px;}
 .tip-front{background:#ffca28;}
 .tip-back{background:#6d4c41;color:white;transform:rotateY(180deg);}
@@ -79,22 +80,15 @@ function calc(){
 let f=+food.value||0,h=+health.value||0,e=+extras.value||0,total=f+h+e;
 alert.innerText=total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
 if(chart)chart.destroy();
-chart=new Chart(chartCanvas=document.getElementById("chart"),{
+chart=new Chart(document.getElementById("chart"),{
 type:'doughnut',
 data:{labels:["Alimentação","Saúde","Mimos"],datasets:[{data:[f,h,e]}]}
 });
 }
 
-/* DICAS AUTOMÁTICAS */
 const tipList=[
-"Vacinas evitam gastos grandes",
-"Ração boa reduz veterinário",
-"Escovar dentes evita cirurgia",
-"Passeio mantém saúde",
-"Hidratação é essencial",
-"Brincar reduz ansiedade",
-"Check-up previne doenças",
-"Amor também é cuidado 💛"
+"Vacinas evitam gastos grandes","Ração boa reduz veterinário","Escovar dentes evita cirurgia",
+"Passeio mantém saúde","Hidratação é essencial","Brincar reduz ansiedade","Check-up previne doenças","Amor também é cuidado 💛"
 ];
 function updateTips(){
 tips.innerHTML="";
@@ -109,29 +103,24 @@ updateTips();
 setInterval(updateTips,8000);
 </script>
 
-<!-- 🔥 FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
+const app=initializeApp({
 apiKey:"AIzaSyCtWTnPgwTreMjrthlXxGu0WOPYRE6W",
 authDomain:"financa-animal.firebaseapp.com",
 projectId:"financa-animal",
 storageBucket:"financa-animal.firebasestorage.app",
 messagingSenderId:"693788312237",
 appId:"1:693788312237:web:169d6407dc2eb3136fc24"
-};
-
-const app=initializeApp(firebaseConfig);
+});
 const db=getFirestore(app);
-const badWords=["idiota","burro","feio","lixo"];
 
-function filterText(t){
-badWords.forEach(w=>t=t.replaceAll(w,"***"));
-return t;
-}
+const badWords=["idiota","burro","lixo","feio"];
+const filterText=t=>{badWords.forEach(w=>t=t.replaceAll(w,"***"));return t;}
 
+/* HISTÓRIAS */
 window.postStory=async()=>{
 let name=petName.value,txt=filterText(story.value),file=photos.files[0];
 if(!name||!txt||!file)return alert("Preencha tudo");
@@ -143,47 +132,60 @@ loadStories();
 r.readAsDataURL(file);
 }
 
-window.likeStory=async(id,likes)=>{await updateDoc(doc(db,"stories",id),{likes:likes+1});loadStories();}
-
-window.deleteStory=async(id)=>{
-let s=prompt("Senha admin:");
-if(s!=="123petadmin")return alert("Só admin apaga");
-await deleteDoc(doc(db,"stories",id));
-loadStories();
+/* FOTOS */
+window.addCute=async()=>{
+let file=cuteUpload.files[0];if(!file)return;
+let r=new FileReader();
+r.onload=async e=>{
+await addDoc(collection(db,"cute"),{img:e.target.result});
+loadCute();
+}
+r.readAsDataURL(file);
 }
 
-window.addComment=async(e,id)=>{
-e.preventDefault();
-let input=e.target.comment;
-if(!input.value)return;
-let ref=doc(db,"stories",id);
-let snap=await getDoc(ref);
-let comments=snap.data().comments||[];
-comments.push(filterText(input.value));
-await updateDoc(ref,{comments});
-loadStories();
+/* VIDEOS */
+window.addVideo=async()=>{
+let file=videoUpload.files[0];if(!file)return;
+let r=new FileReader();
+r.onload=async e=>{
+await addDoc(collection(db,"videos"),{vid:e.target.result});
+loadVideos();
+}
+r.readAsDataURL(file);
 }
 
+/* LOADERS */
 async function loadStories(){
 stories.innerHTML="";
 const qs=await getDocs(collection(db,"stories"));
 qs.forEach(s=>{
 let d=s.data();
-stories.innerHTML+=`
-<div class="post">
-<h4>${d.name}</h4>
-<p>${d.txt}</p>
+stories.innerHTML+=`<div class="post"><h4>${d.name}</h4><p>${d.txt}</p>
 <img src="${d.img}">
 <button onclick="likeStory('${s.id}',${d.likes})">❤️ ${d.likes}</button>
 <button onclick="deleteStory('${s.id}')">🗑️</button>
 ${d.comments.map(c=>`<p>💬 ${c}</p>`).join("")}
-<form onsubmit="addComment(event,'${s.id}')">
-<input name="comment" placeholder="Comentar...">
-</form>
-</div>`;
+<form onsubmit="addComment(event,'${s.id}')"><input name="comment"></form></div>`;
 });
 }
-loadStories();
+
+async function loadCute(){
+cute.innerHTML="";
+const qs=await getDocs(collection(db,"cute"));
+qs.forEach(s=>cute.innerHTML+=`<img src="${s.data().img}">`);
+}
+
+async function loadVideos(){
+videos.innerHTML="";
+const qs=await getDocs(collection(db,"videos"));
+qs.forEach(s=>videos.innerHTML+=`<video src="${s.data().vid}" controls></video>`);
+}
+
+window.likeStory=async(id,l)=>{await updateDoc(doc(db,"stories",id),{likes:l+1});loadStories();}
+window.deleteStory=async(id)=>{if(prompt("Senha:")!=="123petadmin")return;await deleteDoc(doc(db,"stories",id));loadStories();}
+window.addComment=async(e,id)=>{e.preventDefault();let i=e.target.comment;if(!i.value)return;let r=doc(db,"stories",id);let s=await getDoc(r);let c=s.data().comments||[];c.push(filterText(i.value));await updateDoc(r,{comments:c});loadStories();}
+
+loadStories();loadCute();loadVideos();
 </script>
 </body>
 </html>
