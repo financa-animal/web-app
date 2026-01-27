@@ -3,71 +3,160 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FofoPet - Finança Animal</title>
+<title>FofoPet - Dashboard Comunitário</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-:root { --primary: #5FA8A0; --soft: #F4F8F7; --card: rgba(255, 255, 255, 0.98); --text: #2b2b2b; }
+:root {
+  --primary: #5FA8A0;
+  --soft-bg: #f0f7f6;
+  --card-bg: rgba(255, 255, 255, 0.98);
+  --text-color: #2b2b2b;
+}
+
 body {
-  margin: 0; font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
-              url("https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=2069&auto=format&fit=crop") center/cover no-repeat fixed;
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  /* Opção Mosaico: Padrão de patinhas neutro e fofo */
+  background-color: var(--soft-bg);
+  background-image: url("https://www.transparenttextures.com/patterns/paws.png");
+  background-attachment: fixed;
+  color: var(--text-color);
 }
-.container { max-width: 700px; margin: auto; padding: 20px; padding-bottom: 100px; }
-header { text-align: center; padding: 30px 0; font-size: 32px; font-weight: 800; color: var(--primary); }
-.card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); margin-bottom: 25px; }
-.tips-container { perspective: 1000px; height: 90px; }
-.tip-card { 
-    width: 100%; height: 100%; background: var(--primary); color: white; border-radius: 15px;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    padding: 15px; font-weight: 600; transition: transform 0.6s; transform-style: preserve-3d; box-sizing: border-box;
+
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 20px;
+  padding-bottom: 120px; /* Espaço para o chat no mobile */
 }
-input, textarea { width: 100%; padding: 12px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
-button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; }
-.chat { position: fixed; right: 20px; bottom: 20px; width: 350px; height: 500px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 1000; transition: 0.4s; }
-.chat-header { background: var(--primary); color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; cursor: pointer; border-radius: 20px 20px 0 0; }
-.chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f9f9f9; }
-.bubble { padding: 10px; border-radius: 12px; max-width: 80%; font-size: 14px; }
-.user-me { align-self: flex-end; background: #d1e7dd; }
-.user-other { align-self: flex-start; background: #eee; }
+
+header {
+  text-align: center;
+  padding: 30px 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+}
+
+/* 1. DICAS ESTILO CARD QUE GIRAM */
+.tips-container { perspective: 1000px; height: 100px; }
+.tip-card {
+  width: 100%; height: 100%;
+  background: var(--primary);
+  color: white;
+  border-radius: 15px;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 15px; font-weight: 600;
+  transition: transform 0.6s; transform-style: preserve-3d;
+  box-sizing: border-box; font-size: 1.1rem;
+}
+
+/* 2. CALCULADORA E GRÁFICO NÍTIDO */
+.chart-wrap { max-width: 220px; margin: 20px auto; }
+input, textarea {
+  width: 100%; padding: 12px; margin: 8px 0;
+  border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box;
+}
+button {
+  background: var(--primary); color: white; border: none;
+  padding: 12px; border-radius: 12px; font-weight: bold;
+  cursor: pointer; width: 100%; transition: 0.3s;
+}
+button:hover { opacity: 0.9; }
+
+/* 3. CHAT LATERAL MAIOR COM MINIMIZAR/MAXIMIZAR */
+.chat {
+  position: fixed; right: 20px; bottom: 20px;
+  width: 350px; height: 500px;
+  background: white; border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  display: flex; flex-direction: column; z-index: 1000;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.chat-header {
+  background: var(--primary); color: white; padding: 15px;
+  font-weight: bold; display: flex; justify-content: space-between;
+  cursor: pointer; border-radius: 20px 20px 0 0;
+}
+.chat-messages {
+  flex: 1; padding: 15px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 10px; background: #fdfdfd;
+}
+.bubble { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 14px; }
+.user-me { align-self: flex-end; background: #d1e7dd; border-bottom-right-radius: 2px; }
+.user-other { align-self: flex-start; background: #f1f1f1; border-bottom-left-radius: 2px; }
+
 .minimized { height: 50px !important; width: 220px; }
-@media (max-width: 768px) { .chat { width: 100%; right: 0; bottom: 0; border-radius: 20px 20px 0 0; } }
+
+@media (max-width: 768px) {
+  .chat { width: 100%; right: 0; bottom: 0; border-radius: 20px 20px 0 0; }
+  .minimized { width: 100%; }
+}
 </style>
 </head>
 <body>
+
 <header>🐾 FofoPet</header>
+
 <div class="container">
+  
   <div class="card">
-    <h3>💡 Dicas Dinâmicas</h3>
-    <div class="tips-container"><div class="tip-card" id="tipCard">Carregando dicas...</div></div>
+    <div class="tips-container">
+      <div class="tip-card" id="tipCard">Carregando dicas fofas...</div>
+    </div>
   </div>
+
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
-    <input id="hNome" placeholder="Seu nome"/>
-    <textarea id="hTexto" rows="3" placeholder="Conte a história do seu pet..."></textarea>
-    <button onclick="postarHistoria()">Publicar</button>
-    <div id="mural" style="margin-top:20px;"></div>
+    <input id="histNome" placeholder="Nome do seu Pet"/>
+    <textarea id="histTexto" rows="3" placeholder="Conte uma história fofa (apenas texto)..."></textarea>
+    <button onclick="salvarHistoria()">Publicar História</button>
+    <div id="muralLista" style="margin-top:20px;"></div>
   </div>
+
   <div class="card">
-    <h3>💰 Calculadora de Gastos</h3>
-    <input type="number" id="g1" placeholder="Ração (R$)"/>
-    <input type="number" id="g2" placeholder="Veterinário (R$)"/>
-    <input type="number" id="g3" placeholder="Extras (R$)"/>
-    <button onclick="gerarGrafico()">Ver Gráfico</button>
-    <canvas id="meuGrafico" style="max-height: 250px; margin-top: 15px;"></canvas>
+    <h3>💰 Controle Financeiro</h3>
+    <input type="number" id="gRacao" placeholder="Gasto com Ração (R$)"/>
+    <input type="number" id="gVet" placeholder="Gasto com Vet (R$)"/>
+    <input type="number" id="gOutros" placeholder="Outros Gastos (R$)"/>
+    <button onclick="atualizarGrafico()">Calcular Gastos</button>
+    <div id="alertaGasto" style="display:none; color:red; text-align:center; font-weight:bold; margin-top:10px;">⚠️ Gasto Alto!</div>
+    <div class="chart-wrap">
+      <canvas id="graficoFinancas"></canvas>
+    </div>
   </div>
+
 </div>
-<div class="chat" id="caixaChat">
-  <div class="chat-header" onclick="toggleChat()"><span>💬 Chat Comunitário</span><span id="btnChat">+</span></div>
-  <div class="chat-messages" id="msgsChat"></div>
-  <div style="padding:10px; border-top:1px solid #eee;">
-    <input id="nomeChat" placeholder="Seu apelido" style="font-size:12px; margin-bottom:5px;"/>
-    <div style="display:flex; gap:5px;"><input id="inputChat" placeholder="Mensagem..."/><button onclick="enviarMsg()" style="width:50px;">✈</button></div>
+
+<div class="chat" id="chatBox">
+  <div class="chat-header" onclick="toggleChat()">
+    <span>💬 Chat da Comunidade</span>
+    <span id="chatIcon">—</span>
+  </div>
+  <div class="chat-messages" id="chatMsgs"></div>
+  <div style="padding:15px; border-top:1px solid #eee;">
+    <input id="chatUser" placeholder="Seu apelido" style="font-size:12px; margin-bottom:5px;"/>
+    <div style="display:flex; gap:5px;">
+      <input id="chatInput" placeholder="Mensagem..." style="margin:0;"/>
+      <button onclick="enviarMensagem()" style="width:50px;">✈</button>
+    </div>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCitWtNpgwTreTMjrlqhIXxGu0WOPYRE6w",
@@ -80,64 +169,81 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-// Mural de Histórias
-window.postarHistoria = async () => {
-  const nome = document.getElementById('hNome').value;
-  const texto = document.getElementById('hTexto').value;
+signInAnonymously(auth);
+
+// --- HISTÓRIAS ---
+window.salvarHistoria = async () => {
+  const nome = document.getElementById('histNome').value;
+  const texto = document.getElementById('histTexto').value;
   if(nome && texto) {
-    await addDoc(collection(db, "historias"), { nome, texto, data: serverTimestamp() });
-    document.getElementById('hTexto').value = "";
+    await addDoc(collection(db, "historias"), { nomeUsuario: nome, texto, data: serverTimestamp() });
+    document.getElementById('histTexto').value = "";
   }
 };
-
 onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) => {
-  const mural = document.getElementById('mural');
+  const mural = document.getElementById('muralLista');
   mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee"><b>${doc.data().nome}</b>: ${doc.data().texto}</div>`;
+    mural.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee"><b>${doc.data().nomeUsuario}</b>: ${doc.data().texto}</div>`;
   });
 });
 
-// Chat Comunitário
-window.enviarMsg = async () => {
-  const user = document.getElementById('nomeChat').value || "PetLover";
-  const text = document.getElementById('inputChat').value;
-  if(text) {
-    await addDoc(collection(db, "chats", "geral", "mensagens"), { user, text, data: serverTimestamp() });
-    document.getElementById('inputChat').value = "";
+// --- CHAT COMUNITÁRIO ---
+const chatID = "h2ybo1E66fhW8uiojbJy"; 
+window.enviarMensagem = async () => {
+  const user = document.getElementById('chatUser').value || "PetLover";
+  const text = document.getElementById('chatInput').value;
+  if(text && auth.currentUser) {
+    await addDoc(collection(db, "chats", chatID, "mensagens"), { 
+      nomeUsuario: user, texto: text, data: serverTimestamp(), userId: auth.currentUser.uid 
+    });
+    document.getElementById('chatInput').value = "";
   }
 };
-
-onSnapshot(query(collection(db, "chats", "geral", "mensagens"), orderBy("data", "asc")), (snap) => {
-  const cont = document.getElementById('msgsChat');
+onSnapshot(query(collection(db, "chats", chatID, "mensagens"), orderBy("data", "asc")), (snap) => {
+  const cont = document.getElementById('chatMsgs');
   cont.innerHTML = "";
   snap.forEach(doc => {
-    const isMe = doc.data().user === document.getElementById('nomeChat').value;
-    cont.innerHTML += `<div class="bubble ${isMe ? 'user-me' : 'user-other'}"><b>${doc.data().user}</b><br>${doc.data().text}</div>`;
+    const isMe = doc.data().userId === auth.currentUser?.uid;
+    cont.innerHTML += `<div class="bubble ${isMe ? 'user-me' : 'user-other'}"><b>${doc.data().nomeUsuario}</b><br>${doc.data().texto}</div>`;
   });
   cont.scrollTop = cont.scrollHeight;
 });
 
-// Gráfico e Dicas
+// --- DICAS QUE GIRAM ---
+const listaDicas = ["Vacinas em dia salvam vidas! 💉", "Água fresca evita problemas renais! 💧", "Brincar 15min por dia reduz o estresse! 🧶", "Passeios diários são essenciais! 🐕"];
+let dicaIdx = 0;
+setInterval(() => {
+  const card = document.getElementById('tipCard');
+  card.style.transform = "rotateX(90deg)";
+  setTimeout(() => {
+    card.innerText = listaDicas[dicaIdx % listaDicas.length];
+    card.style.transform = "rotateX(0deg)";
+    dicaIdx++;
+  }, 500);
+}, 4500);
+
+// --- GRÁFICO ---
 let chartInst = null;
-window.gerarGrafico = () => {
-  const v = [ +document.getElementById('g1').value, +document.getElementById('g2').value, +document.getElementById('g3').value ];
+window.atualizarGrafico = () => {
+  const v = [ +document.getElementById('gRacao').value || 0, +document.getElementById('gVet').value || 0, +document.getElementById('gOutros').value || 0 ];
+  document.getElementById('alertaGasto').style.display = (v[0]+v[1]+v[2] > 500) ? "block" : "none";
+  const ctx = document.getElementById('graficoFinancas');
   if(chartInst) chartInst.destroy();
-  chartInst = new Chart(document.getElementById('meuGrafico'), {
-    type: 'doughnut', data: { labels: ['Ração', 'Vet', 'Extras'], datasets: [{ data: v, backgroundColor: ['#5FA8A0','#FFB6C1','#FFD700'] }] }
+  chartInst = new Chart(ctx, {
+    type: 'doughnut', data: { labels: ['Ração', 'Vet', 'Outros'], datasets: [{ data: v, backgroundColor: ['#5FA8A0','#FFB6C1','#FFD700'], borderWidth: 0 }] }
   });
 };
+window.atualizarGrafico();
 
-const dicas = ["Ração de qualidade evita idas ao vet! 🍎", "Água fresca sempre disponível! 💧", "Passeios diários são essenciais! 🐕"];
-let dIdx = 0;
-setInterval(() => {
-  const el = document.getElementById('tipCard');
-  el.style.transform = "rotateX(90deg)";
-  setTimeout(() => { el.innerText = dicas[dIdx++ % dicas.length]; el.style.transform = "rotateX(0deg)"; }, 500);
-}, 4000);
-
-window.toggleChat = () => { document.getElementById('caixaChat').classList.toggle('minimized'); };
+// --- TOGGLE CHAT ---
+window.toggleChat = () => {
+  const box = document.getElementById('chatBox');
+  box.classList.toggle('minimized');
+  document.getElementById('chatIcon').innerText = box.classList.contains('minimized') ? "+" : "—";
+};
 </script>
 </body>
 </html>
