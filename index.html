@@ -1,191 +1,157 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Finança Animal</title>
+<title>FofoPet 🐾</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body{
-  font-family:Arial;
-  margin:0;
-  background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a') center/cover fixed;
-  font-size:18px;
-}
-header{background:#4e342e;color:white;text-align:center;padding:15px;font-size:22px;}
-.container{max-width:900px;margin:auto;padding:15px;}
-.box{background:white;border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-input,textarea,button{width:100%;padding:12px;margin-top:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;}
-button{background:#6d4c41;color:white;font-weight:bold;border:none;cursor:pointer;}
-canvas{max-width:300px;margin:auto;display:block}
-.tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.tip-card{perspective:1000px;height:100px;}
-.tip-inner{position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d;}
-.tip-card:hover .tip-inner{transform:rotateY(180deg);}
-.tip-front,.tip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:5px;}
-.tip-front{background:#ffca28;}
-.tip-back{background:#6d4c41;color:white;transform:rotateY(180deg);}
-.post img,video{width:100%;border-radius:10px;margin-top:5px}
+body{margin:0;font-family:Poppins;background:#fff8f2;color:#333}
+header{background:linear-gradient(90deg,#ffb6b9,#fae3d9);padding:15px;text-align:center;font-size:22px;font-weight:700}
+.container{padding:15px;max-width:700px;margin:auto}
+.card{background:white;border-radius:16px;padding:12px;margin-bottom:15px;box-shadow:0 4px 10px rgba(0,0,0,0.08)}
+textarea,input{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ddd}
+button{background:#ff8fab;border:none;padding:8px 14px;border-radius:20px;color:white;margin-top:8px;cursor:pointer}
+.post-img{width:100%;border-radius:12px;margin-top:8px}
+.like{color:#ff477e;font-weight:bold;cursor:pointer}
+.small{font-size:12px;color:#666}
+.flip-card{perspective:1000px}
+.flip-inner{transition:transform .6s;transform-style:preserve-3d}
+.flip-card:hover .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{backface-visibility:hidden;position:absolute;width:100%;height:100%;border-radius:16px;padding:15px}
+.flip-front{background:#ffe5ec}
+.flip-back{background:#ffc2d1;transform:rotateY(180deg)}
+.chat-box{height:200px;overflow-y:auto;background:#fff;border-radius:10px;padding:8px;margin-bottom:8px}
 </style>
 </head>
 
 <body>
-<header>🐾 Finança Animal</header>
+<header>🐶 FofoPet</header>
 <div class="container">
 
-<div class="box">
-<h3>💰 Planejamento do Pet</h3>
-<input id="food" type="number" placeholder="Alimentação">
-<input id="health" type="number" placeholder="Saúde">
-<input id="extras" type="number" placeholder="Mimos">
-<button onclick="calc()">Analisar Gastos</button>
-<p id="alert"></p>
-<canvas id="chart"></canvas>
-</div>
-
-<div class="box">
-<h3>💡 Dicas</h3>
-<div class="tip-grid" id="tips"></div>
-</div>
-
-<div class="box">
-<h3>📖 História do seu Pet</h3>
-<input id="petName" placeholder="Nome do Pet">
+<!-- HISTÓRIA PET -->
+<div class="card">
+<h3>História do seu pet</h3>
+<input id="name" placeholder="Nome do pet">
 <textarea id="story" placeholder="Conte a história"></textarea>
-<input type="file" id="photos">
-<button onclick="postStory()">Publicar História</button>
-<div id="stories"></div>
+<input id="image" placeholder="Link da foto">
+<button onclick="addPost()">Postar</button>
 </div>
 
-<div class="box">
-<h3>📸 Momento Fofura</h3>
-<input type="file" id="cuteUpload">
-<button onclick="addCute()">Adicionar Foto</button>
-<div id="cute"></div>
+<div id="posts"></div>
+
+<!-- CHAT -->
+<div class="card">
+<h3>Chat Fofo 💬</h3>
+<div class="chat-box" id="chat"></div>
+<input id="msg" placeholder="Digite..." onkeypress="if(event.key==='Enter')sendMsg()">
+<button onclick="sendMsg()">Enviar</button>
 </div>
 
-<div class="box">
-<h3>🎥 Vídeos Engraçados</h3>
-<input type="file" id="videoUpload" accept="video/*">
-<button onclick="addVideo()">Adicionar Vídeo</button>
-<div id="videos"></div>
+<!-- CALCULADORA -->
+<div class="card">
+<h3>Calculadora de Gastos</h3>
+<input id="food" placeholder="Ração">
+<input id="vet" placeholder="Veterinário">
+<input id="toy" placeholder="Brinquedos">
+<button onclick="calc()">Calcular</button>
+<canvas id="grafico"></canvas>
+<button onclick="gerarPDF()">Salvar em PDF</button>
+</div>
+
+<!-- DICAS -->
+<div class="card">
+<h3>Dicas para seu pet</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<div class="flip-card" style="width:48%;height:120px;position:relative">
+<div class="flip-inner">
+<div class="flip-front">🥕 Alimentação</div>
+<div class="flip-back">Evite doces e dê ração de qualidade.</div>
+</div></div>
+
+<div class="flip-card" style="width:48%;height:120px;position:relative">
+<div class="flip-inner">
+<div class="flip-front">🏃 Exercícios</div>
+<div class="flip-back">Passeios diários fazem bem!</div>
+</div></div>
+</div>
 </div>
 
 </div>
-
-<script>
-let chart;
-function calc(){
-let f=+food.value||0,h=+health.value||0,e=+extras.value||0,total=f+h+e;
-alert.innerText=total>500?"⚠ Gastando muito!":"✅ Gastos sob controle!";
-if(chart)chart.destroy();
-chart=new Chart(document.getElementById("chart"),{
-type:'doughnut',
-data:{labels:["Alimentação","Saúde","Mimos"],datasets:[{data:[f,h,e]}]}
-});
-}
-
-const tipList=[
-"Vacinas evitam gastos grandes","Ração boa reduz veterinário","Escovar dentes evita cirurgia",
-"Passeio mantém saúde","Hidratação é essencial","Brincar reduz ansiedade","Check-up previne doenças","Amor também é cuidado 💛"
-];
-function updateTips(){
-tips.innerHTML="";
-tipList.sort(()=>0.5-Math.random()).slice(0,4).forEach(t=>{
-tips.innerHTML+=`<div class="tip-card"><div class="tip-inner">
-<div class="tip-front">🐶 Dica</div>
-<div class="tip-back">${t}</div>
-</div></div>`;
-});
-}
-updateTips();
-setInterval(updateTips,8000);
-</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const app=initializeApp({
-apiKey:"AIzaSyCtWTnPgwTreMjrthlXxGu0WOPYRE6W",
-authDomain:"financa-animal.firebaseapp.com",
-projectId:"financa-animal",
-storageBucket:"financa-animal.firebasestorage.app",
-messagingSenderId:"693788312237",
-appId:"1:693788312237:web:169d6407dc2eb3136fc24"
-});
-const db=getFirestore(app);
+const firebaseConfig = {
+ apiKey:"AIzaSyCtwYxRgTmrTyjqHGX6P0VPYER",
+ authDomain:"financa-animal.firebaseapp.com",
+ projectId:"financa-animal"
+};
 
-const badWords=["idiota","burro","lixo","feio"];
-const filterText=t=>{badWords.forEach(w=>t=t.replaceAll(w,"***"));return t;}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-/* HISTÓRIAS */
-window.postStory=async()=>{
-let name=petName.value,txt=filterText(story.value),file=photos.files[0];
-if(!name||!txt||!file)return alert("Preencha tudo");
-let r=new FileReader();
-r.onload=async e=>{
-await addDoc(collection(db,"stories"),{name,txt,img:e.target.result,likes:0,comments:[]});
-loadStories();
-}
-r.readAsDataURL(file);
+const banned=["sexo","porn","morte","matar","violencia","idiota","burro"];
+
+window.addPost=async()=>{
+ const name=name.value;const story=story.value;const image=image.value;
+ if(banned.some(w=>story.toLowerCase().includes(w)))return alert("Texto bloqueado");
+ await addDoc(collection(db,"posts"),{name,story,image,likes:0,comments:[]});
 }
 
-/* FOTOS */
-window.addCute=async()=>{
-let file=cuteUpload.files[0];if(!file)return;
-let r=new FileReader();
-r.onload=async e=>{
-await addDoc(collection(db,"cute"),{img:e.target.result});
-loadCute();
-}
-r.readAsDataURL(file);
+onSnapshot(collection(db,"posts"),snap=>{
+ posts.innerHTML="";
+ snap.forEach(d=>{
+  const p=d.data();
+  posts.innerHTML+=`<div class="card"><b>${p.name}</b><p>${p.story}</p>
+  ${p.image?`<img src="${p.image}" class="post-img">`:""}
+  <div class="like" onclick="likePost('${d.id}')">❤️ ${p.likes}</div>
+  <input placeholder="Comentar" onkeypress="if(event.key==='Enter')comment('${d.id}',this.value)">
+  ${p.comments.map(c=>`<div class="small">💬 ${c}</div>`).join("")}</div>`;
+ })
+})
+
+window.likePost=async(id)=>{
+ const r=doc(db,"posts",id);
+ const s=await getDoc(r);
+ await updateDoc(r,{likes:s.data().likes+1});
 }
 
-/* VIDEOS */
-window.addVideo=async()=>{
-let file=videoUpload.files[0];if(!file)return;
-let r=new FileReader();
-r.onload=async e=>{
-await addDoc(collection(db,"videos"),{vid:e.target.result});
-loadVideos();
-}
-r.readAsDataURL(file);
+window.comment=async(id,t)=>{
+ if(banned.some(w=>t.toLowerCase().includes(w)))return alert("Comentário bloqueado");
+ await updateDoc(doc(db,"posts",id),{comments:arrayUnion(t)});
 }
 
-/* LOADERS */
-async function loadStories(){
-stories.innerHTML="";
-const qs=await getDocs(collection(db,"stories"));
-qs.forEach(s=>{
-let d=s.data();
-stories.innerHTML+=`<div class="post"><h4>${d.name}</h4><p>${d.txt}</p>
-<img src="${d.img}">
-<button onclick="likeStory('${s.id}',${d.likes})">❤️ ${d.likes}</button>
-<button onclick="deleteStory('${s.id}')">🗑️</button>
-${d.comments.map(c=>`<p>💬 ${c}</p>`).join("")}
-<form onsubmit="addComment(event,'${s.id}')"><input name="comment"></form></div>`;
-});
+window.sendMsg=async()=>{
+ const text=msg.value;
+ if(banned.some(w=>text.toLowerCase().includes(w)))return;
+ await addDoc(collection(db,"chat"),{text});
+ msg.value="";
 }
 
-async function loadCute(){
-cute.innerHTML="";
-const qs=await getDocs(collection(db,"cute"));
-qs.forEach(s=>cute.innerHTML+=`<img src="${s.data().img}">`);
+onSnapshot(collection(db,"chat"),s=>{
+ chat.innerHTML="";
+ s.forEach(d=>chat.innerHTML+=`<div>💬 ${d.data().text}</div>`);
+})
+
+// CALCULADORA
+window.calc=()=>{
+ let f=+food.value,v=+vet.value,t=+toy.value;
+ const ctx=document.getElementById("grafico");
+ new Chart(ctx,{type:'bar',data:{labels:['Ração','Vet','Brinq'],datasets:[{data:[f,v,t]}]}});
+ if(f+v+t>500)alert("Gastos altos este mês!");
 }
 
-async function loadVideos(){
-videos.innerHTML="";
-const qs=await getDocs(collection(db,"videos"));
-qs.forEach(s=>videos.innerHTML+=`<video src="${s.data().vid}" controls></video>`);
+window.gerarPDF=()=>{
+ const {jsPDF}=window.jspdf;
+ const doc=new jsPDF();
+ doc.text("Gastos do Pet",10,10);
+ doc.save("gastos.pdf");
 }
-
-window.likeStory=async(id,l)=>{await updateDoc(doc(db,"stories",id),{likes:l+1});loadStories();}
-window.deleteStory=async(id)=>{if(prompt("Senha:")!=="123petadmin")return;await deleteDoc(doc(db,"stories",id));loadStories();}
-window.addComment=async(e,id)=>{e.preventDefault();let i=e.target.comment;if(!i.value)return;let r=doc(db,"stories",id);let s=await getDoc(r);let c=s.data().comments||[];c.push(filterText(i.value));await updateDoc(r,{comments:c});loadStories();}
-
-loadStories();loadCute();loadVideos();
 </script>
 </body>
 </html>
