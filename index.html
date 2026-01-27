@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FofoPet - Finança Animal</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -17,18 +16,18 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, sans-serif;
-  /* Fundo com animais nas bordas conforme escolhido */
+  /* Aplicando a imagem da moldura de bichinhos que você enviou */
   background-color: #f5f5f5;
   background-image: url("https://img.freepik.com/vetores-premium/moldura-com-ilustracao-de-animais-fofos_530521-655.jpg");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-attachment: fixed; /* Mantém os bichinhos parados nas bordas */
   background-repeat: no-repeat;
   color: var(--text);
 }
 
 .container {
-  max-width: 700px;
+  max-width: 650px; /* Estreitado para encaixar melhor no centro da moldura */
   margin: auto;
   padding: 20px;
   padding-bottom: 100px;
@@ -36,35 +35,34 @@ body {
 
 header {
   text-align: center;
-  padding: 30px 0;
-  font-size: 35px;
+  padding: 20px 0;
+  font-size: 38px;
   font-weight: 800;
   color: var(--primary);
-  text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+  text-shadow: 1px 1px 0px #fff;
 }
 
 .card {
   background: var(--card-bg);
   padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   margin-bottom: 25px;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* DICAS QUE GIRAM */
-.tips-container { perspective: 1000px; height: 90px; }
+/* DICAS DINÂMICAS */
+.tips-container { perspective: 1000px; height: 80px; }
 .tip-card {
   width: 100%; height: 100%;
   background: var(--primary);
   color: white; border-radius: 15px;
   display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 15px; font-weight: 600;
+  text-align: center; padding: 10px; font-weight: 600;
   transition: transform 0.6s; transform-style: preserve-3d;
 }
 
-/* CALCULADORA */
-.chart-wrap { max-width: 220px; margin: 20px auto; }
+/* INPUTS E BOTÕES */
 input, textarea {
   width: 100%; padding: 12px; margin: 8px 0;
   border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box;
@@ -75,29 +73,30 @@ button {
   cursor: pointer; width: 100%;
 }
 
-/* CHAT */
+/* CHAT COMUNITÁRIO */
 .chat {
   position: fixed; right: 20px; bottom: 20px;
-  width: 350px; height: 500px;
+  width: 320px; height: 450px;
   background: white; border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.2);
   display: flex; flex-direction: column; z-index: 1000;
-  transition: 0.4s ease-in-out;
+  transition: 0.4s ease;
 }
 .chat-header {
-  background: var(--primary); color: white; padding: 15px;
+  background: var(--primary); color: white; padding: 12px;
   font-weight: bold; display: flex; justify-content: space-between;
   cursor: pointer; border-radius: 20px 20px 0 0;
 }
-.chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f9f9f9; }
-.bubble { padding: 10px; border-radius: 12px; max-width: 80%; font-size: 13px; }
+.chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #fdfdfd; }
+.bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; line-height: 1.4; }
 .user-me { align-self: flex-end; background: #d1e7dd; }
 .user-other { align-self: flex-start; background: #eee; }
 
-.minimized { height: 50px !important; width: 220px; }
+.minimized { height: 45px !important; width: 200px; overflow: hidden; }
 
 @media (max-width: 768px) {
-  .chat { width: 95%; right: 2.5%; bottom: 0; }
+  .chat { width: 90%; right: 5%; bottom: 0; border-radius: 15px 15px 0 0; }
+  header { font-size: 28px; }
 }
 </style>
 </head>
@@ -116,33 +115,33 @@ button {
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="hNome" placeholder="Nome do Pet"/>
-    <textarea id="hTexto" rows="3" placeholder="O que ele fez de fofo hoje?"></textarea>
-    <button onclick="postarHistoria()">Publicar no Mural</button>
-    <div id="mural" style="margin-top:20px;"></div>
+    <textarea id="hTexto" rows="3" placeholder="O que ele aprontou hoje?"></textarea>
+    <button onclick="postarHistoria()">Publicar</button>
+    <div id="mural" style="margin-top:20px; max-height: 200px; overflow-y: auto;"></div>
   </div>
 
   <div class="card">
     <h3>💰 Controle Financeiro</h3>
     <input type="number" id="g1" placeholder="Ração (R$)"/>
-    <input type="number" id="g2" placeholder="Vet (R$)"/>
-    <input type="number" id="g3" placeholder="Outros (R$)"/>
-    <button onclick="gerarGrafico()">Atualizar Gráfico</button>
-    <div class="chart-wrap"><canvas id="meuGrafico"></canvas></div>
+    <input type="number" id="g2" placeholder="Veterinário (R$)"/>
+    <input type="number" id="g3" placeholder="Acessórios/Extras (R$)"/>
+    <button onclick="gerarGrafico()">Ver Gastos</button>
+    <div style="max-width:200px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
   </div>
 
 </div>
 
 <div class="chat" id="caixaChat">
   <div class="chat-header" onclick="toggleChat()">
-    <span>💬 Chat da Galera</span>
+    <span>💬 Chat PetLover</span>
     <span id="btnChat">—</span>
   </div>
   <div class="chat-messages" id="msgsChat"></div>
   <div style="padding:10px; border-top:1px solid #eee;">
-    <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px;"/>
+    <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px; height:30px;"/>
     <div style="display:flex; gap:5px;">
-      <input id="inputChat" placeholder="Mensagem..."/>
-      <button onclick="enviarMsg()" style="width:50px;">✈</button>
+      <input id="inputChat" placeholder="Mensagem..." style="margin:0; height:35px;"/>
+      <button onclick="enviarMsg()" style="width:45px; padding:0;">✈</button>
     </div>
   </div>
 </div>
@@ -166,7 +165,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 signInAnonymously(auth);
 
-// MURAL
+// --- MURAL ---
 window.postarHistoria = async () => {
   const nome = document.getElementById('hNome').value;
   const texto = document.getElementById('hTexto').value;
@@ -179,14 +178,14 @@ onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) =
   const mural = document.getElementById('mural');
   mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee"><b>${doc.data().nomeUsuario}</b>: ${doc.data().texto}</div>`;
+    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #eee; font-size:14px;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
   });
 });
 
-// CHAT (Estrutura exata do seu Firebase)
+// --- CHAT (Coleção específica h2ybo1E66fhW8uiojbJy) ---
 const chatID = "h2ybo1E66fhW8uiojbJy"; 
 window.enviarMsg = async () => {
-  const user = document.getElementById('nomeChat').value || "PetLover";
+  const user = document.getElementById('nomeChat').value || "Anônimo";
   const text = document.getElementById('inputChat').value;
   if(text && auth.currentUser) {
     await addDoc(collection(db, "chats", chatID, "mensagens"), { 
@@ -205,20 +204,21 @@ onSnapshot(query(collection(db, "chats", chatID, "mensagens"), orderBy("data", "
   cont.scrollTop = cont.scrollHeight;
 });
 
-// GRÁFICO
-let chartInst;
+// --- GRÁFICO ---
+let myChart;
 window.gerarGrafico = () => {
   const v = [+document.getElementById('g1').value, +document.getElementById('g2').value, +document.getElementById('g3').value];
-  if(chartInst) chartInst.destroy();
-  chartInst = new Chart(document.getElementById('meuGrafico'), {
+  if(myChart) myChart.destroy();
+  myChart = new Chart(document.getElementById('meuGrafico'), {
     type: 'doughnut',
-    data: { labels:['Ração','Vet','Outros'], datasets:[{ data:v, backgroundColor:['#5FA8A0','#FFB6C1','#FFD700'], borderWidth:0 }] }
+    data: { labels:['Ração','Vet','Extras'], datasets:[{ data:v, backgroundColor:['#5FA8A0','#FFB6C1','#FFD700'], borderWidth:0 }] },
+    options: { plugins: { legend: { position: 'bottom' } } }
   });
 };
 window.gerarGrafico();
 
-// DICAS
-const dicas = ["Vacinas em dia salvam vidas! 💉", "Água fresca sempre! 💧", "Passeios diários são essenciais! 🐕"];
+// --- DICAS ---
+const dicas = ["Ração de qualidade evita idas ao vet! 🍎", "Água fresca sempre disponível! 💧", "Passeios diários são essenciais! 🐕", "Brincar 15min reduz o estresse do pet! 🧶"];
 let dIdx = 0;
 setInterval(() => {
   const el = document.getElementById('tipCard');
@@ -227,7 +227,7 @@ setInterval(() => {
     el.innerText = dicas[dIdx++ % dicas.length];
     el.style.transform = "rotateX(0deg)";
   }, 500);
-}, 4000);
+}, 4500);
 
 window.toggleChat = () => {
   const c = document.getElementById('caixaChat');
