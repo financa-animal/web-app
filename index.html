@@ -9,14 +9,14 @@
 <style>
 :root {
   --primary: #5FA8A0;
-  --card-bg: rgba(255, 255, 255, 0.92); /* Leve transparência para ver o fundo */
+  --card-bg: rgba(255, 255, 255, 0.92);
   --text: #2b2b2b;
 }
 
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, sans-serif;
-  /* Fundo Mundo Animal com Planeta Terra */
+  /* CORREÇÃO: Forçando a imagem do Planeta Terra com Animais Selvagens */
   background-color: #0d1b2a;
   background-image: url("https://img.freepik.com/vetores-gratis/projeto-de-modelo-de-plano-de-fundo-com-animais-selvagens-na-terra_1308-41221.jpg");
   background-size: cover;
@@ -48,10 +48,9 @@ header {
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.3);
   margin-bottom: 25px;
-  backdrop-filter: blur(5px); /* Efeito de vidro embaçado */
+  backdrop-filter: blur(5px);
 }
 
-/* DICAS */
 .tips-container { perspective: 1000px; height: 80px; }
 .tip-card {
   width: 100%; height: 100%;
@@ -62,19 +61,18 @@ header {
   transition: transform 0.6s; transform-style: preserve-3d;
 }
 
-/* CALCULADORA */
 input, textarea {
   width: 100%; padding: 12px; margin: 8px 0;
   border-radius: 10px; border: 1px solid #ccc; box-sizing: border-box;
 }
+
 button {
-  background: #ff9f1c; /* Cor laranja para destacar no fundo azul */
+  background: #ff9f1c; /* Laranja para combinar com o leão/tigre do fundo */
   color: white; border: none;
   padding: 12px; border-radius: 10px; font-weight: bold;
   cursor: pointer; width: 100%; font-size: 16px;
 }
 
-/* CHAT */
 .chat {
   position: fixed; right: 20px; bottom: 20px;
   width: 320px; height: 450px;
@@ -83,11 +81,13 @@ button {
   display: flex; flex-direction: column; z-index: 1000;
   transition: 0.4s ease;
 }
+
 .chat-header {
   background: var(--primary); color: white; padding: 12px;
   font-weight: bold; display: flex; justify-content: space-between;
   cursor: pointer; border-radius: 20px 20px 0 0;
 }
+
 .chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #f0f4f8; }
 .bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 13px; }
 .user-me { align-self: flex-end; background: #d1e7dd; }
@@ -105,17 +105,16 @@ button {
 <header>🐾 FofoPet</header>
 
 <div class="container">
-  
   <div class="card">
     <div class="tips-container">
-      <div class="tip-card" id="tipCard">Amamos todos os animais! 🌍</div>
+      <div class="tip-card" id="tipCard">Proteja os animais selvagens! 🦁</div>
     </div>
   </div>
 
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="hNome" placeholder="Nome do Pet"/>
-    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura do seu pet..."></textarea>
+    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura..."></textarea>
     <button onclick="postarHistoria()">Publicar</button>
     <div id="mural" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
   </div>
@@ -128,7 +127,6 @@ button {
     <button onclick="gerarGrafico()">Ver Gráfico</button>
     <div style="max-width:180px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
   </div>
-
 </div>
 
 <div class="chat" id="caixaChat">
@@ -217,7 +215,7 @@ window.gerarGrafico = () => {
 };
 window.gerarGrafico();
 
-const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Proteja os animais selvagens! 🦁", "Seja o herói do seu pet! 🦸‍♂️"];
+const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Proteja os animais! 🦁"];
 let dIdx = 0;
 setInterval(() => {
   const el = document.getElementById('tipCard');
@@ -236,4 +234,3 @@ window.toggleChat = () => {
 </script>
 </body>
 </html>
-
