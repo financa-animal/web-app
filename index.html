@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FofoPet - Mundo Animal</title>
+<title>FofoPet - Reino Animal</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -16,7 +16,7 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, sans-serif;
-  /* LINK REVISADO PARA GARANTIR O PLANETA COM ANIMAIS SELVAGENS */
+  /* IMAGEM DO REINO ANIMAL (PLANETA E BICHOS) - LINK DIRETO */
   background-color: #0d1b2a;
   background-image: url("https://img.freepik.com/free-vector/wild-animals-around-earth_1308-33315.jpg");
   background-size: cover;
@@ -46,11 +46,12 @@ header {
   background: var(--card-bg);
   padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
   margin-bottom: 25px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px); /* Efeito suave de desfoque no fundo */
 }
 
+/* DICAS */
 .tips-container { perspective: 1000px; height: 80px; }
 .tip-card {
   width: 100%; height: 100%;
@@ -67,18 +68,20 @@ input, textarea {
 }
 
 button {
-  background: #ff9f1c; 
+  background: #ff9f1c; /* Laranja para destacar no azul */
   color: white; border: none;
   padding: 12px; border-radius: 10px; font-weight: bold;
   cursor: pointer; width: 100%; font-size: 16px;
   box-shadow: 0 4px 0 #cc7a00;
 }
+button:active { transform: translateY(2px); box-shadow: none; }
 
+/* CHAT FIXO */
 .chat {
   position: fixed; right: 20px; bottom: 20px;
   width: 320px; height: 450px;
   background: white; border-radius: 20px;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 50px rgba(0,0,0,0.6);
   display: flex; flex-direction: column; z-index: 1000;
   transition: 0.4s ease;
 }
@@ -98,6 +101,7 @@ button {
 
 @media (max-width: 768px) {
   .chat { width: 90%; right: 5%; bottom: 0; }
+  header { font-size: 32px; }
 }
 </style>
 </head>
@@ -108,15 +112,15 @@ button {
 <div class="container">
   <div class="card">
     <div class="tips-container">
-      <div class="tip-card" id="tipCard">Proteja os animais selvagens! 🦁</div>
+      <div class="tip-card" id="tipCard">Respeite o Reino Animal! 🦁</div>
     </div>
   </div>
 
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="hNome" placeholder="Nome do Pet"/>
-    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura..."></textarea>
-    <button onclick="postarHistoria()">Publicar</button>
+    <textarea id="hTexto" rows="3" placeholder="Conte uma aventura do seu pet..."></textarea>
+    <button onclick="postarHistoria()">Publicar no Mural</button>
     <div id="mural" style="margin-top:20px; max-height: 150px; overflow-y: auto;"></div>
   </div>
 
@@ -125,7 +129,7 @@ button {
     <input type="number" id="g1" placeholder="Ração (R$)"/>
     <input type="number" id="g2" placeholder="Veterinário (R$)"/>
     <input type="number" id="g3" placeholder="Outros (R$)"/>
-    <button onclick="gerarGrafico()">Ver Gráfico</button>
+    <button onclick="gerarGrafico()">Ver Gráfico de Gastos</button>
     <div style="max-width:180px; margin: 20px auto;"><canvas id="meuGrafico"></canvas></div>
   </div>
 </div>
@@ -139,8 +143,8 @@ button {
   <div style="padding:10px; border-top:1px solid #eee;">
     <input id="nomeChat" placeholder="Seu apelido" style="font-size:11px; margin-bottom:5px; height:25px;"/>
     <div style="display:flex; gap:5px;">
-      <input id="inputChat" placeholder="Mensagem..."/>
-      <button onclick="enviarMsg()" style="width:45px; background: var(--primary);">✈</button>
+      <input id="inputChat" placeholder="Mensagem..." style="margin:0;"/>
+      <button onclick="enviarMsg()" style="width:45px; background: var(--primary); padding:0; box-shadow:none;">✈</button>
     </div>
   </div>
 </div>
@@ -179,7 +183,7 @@ onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) =
   const mural = document.getElementById('mural');
   mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
+    mural.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ddd; font-size:14px;"><b>${doc.data().nomeUsuario}:</b> ${doc.data().texto}</div>`;
   });
 });
 
@@ -216,7 +220,7 @@ window.gerarGrafico = () => {
 };
 window.gerarGrafico();
 
-const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Respeite o Reino Animal! 🦁"];
+const dicas = ["Preserve a natureza! 🌳", "Água limpa é vida! 💧", "Proteja o Reino Animal! 🦁"];
 let dIdx = 0;
 setInterval(() => {
   const el = document.getElementById('tipCard');
@@ -224,7 +228,7 @@ setInterval(() => {
   setTimeout(() => {
     el.innerText = dicas[dIdx++ % dicas.length];
     el.style.transform = "rotateX(0deg)";
-  }, 5000);
+  }, 500);
 }, 5000);
 
 window.toggleChat = () => {
