@@ -4,35 +4,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FofoPet 🐾</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body{margin:0;font-family:Poppins;background:#fff8f2;color:#333}
-header{background:linear-gradient(90deg,#ffb6b9,#fae3d9);padding:15px;text-align:center;font-size:22px;font-weight:700}
-.container{padding:15px;max-width:700px;margin:auto}
-.card{background:white;border-radius:16px;padding:12px;margin-bottom:15px;box-shadow:0 4px 10px rgba(0,0,0,0.08)}
-textarea,input{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ddd}
-button{background:#ff8fab;border:none;padding:8px 14px;border-radius:20px;color:white;margin-top:8px;cursor:pointer}
+body{
+ margin:0;
+ font-family:Poppins;
+ background:#f4f7f6 url("https://i.imgur.com/8Km9tLL.png") no-repeat bottom right fixed;
+ background-size:220px;
+ color:#333;
+}
+
+header{
+ background:linear-gradient(90deg,#6a9c89,#a7c4bc);
+ padding:15px;
+ text-align:center;
+ font-size:22px;
+ font-weight:700;
+ color:white;
+}
+
+.container{max-width:750px;margin:auto;padding:15px}
+
+.card{
+ background:white;
+ border-radius:16px;
+ padding:12px;
+ margin-bottom:15px;
+ box-shadow:0 4px 10px rgba(0,0,0,0.08)
+}
+
+textarea,input{
+ width:100%;
+ padding:8px;
+ margin-top:6px;
+ border-radius:8px;
+ border:1px solid #ddd
+}
+
+button{
+ background:#6a9c89;
+ border:none;
+ padding:8px 14px;
+ border-radius:20px;
+ color:white;
+ margin-top:8px;
+ cursor:pointer
+}
+
 .post-img{width:100%;border-radius:12px;margin-top:8px}
-.like{color:#ff477e;font-weight:bold;cursor:pointer}
+.like{color:#6a9c89;font-weight:bold;cursor:pointer}
+
 .small{font-size:12px;color:#666}
-.flip-card{perspective:1000px}
-.flip-inner{transition:transform .6s;transform-style:preserve-3d}
-.flip-card:hover .flip-inner{transform:rotateY(180deg)}
-.flip-front,.flip-back{backface-visibility:hidden;position:absolute;width:100%;height:100%;border-radius:16px;padding:15px}
-.flip-front{background:#ffe5ec}
-.flip-back{background:#ffc2d1;transform:rotateY(180deg)}
-.chat-box{height:200px;overflow-y:auto;background:#fff;border-radius:10px;padding:8px;margin-bottom:8px}
+
+/* CHAT LATERAL */
+.chat-fixed{
+ position:fixed;
+ right:10px;
+ bottom:10px;
+ width:280px;
+ background:white;
+ border-radius:16px;
+ box-shadow:0 4px 12px rgba(0,0,0,0.2);
+ padding:10px
+}
+.chat-box{height:200px;overflow-y:auto}
+
+/* DICAS */
+.tip-card{
+ background:#e8f1f2;
+ padding:15px;
+ border-radius:16px;
+ text-align:center;
+ font-weight:500;
+ margin-bottom:10px;
+}
+
+@media(max-width:900px){
+ .chat-fixed{position:static;width:100%;margin-bottom:15px}
+}
 </style>
 </head>
 
 <body>
-<header>🐶 FofoPet</header>
+<header>🐾 FofoPet</header>
+
 <div class="container">
 
-<!-- HISTÓRIA PET -->
+<!-- HISTÓRIA -->
 <div class="card">
 <h3>História do seu pet</h3>
 <input id="name" placeholder="Nome do pet">
@@ -42,14 +104,6 @@ button{background:#ff8fab;border:none;padding:8px 14px;border-radius:20px;color:
 </div>
 
 <div id="posts"></div>
-
-<!-- CHAT -->
-<div class="card">
-<h3>Chat Fofo 💬</h3>
-<div class="chat-box" id="chat"></div>
-<input id="msg" placeholder="Digite..." onkeypress="if(event.key==='Enter')sendMsg()">
-<button onclick="sendMsg()">Enviar</button>
-</div>
 
 <!-- CALCULADORA -->
 <div class="card">
@@ -65,50 +119,46 @@ button{background:#ff8fab;border:none;padding:8px 14px;border-radius:20px;color:
 <!-- DICAS -->
 <div class="card">
 <h3>Dicas para seu pet</h3>
-<div style="display:flex;gap:10px;flex-wrap:wrap">
-<div class="flip-card" style="width:48%;height:120px;position:relative">
-<div class="flip-inner">
-<div class="flip-front">🥕 Alimentação</div>
-<div class="flip-back">Evite doces e dê ração de qualidade.</div>
-</div></div>
-
-<div class="flip-card" style="width:48%;height:120px;position:relative">
-<div class="flip-inner">
-<div class="flip-front">🏃 Exercícios</div>
-<div class="flip-back">Passeios diários fazem bem!</div>
-</div></div>
-</div>
+<div id="tips"></div>
 </div>
 
+</div>
+
+<!-- CHAT FIXO -->
+<div class="chat-fixed">
+<h4>Chat 💬</h4>
+<div class="chat-box" id="chat"></div>
+<input id="msg" placeholder="Digite..." onkeypress="if(event.key==='Enter')sendMsg()">
+<button onclick="sendMsg()">Enviar</button>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, arrayUnion, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
+const firebaseConfig={
  apiKey:"AIzaSyCtwYxRgTmrTyjqHGX6P0VPYER",
  authDomain:"financa-animal.firebaseapp.com",
  projectId:"financa-animal"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
 
 const banned=["sexo","porn","morte","matar","violencia","idiota","burro"];
 
 window.addPost=async()=>{
- const name=name.value;const story=story.value;const image=image.value;
- if(banned.some(w=>story.toLowerCase().includes(w)))return alert("Texto bloqueado");
- await addDoc(collection(db,"posts"),{name,story,image,likes:0,comments:[]});
+ const n=name.value,s=story.value,i=image.value;
+ if(banned.some(w=>s.toLowerCase().includes(w)))return alert("Texto bloqueado");
+ await addDoc(collection(db,"posts"),{n,s,i,likes:0,comments:[]});
 }
 
 onSnapshot(collection(db,"posts"),snap=>{
  posts.innerHTML="";
  snap.forEach(d=>{
   const p=d.data();
-  posts.innerHTML+=`<div class="card"><b>${p.name}</b><p>${p.story}</p>
-  ${p.image?`<img src="${p.image}" class="post-img">`:""}
+  posts.innerHTML+=`<div class="card"><b>${p.n}</b><p>${p.s}</p>
+  ${p.i?`<img src="${p.i}" class="post-img">`:""}
   <div class="like" onclick="likePost('${d.id}')">❤️ ${p.likes}</div>
   <input placeholder="Comentar" onkeypress="if(event.key==='Enter')comment('${d.id}',this.value)">
   ${p.comments.map(c=>`<div class="small">💬 ${c}</div>`).join("")}</div>`;
@@ -138,20 +188,36 @@ onSnapshot(collection(db,"chat"),s=>{
  s.forEach(d=>chat.innerHTML+=`<div>💬 ${d.data().text}</div>`);
 })
 
-// CALCULADORA
+// GRÁFICO REDONDO
 window.calc=()=>{
  let f=+food.value,v=+vet.value,t=+toy.value;
- const ctx=document.getElementById("grafico");
- new Chart(ctx,{type:'bar',data:{labels:['Ração','Vet','Brinq'],datasets:[{data:[f,v,t]}]}});
- if(f+v+t>500)alert("Gastos altos este mês!");
+ let total=f+v+t;
+ new Chart(grafico,{type:'pie',data:{labels:['Ração','Vet','Brinq'],datasets:[{data:[f,v,t]}]}});
+ if(total>500)alert("⚠️ Seus gastos estão altos este mês!");
 }
 
+// PDF
 window.gerarPDF=()=>{
  const {jsPDF}=window.jspdf;
  const doc=new jsPDF();
- doc.text("Gastos do Pet",10,10);
+ doc.text("Relatório de Gastos do Pet",10,10);
  doc.save("gastos.pdf");
 }
+
+// DICAS ROTATIVAS
+const dicas=[
+"Água fresca sempre disponível 🥤",
+"Passeios evitam ansiedade 🐕",
+"Vacinas em dia salvam vidas 💉",
+"Brincar fortalece o vínculo ❤️"
+];
+
+function loadTips(){
+ tips.innerHTML="";
+ dicas.forEach(d=>tips.innerHTML+=`<div class="tip-card">${d}</div>`);
+}
+loadTips();
+setInterval(loadTips,6000);
 </script>
 </body>
 </html>
