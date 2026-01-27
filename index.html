@@ -30,7 +30,7 @@ body {
   max-width: 700px;
   margin: auto;
   padding: 20px;
-  padding-bottom: 100px; /* Espaço para o chat mobile */
+  padding-bottom: 120px;
 }
 
 header {
@@ -121,9 +121,9 @@ button:active { transform: scale(0.98); }
 .chat {
   position: fixed;
   right: 25px;
-  bottom: 25px;
+  bottom: 80px; /* Ajustado para não cobrir o footer */
   width: 360px;
-  height: 550px;
+  height: 500px;
   background: white;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.2);
@@ -178,6 +178,50 @@ button:active { transform: scale(0.98); }
   height: 50px !important;
   width: 220px;
   overflow: hidden;
+}
+
+/* ESTILOS PARA POLÍTICAS (ADICIONADOS) */
+footer {
+  text-align: center;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  margin-top: 40px;
+  border-top: 1px solid #ddd;
+}
+footer a {
+  color: var(--primary);
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  backdrop-filter: blur(3px);
+}
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 20px;
+  width: 85%;
+  max-width: 500px;
+  max-height: 70vh;
+  overflow-y: auto;
+  position: relative;
+}
+.close-modal {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
 }
 
 @media (max-width: 768px) {
@@ -236,6 +280,19 @@ button:active { transform: scale(0.98); }
   </div>
 </div>
 
+<footer>
+  <p>© 2026 FofoPet - Comunidade Animal</p>
+  <a href="javascript:void(0)" onclick="abrirPolitica('privacidade')">Privacidade</a> | 
+  <a href="javascript:void(0)" onclick="abrirPolitica('termos')">Termos</a>
+</footer>
+
+<div id="modalPolitica" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="fecharModal()">&times;</span>
+    <div id="textoPolitica"></div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -248,6 +305,24 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// --- POLÍTICAS (MODAL) ---
+window.abrirPolitica = (tipo) => {
+  const modal = document.getElementById('modalPolitica');
+  const texto = document.getElementById('textoPolitica');
+  if(tipo === 'privacidade') {
+    texto.innerHTML = `<h2>Política de Privacidade</h2>
+    <p>O FofoPet respeita sua privacidade. Nosso site utiliza cookies do Google AdSense para exibir anúncios personalizados com base em suas visitas anteriores. Não compartilhamos dados pessoais com terceiros.</p>`;
+  } else {
+    texto.innerHTML = `<h2>Termos de Uso</h2>
+    <p>Ao utilizar nossa comunidade, você concorda em manter o respeito no Mural e no Chat. Conteúdos ofensivos serão removidos. O FofoPet é uma ferramenta informativa e não substitui o médico veterinário.</p>`;
+  }
+  modal.style.display = "block";
+}
+
+window.fecharModal = () => {
+  document.getElementById('modalPolitica').style.display = "none";
+}
 
 // --- MURAL DE HISTÓRIAS ---
 window.salvarHistoria = async () => {
@@ -303,6 +378,7 @@ const listaDicas = [
 let idDica = 0;
 setInterval(() => {
   const card = document.getElementById('tipCard');
+  if(!card) return;
   card.style.transform = "rotateX(90deg)";
   setTimeout(() => {
     card.innerText = listaDicas[idDica % listaDicas.length];
