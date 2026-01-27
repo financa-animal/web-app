@@ -18,84 +18,51 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Roboto, sans-serif;
-  /* Opção Mosaico: Padrão de patinhas neutro e fofo */
-  background-color: var(--soft-bg);
-  background-image: url("https://www.transparenttextures.com/patterns/paws.png");
+  /* NOVA TÉCNICA DE MOSAICO: SVG Direto no Código */
+  background-color: #f0f7f6;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M36.6 24.3c-.7-.7-1.7-.7-2.4 0L31 27.5l-3.2-3.2c-.7-.7-1.7-.7-2.4 0-.7.7-.7 1.7 0 2.4l3.2 3.2-3.2 3.2c-.7.7-.7 1.7 0 2.4.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l3.2-3.2 3.2 3.2c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5.7-.7.7-1.7 0-2.4L34.2 30l3.2-3.2c.6-.6.6-1.7-.8-2.5zM10 10c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zm10 0c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zM5.7 18.2c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zm28.6 0c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zM20 25c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8z' fill='%235fa8a0' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
   background-attachment: fixed;
   color: var(--text-color);
 }
 
-.container {
-  max-width: 720px;
-  margin: auto;
-  padding: 20px;
-  padding-bottom: 120px; /* Espaço para o chat no mobile */
-}
+.container { max-width: 720px; margin: auto; padding: 20px; padding-bottom: 120px; }
+header { text-align: center; padding: 30px 0; font-size: 32px; font-weight: 800; color: var(--primary); }
+.card { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); margin-bottom: 25px; }
 
-header {
-  text-align: center;
-  padding: 30px 0;
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--primary);
-}
-
-.card {
-  background: var(--card-bg);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.05);
-  margin-bottom: 25px;
-}
-
-/* 1. DICAS ESTILO CARD QUE GIRAM */
+/* DICAS */
 .tips-container { perspective: 1000px; height: 100px; }
 .tip-card {
   width: 100%; height: 100%;
-  background: var(--primary);
-  color: white;
-  border-radius: 15px;
+  background: var(--primary); color: white; border-radius: 15px;
   display: flex; align-items: center; justify-content: center;
   text-align: center; padding: 15px; font-weight: 600;
   transition: transform 0.6s; transform-style: preserve-3d;
   box-sizing: border-box; font-size: 1.1rem;
 }
 
-/* 2. CALCULADORA E GRÁFICO NÍTIDO */
+/* CALCULADORA */
 .chart-wrap { max-width: 220px; margin: 20px auto; }
-input, textarea {
-  width: 100%; padding: 12px; margin: 8px 0;
-  border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box;
-}
-button {
-  background: var(--primary); color: white; border: none;
-  padding: 12px; border-radius: 12px; font-weight: bold;
-  cursor: pointer; width: 100%; transition: 0.3s;
-}
-button:hover { opacity: 0.9; }
+input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; }
+button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 
-/* 3. CHAT LATERAL MAIOR COM MINIMIZAR/MAXIMIZAR */
+/* CHAT */
 .chat {
   position: fixed; right: 20px; bottom: 20px;
   width: 350px; height: 500px;
   background: white; border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
   display: flex; flex-direction: column; z-index: 1000;
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: 0.4s ease-in-out;
 }
 .chat-header {
   background: var(--primary); color: white; padding: 15px;
   font-weight: bold; display: flex; justify-content: space-between;
   cursor: pointer; border-radius: 20px 20px 0 0;
 }
-.chat-messages {
-  flex: 1; padding: 15px; overflow-y: auto;
-  display: flex; flex-direction: column; gap: 10px; background: #fdfdfd;
-}
+.chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #fdfdfd; }
 .bubble { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 14px; }
-.user-me { align-self: flex-end; background: #d1e7dd; border-bottom-right-radius: 2px; }
-.user-other { align-self: flex-start; background: #f1f1f1; border-bottom-left-radius: 2px; }
-
+.user-me { align-self: flex-end; background: #d1e7dd; }
+.user-other { align-self: flex-start; background: #f1f1f1; }
 .minimized { height: 50px !important; width: 220px; }
 
 @media (max-width: 768px) {
@@ -112,14 +79,14 @@ button:hover { opacity: 0.9; }
   
   <div class="card">
     <div class="tips-container">
-      <div class="tip-card" id="tipCard">Carregando dicas fofas...</div>
+      <div class="tip-card" id="tipCard">Passeios diários são essenciais! 🐕</div>
     </div>
   </div>
 
   <div class="card">
     <h3>📖 Mural de Histórias</h3>
     <input id="histNome" placeholder="Nome do seu Pet"/>
-    <textarea id="histTexto" rows="3" placeholder="Conte uma história fofa (apenas texto)..."></textarea>
+    <textarea id="histTexto" rows="3" placeholder="Conte uma história fofa..."></textarea>
     <button onclick="salvarHistoria()">Publicar História</button>
     <div id="muralLista" style="margin-top:20px;"></div>
   </div>
@@ -130,10 +97,7 @@ button:hover { opacity: 0.9; }
     <input type="number" id="gVet" placeholder="Gasto com Vet (R$)"/>
     <input type="number" id="gOutros" placeholder="Outros Gastos (R$)"/>
     <button onclick="atualizarGrafico()">Calcular Gastos</button>
-    <div id="alertaGasto" style="display:none; color:red; text-align:center; font-weight:bold; margin-top:10px;">⚠️ Gasto Alto!</div>
-    <div class="chart-wrap">
-      <canvas id="graficoFinancas"></canvas>
-    </div>
+    <div class="chart-wrap"><canvas id="graficoFinancas"></canvas></div>
   </div>
 
 </div>
@@ -170,79 +134,69 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-
 signInAnonymously(auth);
 
-// --- HISTÓRIAS ---
+// Mural
 window.salvarHistoria = async () => {
-  const nome = document.getElementById('histNome').value;
-  const texto = document.getElementById('histTexto').value;
-  if(nome && texto) {
-    await addDoc(collection(db, "historias"), { nomeUsuario: nome, texto, data: serverTimestamp() });
+  const n = document.getElementById('histNome').value;
+  const t = document.getElementById('histTexto').value;
+  if(n && t) {
+    await addDoc(collection(db, "historias"), { nomeUsuario: n, texto: t, data: serverTimestamp() });
     document.getElementById('histTexto').value = "";
   }
 };
 onSnapshot(query(collection(db, "historias"), orderBy("data", "desc")), (snap) => {
-  const mural = document.getElementById('muralLista');
-  mural.innerHTML = "";
-  snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee"><b>${doc.data().nomeUsuario}</b>: ${doc.data().texto}</div>`;
-  });
+  const m = document.getElementById('muralLista');
+  m.innerHTML = "";
+  snap.forEach(doc => { m.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee"><b>${doc.data().nomeUsuario}</b>: ${doc.data().texto}</div>`; });
 });
 
-// --- CHAT COMUNITÁRIO ---
+// Chat (Usando seu ID de chat real do Firebase)
 const chatID = "h2ybo1E66fhW8uiojbJy"; 
 window.enviarMensagem = async () => {
-  const user = document.getElementById('chatUser').value || "PetLover";
-  const text = document.getElementById('chatInput').value;
-  if(text && auth.currentUser) {
+  const u = document.getElementById('chatUser').value || "PetLover";
+  const t = document.getElementById('chatInput').value;
+  if(t && auth.currentUser) {
     await addDoc(collection(db, "chats", chatID, "mensagens"), { 
-      nomeUsuario: user, texto: text, data: serverTimestamp(), userId: auth.currentUser.uid 
+      nomeUsuario: u, texto: t, data: serverTimestamp(), userId: auth.currentUser.uid 
     });
     document.getElementById('chatInput').value = "";
   }
 };
 onSnapshot(query(collection(db, "chats", chatID, "mensagens"), orderBy("data", "asc")), (snap) => {
-  const cont = document.getElementById('chatMsgs');
-  cont.innerHTML = "";
+  const c = document.getElementById('chatMsgs');
+  c.innerHTML = "";
   snap.forEach(doc => {
     const isMe = doc.data().userId === auth.currentUser?.uid;
-    cont.innerHTML += `<div class="bubble ${isMe ? 'user-me' : 'user-other'}"><b>${doc.data().nomeUsuario}</b><br>${doc.data().texto}</div>`;
+    c.innerHTML += `<div class="bubble ${isMe ? 'user-me' : 'user-other'}"><b>${doc.data().nomeUsuario}</b><br>${doc.data().texto}</div>`;
   });
-  cont.scrollTop = cont.scrollHeight;
+  c.scrollTop = c.scrollHeight;
 });
 
-// --- DICAS QUE GIRAM ---
-const listaDicas = ["Vacinas em dia salvam vidas! 💉", "Água fresca evita problemas renais! 💧", "Brincar 15min por dia reduz o estresse! 🧶", "Passeios diários são essenciais! 🐕"];
-let dicaIdx = 0;
+// Dicas
+const dicas = ["Vacinas em dia salvam vidas! 💉", "Água fresca sempre! 💧", "Passeios diários são essenciais! 🐕"];
+let idx = 0;
 setInterval(() => {
-  const card = document.getElementById('tipCard');
-  card.style.transform = "rotateX(90deg)";
-  setTimeout(() => {
-    card.innerText = listaDicas[dicaIdx % listaDicas.length];
-    card.style.transform = "rotateX(0deg)";
-    dicaIdx++;
-  }, 500);
-}, 4500);
+  const el = document.getElementById('tipCard');
+  el.style.transform = "rotateX(90deg)";
+  setTimeout(() => { el.innerText = dicas[idx++ % dicas.length]; el.style.transform = "rotateX(0deg)"; }, 500);
+}, 4000);
 
-// --- GRÁFICO ---
-let chartInst = null;
+// Gráfico
+let chart;
 window.atualizarGrafico = () => {
-  const v = [ +document.getElementById('gRacao').value || 0, +document.getElementById('gVet').value || 0, +document.getElementById('gOutros').value || 0 ];
-  document.getElementById('alertaGasto').style.display = (v[0]+v[1]+v[2] > 500) ? "block" : "none";
-  const ctx = document.getElementById('graficoFinancas');
-  if(chartInst) chartInst.destroy();
-  chartInst = new Chart(ctx, {
+  const v = [+document.getElementById('gRacao').value, +document.getElementById('gVet').value, +document.getElementById('gOutros').value];
+  if(chart) chart.destroy();
+  chart = new Chart(document.getElementById('graficoFinancas'), {
     type: 'doughnut', data: { labels: ['Ração', 'Vet', 'Outros'], datasets: [{ data: v, backgroundColor: ['#5FA8A0','#FFB6C1','#FFD700'], borderWidth: 0 }] }
   });
 };
 window.atualizarGrafico();
 
-// --- TOGGLE CHAT ---
 window.toggleChat = () => {
-  const box = document.getElementById('chatBox');
-  box.classList.toggle('minimized');
-  document.getElementById('chatIcon').innerText = box.classList.contains('minimized') ? "+" : "—";
+  const b = document.getElementById('chatBox');
+  b.classList.toggle('minimized');
+  document.getElementById('chatIcon').innerText = b.classList.contains('minimized') ? "+" : "—";
 };
 </script>
 </body>
