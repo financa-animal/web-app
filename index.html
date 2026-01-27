@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FofoPet - Comunidade</title>
+<title>FofoPet - Comunidade e Gestão</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -22,7 +22,7 @@ body {
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: 
     linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)),
-    url("https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=2069&auto=format&fit=crop") center/cover no-repeat fixed;
+    url("https://img.freepik.com/vetores-gratis/projeto-de-modelo-de-plano-de-fundo-com-muitos-brinquedos-na-prateleira_1308-40394.jpg") center/cover no-repeat fixed;
   color: var(--text);
 }
 
@@ -50,10 +50,10 @@ header {
   margin-bottom: 25px;
 }
 
-/* DICAS ESTILO CARD ROTATIVO */
+/* DICAS ROTATIVAS */
 .tips-container {
   perspective: 1000px;
-  height: 100px;
+  height: 80px;
   margin-top: 10px;
 }
 
@@ -75,7 +75,26 @@ header {
   box-sizing: border-box;
 }
 
-/* CALCULADORA E GRÁFICO */
+/* SEÇÃO BLOG (ADICIONADA) */
+.blog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+.article-card {
+  background: var(--soft);
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 14px;
+  border-left: 4px solid var(--primary);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.article-card:hover { transform: translateY(-3px); background: #ebf3f2; }
+.article-card h4 { margin: 0 0 8px 0; color: var(--primary); }
+
+/* FINANCEIRO */
 .chart-wrap {
   max-width: 220px;
   margin: 20px auto;
@@ -115,13 +134,11 @@ button {
   transition: 0.2s;
 }
 
-button:active { transform: scale(0.98); }
-
-/* CHAT LATERAL MULTIUSUÁRIO */
+/* CHAT */
 .chat {
   position: fixed;
   right: 25px;
-  bottom: 80px; /* Ajustado para não cobrir o footer */
+  bottom: 85px; 
   width: 360px;
   height: 500px;
   background: white;
@@ -130,7 +147,6 @@ button:active { transform: scale(0.98); }
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .chat-header {
@@ -151,50 +167,24 @@ button:active { transform: scale(0.98); }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: #fdfdfd;
 }
 
-.bubble {
-  padding: 10px 14px;
-  border-radius: 15px;
-  max-width: 85%;
-  font-size: 14px;
-  line-height: 1.4;
-  position: relative;
-}
+.bubble { padding: 10px 14px; border-radius: 15px; max-width: 85%; font-size: 14px; }
+.user-me { align-self: flex-end; background: #e3f2fd; }
+.user-other { align-self: flex-start; background: #f1f1f1; }
 
-.bubble-name {
-  font-size: 10px;
-  font-weight: 800;
-  margin-bottom: 3px;
-  display: block;
-  text-transform: uppercase;
-}
+.minimized { height: 50px !important; width: 220px; overflow: hidden; }
 
-.user-me { align-self: flex-end; background: #e3f2fd; border-bottom-right-radius: 2px; }
-.user-other { align-self: flex-start; background: #f1f1f1; border-bottom-left-radius: 2px; }
-
-.minimized {
-  height: 50px !important;
-  width: 220px;
-  overflow: hidden;
-}
-
-/* ESTILOS PARA POLÍTICAS (ADICIONADOS) */
+/* POLÍTICAS E FOOTER */
 footer {
   text-align: center;
-  padding: 25px;
+  padding: 30px;
   background: rgba(255, 255, 255, 0.9);
-  margin-top: 40px;
+  margin-top: 50px;
   border-top: 1px solid #ddd;
 }
-footer a {
-  color: var(--primary);
-  text-decoration: none;
-  margin: 0 10px;
-  font-size: 14px;
-  font-weight: bold;
-}
+footer a { color: var(--primary); text-decoration: none; margin: 0 15px; font-size: 14px; font-weight: bold; }
+
 .modal {
   display: none;
   position: fixed;
@@ -202,31 +192,24 @@ footer a {
   left: 0; top: 0;
   width: 100%; height: 100%;
   background-color: rgba(0,0,0,0.6);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
 }
 .modal-content {
   background-color: white;
-  margin: 10% auto;
+  margin: 8% auto;
   padding: 30px;
-  border-radius: 20px;
+  border-radius: 25px;
   width: 85%;
-  max-width: 500px;
-  max-height: 70vh;
+  max-width: 550px;
+  max-height: 75vh;
   overflow-y: auto;
   position: relative;
 }
-.close-modal {
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  font-size: 24px;
-  cursor: pointer;
-  color: #999;
-}
+.close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #bbb; }
 
 @media (max-width: 768px) {
   .chat { width: 100%; right: 0; bottom: 0; border-radius: 20px 20px 0 0; }
-  .minimized { width: 100%; }
+  .blog-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -237,16 +220,30 @@ footer a {
 <div class="container">
   
   <div class="card">
-    <h3 style="margin:0">💡 Dica Pet</h3>
+    <h3 style="margin:0">💡 Dica Rápida</h3>
     <div class="tips-container">
       <div class="tip-card" id="tipCard">Carregando amor...</div>
     </div>
   </div>
 
   <div class="card">
+    <h3>📰 Guia de Cuidados</h3>
+    <div class="blog-grid">
+      <div class="article-card" onclick="abrirArtigo(1)">
+        <h4>🩺 Saúde Preventiva</h4>
+        <p>Por que as vacinas anuais são essenciais?</p>
+      </div>
+      <div class="article-card" onclick="abrirArtigo(2)">
+        <h4>🍎 Alimentação</h4>
+        <p>Frutas seguras para o seu pet no verão.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
     <h3>📖 História do seu Pet</h3>
     <input id="histName" placeholder="Nome do Pet"/>
-    <textarea id="histText" rows="3" placeholder="Conte uma história engraçada ou fofa..."></textarea>
+    <textarea id="histText" rows="3" placeholder="Conte uma história engraçada..."></textarea>
     <button onclick="salvarHistoria()">Publicar História</button>
     <div id="mural" style="margin-top:20px;"></div>
   </div>
@@ -267,7 +264,7 @@ footer a {
 
 <div class="chat" id="chatWindow">
   <div class="chat-header" onclick="toggleChat()">
-    <span>💬 Chat da Galera Pet</span>
+    <span>💬 Chat da Galera</span>
     <span id="chatBtn">+</span>
   </div>
   <div class="chat-messages" id="chatContent"></div>
@@ -275,7 +272,7 @@ footer a {
     <input id="chatUser" placeholder="Seu apelido" style="font-size:12px; height:30px; margin-bottom:5px;"/>
     <div style="display:flex; gap:5px;">
       <input id="chatInput" placeholder="Oi pessoal! 👋" style="margin:0;"/>
-      <button onclick="enviarChat()" style="width:50px;">✈</button>
+      <button onclick="enviarChat()" style="width:50px; background: var(--primary);">✈</button>
     </div>
   </div>
 </div>
@@ -283,7 +280,7 @@ footer a {
 <footer>
   <p>© 2026 FofoPet - Comunidade Animal</p>
   <a href="javascript:void(0)" onclick="abrirPolitica('privacidade')">Privacidade</a> | 
-  <a href="javascript:void(0)" onclick="abrirPolitica('termos')">Termos</a>
+  <a href="javascript:void(0)" onclick="abrirPolitica('termos')">Termos de Uso</a>
 </footer>
 
 <div id="modalPolitica" class="modal">
@@ -306,25 +303,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// --- POLÍTICAS (MODAL) ---
+// --- ARTIGOS DO BLOG ---
+window.abrirArtigo = (id) => {
+  const modal = document.getElementById('modalPolitica');
+  const texto = document.getElementById('textoPolitica');
+  if(id === 1) {
+    texto.innerHTML = `<h2>Saúde Preventiva</h2><p>Manter as vacinas em dia evita gastos inesperados com internações. Vacinas como a V10 e a Antirrábica são a base da saúde do seu cão.</p>`;
+  } else {
+    texto.innerHTML = `<h2>Alimentação Segura</h2><p>Melancia e Maçã (sem sementes) são ótimas para hidratar seu pet. Evite sempre uvas e chocolate, que são tóxicos.</p>`;
+  }
+  modal.style.display = "block";
+};
+
+// --- POLÍTICAS ---
 window.abrirPolitica = (tipo) => {
   const modal = document.getElementById('modalPolitica');
   const texto = document.getElementById('textoPolitica');
   if(tipo === 'privacidade') {
-    texto.innerHTML = `<h2>Política de Privacidade</h2>
-    <p>O FofoPet respeita sua privacidade. Nosso site utiliza cookies do Google AdSense para exibir anúncios personalizados com base em suas visitas anteriores. Não compartilhamos dados pessoais com terceiros.</p>`;
+    texto.innerHTML = `<h2>Privacidade</h2><p>O FofoPet utiliza cookies para melhorar sua experiência e exibir anúncios via Google AdSense.</p>`;
   } else {
-    texto.innerHTML = `<h2>Termos de Uso</h2>
-    <p>Ao utilizar nossa comunidade, você concorda em manter o respeito no Mural e no Chat. Conteúdos ofensivos serão removidos. O FofoPet é uma ferramenta informativa e não substitui o médico veterinário.</p>`;
+    texto.innerHTML = `<h2>Termos</h2><p>Respeite os outros usuários no chat e mural. O uso das ferramentas é para fins informativos.</p>`;
   }
   modal.style.display = "block";
-}
+};
+window.fecharModal = () => document.getElementById('modalPolitica').style.display = "none";
 
-window.fecharModal = () => {
-  document.getElementById('modalPolitica').style.display = "none";
-}
-
-// --- MURAL DE HISTÓRIAS ---
+// --- MURAL ---
 window.salvarHistoria = async () => {
   const nome = document.getElementById('histName').value;
   const texto = document.getElementById('histText').value;
@@ -333,18 +337,14 @@ window.salvarHistoria = async () => {
   document.getElementById('histName').value = "";
   document.getElementById('histText').value = "";
 }
-
 onSnapshot(query(collection(db, "mural"), orderBy("data", "desc")), (snap) => {
-  const mural = document.getElementById('mural');
-  mural.innerHTML = "";
+  const mural = document.getElementById('mural'); mural.innerHTML = "";
   snap.forEach(doc => {
-    mural.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee">
-      <strong>${doc.data().nome}</strong>: ${doc.data().texto}
-    </div>`;
+    mural.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee"><strong>${doc.data().nome}</strong>: ${doc.data().texto}</div>`;
   });
 });
 
-// --- CHAT COMUNITÁRIO (USUÁRIOS) ---
+// --- CHAT ---
 window.enviarChat = async () => {
   const user = document.getElementById('chatUser').value || "Anônimo";
   const text = document.getElementById('chatInput').value;
@@ -352,69 +352,49 @@ window.enviarChat = async () => {
   await addDoc(collection(db, "chat_comunitario"), { user, text, data: serverTimestamp() });
   document.getElementById('chatInput').value = "";
 }
-
 onSnapshot(query(collection(db, "chat_comunitario"), orderBy("data", "asc"), limit(50)), (snap) => {
-  const cont = document.getElementById('chatContent');
-  cont.innerHTML = "";
+  const cont = document.getElementById('chatContent'); cont.innerHTML = "";
   snap.forEach(doc => {
     const d = doc.data();
     const isMe = d.user === document.getElementById('chatUser').value;
-    cont.innerHTML += `
-      <div class="bubble ${isMe ? 'user-me' : 'user-other'}">
-        <span class="bubble-name" style="color:${isMe ? '#0277bd' : '#e67e22'}">${d.user}</span>
-        ${d.text}
-      </div>`;
+    cont.innerHTML += `<div class="bubble ${isMe ? 'user-me' : 'user-other'}"><strong>${d.user}:</strong> ${d.text}</div>`;
   });
   cont.scrollTop = cont.scrollHeight;
 });
 
-// --- DICAS QUE GIRAM ---
-const listaDicas = [
-  "Cães amam rotina de passeios! 🚶‍♂️",
-  "Gatos precisam de lugares altos. 🐈",
-  "Troque a água do seu pet 2x ao dia. 💧",
-  "Brinquedos de roer ajudam nos dentes. 🦷"
-];
+// --- DICAS ---
+const listaDicas = ["Passeie diariamente! 🚶‍♂️", "Água fresca sempre. 💧", "Gatos amam carinho no queixo. 🐈"];
 let idDica = 0;
 setInterval(() => {
   const card = document.getElementById('tipCard');
-  if(!card) return;
-  card.style.transform = "rotateX(90deg)";
-  setTimeout(() => {
-    card.innerText = listaDicas[idDica % listaDicas.length];
-    card.style.transform = "rotateX(0deg)";
-    idDica++;
-  }, 600);
+  if(card) {
+    card.style.transform = "rotateX(90deg)";
+    setTimeout(() => {
+      card.innerText = listaDicas[idDica % listaDicas.length];
+      card.style.transform = "rotateX(0deg)";
+      idDica++;
+    }, 600);
+  }
 }, 4500);
 
-// --- GRÁFICO E CALC ---
+// --- GRÁFICO ---
 let chartObj = null;
 window.calcularFinancas = () => {
   const r = +document.getElementById('vRacao').value || 0;
   const v = +document.getElementById('vVet').value || 0;
   const e = +document.getElementById('vExtra').value || 0;
-  
   document.getElementById('alertaGasto').style.display = (r+v+e > 600) ? "block" : "none";
-
   const ctx = document.getElementById('graficoPet');
   if(chartObj) chartObj.destroy();
   chartObj = new Chart(ctx, {
     type: 'doughnut',
-    data: {
-      labels: ['Ração', 'Vet', 'Extras'],
-      datasets: [{ data: [r,v,e], backgroundColor: ['#5FA8A0','#FFB6C1','#FFD700'], borderWidth: 0 }]
-    },
-    options: { plugins: { legend: { position: 'bottom' } } }
+    data: { labels: ['Ração', 'Vet', 'Extras'], datasets: [{ data:[r,v,e], backgroundColor:['#5FA8A0','#FFB6C1','#FFD700'] }] }
   });
 }
 window.calcularFinancas();
-
-// --- TOGGLE CHAT ---
 window.toggleChat = () => {
-  const win = document.getElementById('chatWindow');
-  win.classList.toggle('minimized');
-  document.getElementById('chatBtn').innerText = win.classList.contains('minimized') ? "+" : "—";
-}
+  document.getElementById('chatWindow').classList.toggle('minimized');
+};
 </script>
 </body>
 </html>
