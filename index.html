@@ -165,9 +165,6 @@ function initCW() {
     // Sorteia um dos 6 jogos do seu banco
     const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
     
-    // Alerta para você ter certeza que o botão funcionou
-    alert("Cruzadinha sorteada! O tema agora é: " + game.tips[0]);
-
     const g = document.getElementById('cwGrid'); 
     if(!g) return;
     g.innerHTML = '';
@@ -272,6 +269,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart();
 </script>
 </body>
 </html>
+
 
 
 
