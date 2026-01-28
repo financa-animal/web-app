@@ -162,14 +162,17 @@ const bancoCW = [
     }
 ];
 function initCW() {
-    // Esta linha abaixo é o segredo: ela sorteia um dos 6 jogos que você colou
+    // Sorteia um dos 6 jogos do seu banco
     const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
     
+    // Alerta para você ter certeza que o botão funcionou
+    alert("Cruzadinha sorteada! O tema agora é: " + game.tips[0]);
+
     const g = document.getElementById('cwGrid'); 
-    if(!g) return; // Segurança para não quebrar o site
+    if(!g) return;
     g.innerHTML = '';
     
-    // Atualiza as dicas conforme o jogo sorteado
+    // Atualiza as dicas na tela
     document.getElementById('cwTips').innerHTML = "<b>Dicas:</b> " + game.tips.join(" | ");
     
     for(let r=0; r<9; r++) {
@@ -283,5 +286,6 @@ rotacionarDicas(); initCP(); initCW(); updateChart();
 </script>
 </body>
 </html>
+
 
 
