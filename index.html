@@ -12,17 +12,23 @@
         header { text-align: center; padding: 15px 0; font-size: 28px; font-weight: 800; color: var(--primary); }
         .card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
         
-        /* JOGOS */
+        /* GUIAS E DICAS */
+        .guia-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .guia-box { flex: 1; background: white; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .guia-box h5 { margin: 0 0 5px 0; color: var(--primary); font-size: 14px; }
+        .guia-box p { margin: 0; font-size: 12px; color: #555; line-height: 1.4; }
+
+        /* GRIDS JOGOS */
         .game-grid { display: grid; gap: 2px; background: #bbb; padding: 3px; margin: 10px auto; width: fit-content; border-radius: 4px; }
         .cell, .cw-cell { width: 34px; height: 34px; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .cell { cursor: pointer; font-size: 13px; user-select: none; }
+        .cell { cursor: pointer; font-size: 11px; user-select: none; }
         .cell.selected { background: var(--secondary); color: white; }
         .cw-cell.black { background: #333; }
-        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 18px; outline: none; background: transparent; }
+        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 16px; outline: none; background: transparent; }
         .correct { background: #d4edda !important; }
 
-        /* ALERTAS E INPUTS */
-        #alertaFinanceiro { display: none; background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin: 10px 0; font-weight: bold; text-align: center; border: 1px solid #ef9a9a; }
+        /* INTERFACE */
+        #alertaFinanceiro { display: none; background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin: 10px 0; font-weight: bold; text-align: center; border: 1px solid #ef9a9a; font-size: 13px; }
         input, select { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
         button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
 
@@ -35,7 +41,7 @@
         
         /* RODAPÉ */
         footer { padding: 40px 20px; text-align: center; background: rgba(255,255,255,0.9); border-top: 1px solid #eee; }
-        .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 12px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 10px; font-weight: bold; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -43,13 +49,25 @@
 <header>🐾 FofoPet</header>
 
 <div class="container">
-    <div class="card" style="background: var(--primary); color: white; text-align: center;">
-        <div style="font-weight: bold;">Sempre deixe água fresca disponível 💧</div>
+    
+    <div class="card" style="background: var(--primary); color: white; text-align: center; margin-bottom: 10px;">
+        <div id="tipPrincipal" style="font-weight: bold; font-size: 16px;">Dica do Dia: Carregando...</div>
+    </div>
+    
+    <div class="guia-container">
+        <div class="guia-box">
+            <h5>🩺 Saúde</h5>
+            <p id="guiaSaude">Verifique as vacinas anualmente.</p>
+        </div>
+        <div class="guia-box" style="border-left-color: var(--secondary);">
+            <h5>🍎 Dieta</h5>
+            <p id="guiaDieta">Chocolate é tóxico para cães e gatos.</p>
+        </div>
     </div>
 
     <div class="card">
         <h4>🔍 Caça-Palavras Infinito</h4>
-        <div id="cpList" style="text-align:center; font-weight:bold; color:var(--secondary); margin-bottom:10px; font-size: 12px;"></div>
+        <div id="cpList" style="text-align:center; font-weight:bold; color:var(--secondary); margin-bottom:10px; font-size: 11px; text-transform: uppercase;"></div>
         <div class="game-grid" id="cpGrid" style="grid-template-columns: repeat(10, 1fr);"></div>
         <button onclick="initCP()" style="background:#888;">Novo Jogo</button>
     </div>
@@ -59,6 +77,7 @@
         <div class="game-grid" id="cwGrid" style="grid-template-columns: repeat(11, 34px);"></div>
         <div id="cwTips" style="font-size: 12px; color: #666; margin: 10px 0;"></div>
         <button onclick="checkCW()" style="background: var(--secondary);">Verificar Respostas</button>
+        <button onclick="initCW()" style="background:#888; font-size: 11px; margin-top: 5px;">Mudar Cruzadinha</button>
     </div>
 
     <div class="card">
@@ -72,14 +91,13 @@
 
     <div class="card">
         <h4>💧 Calculadora de Água</h4>
-        <p style="font-size: 12px; color: #666;">Saiba quanto seu pet deve beber por dia.</p>
         <input type="number" id="pesoPet" placeholder="Peso do Pet (kg)">
         <select id="tipoPet">
-            <option value="60">Cão (Ativo)</option>
-            <option value="50">Cão (Calmo)</option>
-            <option value="45">Gato</option>
+            <option value="60">Cão Ativo (60ml/kg)</option>
+            <option value="50">Cão Caseiro (50ml/kg)</option>
+            <option value="45">Gato (45ml/kg)</option>
         </select>
-        <button onclick="calcAgua()">Calcular Meta Diária</button>
+        <button onclick="calcAgua()">Calcular Meta</button>
         <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
     </div>
 </div>
@@ -87,37 +105,79 @@
 <div class="chat-container">
     <div class="chat-header" onclick="toggleChat()">💬 Chat da Galera <span>+</span></div>
     <div class="chat-body" id="chatBody">
-        <div class="msg-area" id="chatMsgs"><b>PetBot:</b> Seja educado! Troque experiências com amor. ❤️</div>
+        <div class="msg-area" id="chatMsgs"><b>PetBot:</b> Bem-vindo à alcateia! ❤️</div>
         <input type="text" id="chatNick" placeholder="Seu apelido...">
         <div style="display:flex; gap: 5px;">
             <input type="text" id="chatInput" placeholder="Mensagem...">
-            <button onclick="sendMsg()" style="width: auto; padding: 0 12px;">✈️</button>
+            <button onclick="sendMsg()" style="width: auto; padding: 0 15px;">✈️</button>
         </div>
     </div>
 </div>
 
 <footer>
     <div class="footer-links">
-        <a onclick="alert('Sobre Nós: O FofoPet nasceu para unir tutores e trazer diversão e cuidado para o dia a dia dos nossos melhores amigos!')">Sobre Nós</a> | 
-        <a onclick="alert('Privacidade: Respeitamos seus dados. Nenhuma informação financeira é salva em servidores externos.')">Privacidade</a> | 
-        <a onclick="alert('Termos: O uso deste portal é recreativo e informativo. Consulte sempre um veterinário.')">Termos</a> |
-        <a onclick="alert('Contato: Mande um e-mail para carinho@fofopet.com.br')">Contato</a>
+        <a onclick="alert('Sobre Nós: O FofoPet é sua central de cuidados animal.')">Sobre Nós</a> | 
+        <a onclick="alert('Privacidade: Dados locais e seguros.')">Privacidade</a> | 
+        <a onclick="alert('Termos: Uso informativo.')">Termos</a> |
+        <a onclick="alert('Contato: carinho@fofopet.com.br')">Contato</a>
     </div>
-    <p style="margin-top: 15px; font-size: 13px; color: #666;">© 2026 FofoPet - Comunidade Animal</p>
+    <p style="margin-top: 15px; font-size: 12px; color: #888;">© 2026 FofoPet</p>
 </footer>
 
 <script>
-// --- HIDRATAÇÃO ---
-function calcAgua() {
-    const peso = document.getElementById('pesoPet').value;
-    const fator = document.getElementById('tipoPet').value;
-    if(peso > 0) {
-        const total = peso * fator;
-        document.getElementById('resAgua').innerText = `Meta: ${total}ml por dia! 🐾`;
+// --- BANCO DE DADOS ATUALIZÁVEL ---
+const dicasCompletas = [
+    { principal: "Escove os dentes do seu pet regularmente 🦷", saude: "O tártaro pode causar doenças cardíacas.", dieta: "Evite dar restos de comida temperada." },
+    { principal: "Passeios diários combatem a obesidade 🐕", saude: "Mantenha o antipulgas sempre em dia.", dieta: "Frutas como maçã (sem semente) são ótimos petiscos." },
+    { principal: "Gatos precisam de estímulo vertical 🐈", saude: "Check-ups semestrais salvam vidas.", dieta: "Gatos preferem água corrente e fresca." }
+];
+
+const listaPalavras = ["PEIXE", "GATO", "AMOR", "BANHO", "CAO", "RACAO", "VET", "COLEIRA", "BOLA", "OSSO"];
+
+const bancoCW = [
+    { tips: ["1. Amigo Fiel", "2. Faz Miau", "3. No pescoço", "4. Médico"], 
+      data: [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']] }
+];
+
+// --- FUNÇÕES DE ATUALIZAÇÃO ---
+function rotacionarDicas() {
+    const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
+    document.getElementById('tipPrincipal').innerText = d.principal;
+    document.getElementById('guiaSaude').innerText = d.saude;
+    document.getElementById('guiaDieta').innerText = d.dieta;
+}
+
+function initCP() {
+    const cpList = document.getElementById('cpList');
+    const g = document.getElementById('cpGrid'); g.innerHTML = '';
+    const selecionadas = [...listaPalavras].sort(() => 0.5 - Math.random()).slice(0, 4);
+    cpList.innerText = "Busque: " + selecionadas.join(" • ");
+    let grid = Array(100).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)]);
+    selecionadas.forEach((w, row) => {
+        let start = (row + 2) * 10 + 1;
+        for(let i=0; i<w.length; i++) grid[start + i] = w[i];
+    });
+    grid.forEach(l => {
+        const c = document.createElement('div'); c.className = 'cell';
+        c.innerText = l; c.onclick = () => c.classList.toggle('selected');
+        g.appendChild(c);
+    });
+}
+
+function initCW() {
+    const game = bancoCW[0];
+    const g = document.getElementById('cwGrid'); g.innerHTML = '';
+    document.getElementById('cwTips').innerHTML = "<b>Dicas:</b> " + game.tips.join(" | ");
+    for(let r=0; r<9; r++) {
+        for(let c=0; c<11; c++) {
+            const d = game.data.find(x => x[0]===r && x[1]===c);
+            const div = document.createElement('div'); div.className = d ? 'cw-cell' : 'cw-cell black';
+            if(d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}">`;
+            g.appendChild(div);
+        }
     }
 }
 
-// --- FINANCEIRO ---
 function updateChart() {
     const r = parseFloat(document.getElementById('vRacao').value) || 0;
     const v = parseFloat(document.getElementById('vVet').value) || 0;
@@ -129,37 +189,14 @@ function updateChart() {
     });
 }
 
-// --- JOGOS (ESTABILIZADOS) ---
-function initCP() {
-    const words = ["PEIXE", "GATO", "AMOR", "BANHO"];
-    document.getElementById('cpList').innerText = "BUSQUE: " + words.join(" • ");
-    const g = document.getElementById('cpGrid'); g.innerHTML = '';
-    let grid = Array(100).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)]);
-    words.forEach((w, i) => { for(let j=0; j<w.length; j++) grid[((i+2)*10)+j+2] = w[j]; });
-    grid.forEach(l => {
-        const c = document.createElement('div'); c.className = 'cell';
-        c.innerText = l; c.onclick = () => c.classList.toggle('selected');
-        g.appendChild(c);
-    });
+function calcAgua() {
+    const p = document.getElementById('pesoPet').value;
+    const f = document.getElementById('tipoPet').value;
+    if(p > 0) document.getElementById('resAgua').innerHTML = `Meta: ${(p * f)}ml diários 💧`;
 }
 
-function initCW() {
-    const g = document.getElementById('cwGrid'); g.innerHTML = '';
-    const d = [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']];
-    document.getElementById('cwTips').innerHTML = "1. Amigo fiel • 2. Miau • 3. No pescoço • 4. Médico";
-    for(let r=0; r<9; r++) {
-        for(let c=0; c<11; c++) {
-            const cellData = d.find(x => x[0]===r && x[1]===c);
-            const div = document.createElement('div'); div.className = cellData ? 'cw-cell' : 'cw-cell black';
-            if(cellData) div.innerHTML = `<input type="text" maxlength="1" data-ans="${cellData[2]}">`;
-            g.appendChild(div);
-        }
-    }
-}
-
-// --- CHAT ---
 function sendMsg() {
-    const n = document.getElementById('chatNick').value || "PetLover";
+    const n = document.getElementById('chatNick').value || "Tutor";
     const i = document.getElementById('chatInput');
     if(i.value) {
         document.getElementById('chatMsgs').innerHTML += `<div><b>${n}:</b> ${i.value}</div>`;
@@ -170,7 +207,9 @@ function sendMsg() {
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
 function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
 
-initCP(); initCW(); updateChart();
+// --- START ---
+setInterval(rotacionarDicas, 7000); 
+rotacionarDicas(); initCP(); initCW(); updateChart();
 </script>
 </body>
 </html>
