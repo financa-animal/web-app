@@ -39,9 +39,7 @@
         .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 10px; font-weight: bold; cursor: pointer; font-size: 14px; }
     </style>
 </head>
-<body style="background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
-      url('https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=1974&auto=format&fit=crop'); 
-      background-size: cover; background-attachment: fixed; background-position: center;">
+<body style="background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=1974&auto=format&fit=crop'); background-size: cover; background-attachment: fixed; background-position: center;">
 
 <header>🐾 FofoPet</header>
 <div class="card" style="text-align: center; border-bottom: 4px solid var(--primary); margin: 10px auto; max-width: 90%;">
@@ -52,6 +50,7 @@
         ajudam você a monitorar a saúde do seu pet enquanto se diverte com nossos jogos educativos.
     </p>
 </div>
+
 <div class="container">
     <div class="card" style="background: var(--primary); color: white; text-align: center; margin-bottom: 10px;">
         <div id="tipPrincipal" style="font-weight: bold; font-size: 16px;">Dica do Dia: Carregando...</div>
@@ -94,9 +93,7 @@
 
     <div class="card">
         <h4>💧 Calculadora de Água</h4>
-        <p style="font-size: 12px; color: #777; margin-bottom: 15px; text-align: center;">
-    A hidratação correta é vital para prevenir doenças renais e manter a energia do seu pet.
-</p>
+        <p style="font-size: 12px; color: #777; margin-bottom: 15px; text-align: center;">A hidratação correta é vital para prevenir doenças renais e manter a energia do seu pet.</p>
         <input type="number" id="pesoPet" placeholder="Peso do Pet (kg)">
         <select id="tipoPet">
             <option value="60">Cão Ativo (60ml/kg)</option>
@@ -108,68 +105,71 @@
     </div>
 
     <div class="card">
-    <h4>🦴 Idade Humana do Pet</h4>
-        <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
-    Entender a fase de vida do seu pet ajuda a adaptar a dieta e o nível de atividades físicas.
-</p>
-    <input type="number" id="idadeReal" placeholder="Idade do pet (anos)">
-    <select id="portePet">
-        <option value="7">Cão Pequeno / Gato</option>
-        <option value="8">Cão Médio</option>
-        <option value="9">Cão Grande</option>
-    </select>
-    <button onclick="calcIdade()">Descobrir Idade Real</button>
-    <div id="resIdade" style="margin-top: 10px; font-weight: bold; text-align: center;"></div>
-</div>
+        <h4>🦴 Idade Humana do Pet</h4>
+        <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">Entender a fase de vida do seu pet ajuda a adaptar a dieta e o nível de atividades físicas.</p>
+        <input type="number" id="idadeReal" placeholder="Idade do pet (anos)">
+        <select id="portePet">
+            <option value="7">Cão Pequeno / Gato</option>
+            <option value="8">Cão Médio</option>
+            <option value="9">Cão Grande</option>
+        </select>
+        <button onclick="calcIdade()">Descobrir Idade Real</button>
+        <div id="resIdade" style="margin-top: 10px; font-weight: bold; text-align: center;"></div>
+    </div>
 
-<div class="card">
-    <h4>💊 Próxima Dose (Vermífugo/Pulgas)</h4>
-    <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
-    Manter o reforço de vermífugos e antipulgas em dia protege não só o pet, mas toda a sua família.
-</p>
-    <label style="font-size: 12px;">Data da última dose:</label>
-    <input type="date" id="dataDose">
-    <button onclick="calcDose()">Calcular Reforço</button>
-    <div id="resDose" style="margin-top: 10px; font-weight: bold; text-align: center; color: #e67e22;"></div>
-</div>
+    <div class="card">
+        <h4>💊 Próxima Dose (Vermífugo/Pulgas)</h4>
+        <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">Manter o reforço de vermífugos e antipulgas em dia protege não só o pet, mas toda a sua família.</p>
+        <label style="font-size: 12px;">Data da última dose:</label>
+        <input type="date" id="dataDose">
+        <button onclick="calcDose()">Calcular Reforço</button>
+        <div id="resDose" style="margin-top: 10px; font-weight: bold; text-align: center; color: #e67e22;"></div>
+    </div>
     
-<div class="card">
-    <h4>🩺 Check-up de Sinais de Alerta</h4>
-    
-    <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
-        Este checklist ajuda a identificar sinais sutis que podem indicar a necessidade de uma consulta veterinária.
+    <div class="card">
+        <h4>🩺 Check-up de Sinais de Alerta</h4>
+        <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">Este checklist ajuda a identificar sinais sutis que podem indicar a necessidade de uma consulta veterinária.</p>
+        <div style="text-align: left; display: inline-block;">
+            <label><input type="checkbox" class="alerta-pet"> Perda de apetite ou peso</label><br>
+            <label><input type="checkbox" class="alerta-pet"> Vômitos ou diarreia frequente</label><br>
+            <label><input type="checkbox" class="alerta-pet"> Coceira excessiva ou feridas</label><br>
+            <label><input type="checkbox" class="alerta-pet"> Cansaço ou desânimo</label><br>
+        </div>
+        <button onclick="verificarSaude()" style="margin-top:10px;">Verificar Checklist</button>
+        <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px;"></div>
+    </div>
+
+    <h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
+    <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
+        Aprender brincando é a melhor forma de cuidar! Nossos jogos foram criados para testar seus conhecimentos sobre alimentação e comportamento pet de forma leve e interativa.
     </p>
 
-    <div style="text-align: left; display: inline-block;">
-        <label><input type="checkbox" class="alerta-pet"> Perda de apetite ou peso</label><br>
-        ```
-        <h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
-<p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
-    Aprender brincando é a melhor forma de cuidar! Nossos jogos foram criados para testar seus 
-    conhecimentos sobre alimentação e comportamento pet de forma leve e interativa.
-</p>
-    <h4>🍎 Pode Comer?</h4>
-    <div id="foodGameArea" style="text-align: center; padding: 10px;">
-        <div id="foodName" style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: var(--secondary);">Carregando...</div>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="checkFood(true)" style="background: #2ecc71;">✅ Seguro</button>
-            <button onclick="checkFood(false)" style="background: #e74c3c;">❌ Perigoso</button>
+    <div class="card">
+        <h4>🍎 Pode Comer?</h4>
+        <div id="foodGameArea" style="text-align: center; padding: 10px;">
+            <div id="foodName" style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: var(--secondary);">Carregando...</div>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="checkFood(true)" style="background: #2ecc71;">✅ Seguro</button>
+                <button onclick="checkFood(false)" style="background: #e74c3c;">❌ Perigoso</button>
+            </div>
+            <div id="foodScore" style="margin-top: 10px; font-size: 14px; font-weight: bold;">Pontos: 0</div>
         </div>
-        <div id="foodScore" style="margin-top: 10px; font-size: 14px; font-weight: bold;">Pontos: 0</div>
     </div>
-</div>
 
-<div class="card">
-    <h4>🧠 Quiz de Raças</h4>
-    <div id="quizArea" style="text-align: center;">
-        <p id="quizQuestion" style="font-weight: bold; font-size: 14px; min-height: 40px;">Carregando pergunta...</p>
-        <div id="quizOptions"></div>
-        <div id="quizResult" style="margin-top: 10px; font-weight: bold; color: var(--primary);"></div>
+    <div class="card">
+        <h4>🧠 Quiz de Raças</h4>
+        <div id="quizArea" style="text-align: center;">
+            <p id="quizQuestion" style="font-weight: bold; font-size: 14px; min-height: 40px;">Carregando pergunta...</p>
+            <div id="quizOptions"></div>
+            <div id="quizResult" style="margin-top: 10px; font-weight: bold; color: var(--primary);"></div>
+        </div>
     </div>
-<div class="card">
-    <h4>🧠 Memória Pet</h4>
-    <div id="memoGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: auto; max-width: 200px;"></div>
-    <button onclick="initMemo()" style="margin-top:10px; background:#888; font-size:11px;">Reiniciar Memória</button>
+
+    <div class="card">
+        <h4>🧠 Memória Pet</h4>
+        <div id="memoGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: auto; max-width: 200px;"></div>
+        <button onclick="initMemo()" style="margin-top:10px; background:#888; font-size:11px;">Reiniciar Memória</button>
+    </div>
 </div>
 
 <div class="chat-container">
@@ -212,52 +212,10 @@ const dicasCompletas = [
 const listaPalavras = ["PEIXE", "GATO", "AMOR", "BANHO", "CAO", "RACAO", "VET", "COLEIRA", "BOLA", "OSSO"];
 
 const bancoCW = [
-    { 
-        tips: ["1. Amigo Fiel", "2. Faz Miau", "3. No pescoço", "4. Médico"], 
-        data: [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']] 
-    },
-    { 
-        tips: ["1. Onde dorme", "2. Ama roer", "3. Som do cão", "4. Limpeza"], 
-        data: [[1,1,'C'],[1,2,'A'],[1,3,'M'],[1,4,'A'],[3,1,'O'],[3,2,'S'],[3,3,'S'],[3,4,'O'],[5,1,'A'],[5,2,'U'],[5,3,'A'],[5,4,'U'],[7,1,'B'],[7,2,'A'],[7,3,'N'],[7,4,'H'],[7,5,'O']] 
-    },
-    { 
-        tips: ["1. Peixe tem", "2. Voa alto", "3. Nome do site", "4. Ouve bem"], 
-        data: [[1,1,'A'],[1,2,'G'],[1,3,'U'],[1,4,'A'],[3,1,'A'],[3,2,'V'],[3,3,'E'],[5,1,'F'],[5,2,'O'],[5,3,'F'],[5,4,'O'],[7,1,'O'],[7,2,'R'],[7,3,'E'],[7,4,'L'],[7,5,'H'],[7,6,'A']] 
-    },
-    { 
-        tips: ["1. Gosta de osso", "2. Tem bico", "3. Animal lento", "4. Vive no gelo"], 
-        data: [[1,1,'P'],[1,2,'E'],[1,3,'T'],[3,1,'A'],[3,2,'V'],[3,3,'E'],[5,1,'T'],[5,2,'A'],[5,3,'R'],[5,4,'T'],[5,5,'A'],[5,6,'R'],[5,7,'U'],[5,8,'G'],[5,9,'A'],[7,1,'P'],[7,2,'I'],[7,3,'N'],[7,4,'G'],[7,5,'U'],[7,6,'I'],[7,7,'M']] 
-    },
-    { 
-        tips: ["1. Peludo", "2. Come cenoura", "3. De estimação", "4. Pequeno roedor"], 
-        data: [[1,1,'U'],[1,2,'R'],[1,3,'S'],[1,4,'O'],[3,1,'C'],[3,2,'O'],[3,3,'E'],[3,4,'L'],[3,5,'H'],[3,6,'O'],[5,1,'A'],[5,2,'N'],[5,3,'I'],[5,4,'M'],[5,5,'A'],[5,6,'L'],[7,1,'H'],[7,2,'A'],[7,3,'M'],[7,4,'S'],[7,5,'T'],[7,6,'E'],[7,7,'R']] 
-    },
-    { 
-        tips: ["1. Tem escamas", "2. Orelha de...", "3. Adestrar", "4. Caminhar"], 
-        data: [[1,1,'P'],[1,2,'E'],[1,3,'I'],[1,4,'X'],[1,5,'E'],[3,1,'A'],[3,2,'B'],[3,3,'A'],[3,4,'N'],[3,5,'O'],[5,1,'E'],[5,2,'D'],[5,3,'U'],[5,4,'C'],[5,5,'A'],[5,6,'R'],[7,1,'P'],[7,2,'A'],[7,3,'S'],[7,4,'S'],[7,5,'E'],[7,6,'I'],[7,7,'A'],[7,8,'R']] 
-    }
+    { tips: ["1. Amigo Fiel", "2. Faz Miau", "3. No pescoço", "4. Médico"], data: [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']] },
+    { tips: ["1. Onde dorme", "2. Ama roer", "3. Som do cão", "4. Limpeza"], data: [[1,1,'C'],[1,2,'A'],[1,3,'M'],[1,4,'A'],[3,1,'O'],[3,2,'S'],[3,3,'S'],[3,4,'O'],[5,1,'A'],[5,2,'U'],[5,3,'A'],[5,4,'U'],[7,1,'B'],[7,2,'A'],[7,3,'N'],[7,4,'H'],[7,5,'O']] }
 ];
-function initCW() {
-    // Sorteia um dos 6 jogos do seu banco
-    const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
-    
-    const g = document.getElementById('cwGrid'); 
-    if(!g) return;
-    g.innerHTML = '';
-    
-    // Atualiza as dicas na tela
-    document.getElementById('cwTips').innerHTML = "<b>Dicas:</b> " + game.tips.join(" | ");
-    
-    for(let r=0; r<9; r++) {
-        for(let c=0; c<11; c++) {
-            const d = game.data.find(x => x[0]===r && x[1]===c);
-            const div = document.createElement('div'); 
-            div.className = d ? 'cw-cell' : 'cw-cell black';
-            if(d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}">`;
-            g.appendChild(div);
-        }
-    }
-}
+
 const conteudosRodape = {
     sobre: { 
         t: "Nossa História 🐾", 
@@ -265,17 +223,11 @@ const conteudosRodape = {
     },
     privacidade: { 
         t: "Carinho com seus Dados 🔒", 
-       "Sua confiança é o nosso maior tesouro! No FofoPet, seguimos as diretrizes da LGPD para garantir que seus dados e os do seu pet estejam seguros. Todos os cálculos de saúde são processados localmente no seu navegador.
-     Além disso, utilizamos cookies para oferecer uma experiência personalizada e viabilizar nosso portal através de parceiros como o Google AdSense,
-    exibindo anúncios relevantes para o universo pet. 
-    Você pode gerenciar suas preferências no seu navegador a qualquer momento. 🐾 
+        d: "Sua confiança é o nosso maior tesouro! No FofoPet, seguimos as diretrizes da LGPD para garantir que seus dados e os do seu pet estejam seguros. Todos os cálculos de saúde são processados localmente no seu navegador. Além disso, utilizamos cookies para oferecer uma experiência personalizada e viabilizar nosso portal através de parceiros como o Google AdSense, exibindo anúncios relevantes para o universo pet. Você pode gerenciar suas preferências no seu navegador a qualquer momento. 🐾"
     },
     termos: { 
         t: "Combinados de Amizade 🤝", 
-        d: "Bem-vindo aos nossos Combinados de Amizade! Ao usar o FofoPet, você concorda que nossas ferramentas e jogos têm caráter informativo e educativo. 
-            Embora busquemos sempre a maior precisão científica, o uso das calculadoras não substitui, em hipótese alguma,
-            a consulta com um médico veterinário de sua confiança. 
-            Nosso objetivo é ser um apoio na sua jornada de cuidado, celebrando sempre a saúde e o bem-estar animal. 🐾"
+        d: "Bem-vindo aos nossos Combinados de Amizade! Ao usar o FofoPet, você concorda que nossas ferramentas e jogos têm caráter informativo e educativo. Embora busquemos sempre a maior precisão científica, o uso das calculadoras não substitui, em hipótese alguma, a consulta com um médico veterinário de sua confiança. Nosso objetivo é ser um apoio na sua jornada de cuidado, celebrando sempre a saúde e o bem-estar animal. 🐾"
     },
     contato: { 
         t: "Vamos Conversar? 💌", 
@@ -289,9 +241,7 @@ function openModal(id) {
     document.getElementById('txtModal').style.display = 'flex';
 }
 
-function closeModal() {
-    document.getElementById('txtModal').style.display = 'none';
-}
+function closeModal() { document.getElementById('txtModal').style.display = 'none'; }
 
 function rotacionarDicas() {
     const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
@@ -317,6 +267,21 @@ function initCP() {
     });
 }
 
+function initCW() {
+    const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
+    const g = document.getElementById('cwGrid'); if(!g) return; g.innerHTML = '';
+    document.getElementById('cwTips').innerHTML = "<b>Dicas:</b> " + game.tips.join(" | ");
+    for(let r=0; r<9; r++) {
+        for(let c=0; c<11; c++) {
+            const d = game.data.find(x => x[0]===r && x[1]===c);
+            const div = document.createElement('div'); 
+            div.className = d ? 'cw-cell' : 'cw-cell black';
+            if(d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}">`;
+            g.appendChild(div);
+        }
+    }
+}
+
 function updateChart() {
     const r = parseFloat(document.getElementById('vRacao').value) || 0;
     const v = parseFloat(document.getElementById('vVet').value) || 0;
@@ -334,6 +299,29 @@ function calcAgua() {
     if(p > 0) document.getElementById('resAgua').innerHTML = `Meta: ${(p * f)}ml diários 💧`;
 }
 
+function calcIdade() {
+    const idade = document.getElementById('idadeReal').value;
+    const porte = document.getElementById('portePet').value;
+    if(idade > 0) document.getElementById('resIdade').innerHTML = `Seu pet tem o equivalente a <b>${idade * porte} anos</b> humanos! 👴👵`;
+}
+
+function calcDose() {
+    const dataInput = document.getElementById('dataDose').value;
+    if(dataInput) {
+        const data = new Date(dataInput);
+        data.setMonth(data.getMonth() + 3);
+        document.getElementById('resDose').innerHTML = `⚠️ Próximo reforço sugerido: <b>${data.toLocaleDateString('pt-BR')}</b>`;
+    }
+}
+
+function verificarSaude() {
+    const marcados = document.querySelectorAll('.alerta-pet:checked').length;
+    const res = document.getElementById('resSaude');
+    if (marcados === 0) res.innerHTML = "✅ Continue observando seu pet com carinho!";
+    else if (marcados < 2) res.innerHTML = "🟡 Fique atento. Se os sintomas persistirem, fale com um vet.";
+    else res.innerHTML = "🔴 Atenção! Recomendamos levar seu pet ao veterinário o quanto antes.";
+}
+
 function sendMsg() {
     const n = document.getElementById('chatNick').value || "Tutor";
     const i = document.getElementById('chatInput');
@@ -346,7 +334,6 @@ function sendMsg() {
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
 function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
 
-// --- JOGOS NOVOS (Pode Comer, Quiz e Memória) ---
 const alimentos = [{n:"Chocolate",s:false},{n:"Maçã (sem semente)",s:true},{n:"Uva",s:false},{n:"Banana",s:true},{n:"Cebola",s:false},{n:"Cenoura",s:true}];
 let foodPoints = 0; let currentFood = {};
 function nextFood() { currentFood = alimentos[Math.floor(Math.random()*alimentos.length)]; document.getElementById('foodName').innerText = currentFood.n; }
@@ -355,6 +342,7 @@ function checkFood(choice) {
     else { foodPoints = Math.max(0, foodPoints - 5); alert("Cuidado! Isso faz mal. ⚠️"); }
     document.getElementById('foodScore').innerText = "Pontos: " + foodPoints; nextFood();
 }
+
 const quizData = [{q:"Qual raça é o 'cachorro salsicha'?",a:["Dachshund","Poodle","Beagle"],c:0},{q:"Gato famoso por não ter pelos?",a:["Persa","Sphynx","Siamês"],c:1}];
 function loadQuiz() {
     const q = quizData[Math.floor(Math.random()*quizData.length)]; document.getElementById('quizQuestion').innerText = q.q;
@@ -365,11 +353,12 @@ function loadQuiz() {
         optDiv.appendChild(btn);
     });
 }
+
 const icons = ['🐶','🐱','🐹','🐦','🐶','🐱','🐹','🐦']; let flipped = [];
 function initMemo() {
     const grid = document.getElementById('memoGrid'); grid.innerHTML = ''; flipped = [];
     icons.sort(() => 0.5 - Math.random()).forEach((icon) => {
-        const card = document.createElement('div'); card.className = 'cell'; // Usa sua classe de célula
+        const card = document.createElement('div'); card.className = 'cell';
         card.style = "background:#ddd; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:20px; border-radius:5px;";
         card.dataset.icon = icon;
         card.onclick = function() {
@@ -384,47 +373,10 @@ function initMemo() {
         };
         grid.appendChild(card);
     });
-} // <--- Aqui termina o initMemo (sua linha 351)
-
-// --- NOVAS FUNÇÕES DE SAÚDE ---
-function calcIdade() {
-    const idade = document.getElementById('idadeReal').value;
-    const porte = document.getElementById('portePet').value;
-    if(idade > 0) {
-        const idadeHumana = idade * porte;
-        document.getElementById('resIdade').innerHTML = `Seu pet tem o equivalente a <b>${idadeHumana} anos</b> humanos! 👴👵`;
-    }
 }
 
-function calcDose() {
-    const dataInput = document.getElementById('dataDose').value;
-    if(dataInput) {
-        const data = new Date(dataInput);
-        data.setMonth(data.getMonth() + 3);
-        const dataFormatada = data.toLocaleDateString('pt-BR');
-        document.getElementById('resDose').innerHTML = `⚠️ Próximo reforço sugerido: <b>${dataFormatada}</b>`;
-    }
-}
-
-function verificarSaude() {
-    const marcados = document.querySelectorAll('.alerta-pet:checked').length;
-    const res = document.getElementById('resSaude');
-    if (marcados === 0) res.innerHTML = "✅ Continue observando seu pet com carinho!";
-    else if (marcados < 2) res.innerHTML = "🟡 Fique atento. Se os sintomas persistirem, fale com um vet.";
-    else res.innerHTML = "🔴 Atenção! Recomendamos levar seu pet ao veterinário o quanto antes.";
-}
-
-// --- ATIVAÇÃO DE TODAS AS FERRAMENTAS (Já existe no seu código) ---
 setInterval(rotacionarDicas, 7000);
-rotacionarDicas();
-initCP();
-initCW();
-updateChart();
-nextFood();
-loadQuiz();
-initMemo();
+rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); initMemo();
 </script>
 </body>
 </html>
-
-
