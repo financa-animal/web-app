@@ -96,6 +96,27 @@
         <button onclick="calcAgua()">Calcular Meta</button>
         <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
     </div>
+
+    <div class="card">
+    <h4>🦴 Idade Humana do Pet</h4>
+    <input type="number" id="idadeReal" placeholder="Idade do pet (anos)">
+    <select id="portePet">
+        <option value="7">Cão Pequeno / Gato</option>
+        <option value="8">Cão Médio</option>
+        <option value="9">Cão Grande</option>
+    </select>
+    <button onclick="calcIdade()">Descobrir Idade Real</button>
+    <div id="resIdade" style="margin-top: 10px; font-weight: bold; text-align: center;"></div>
+</div>
+
+<div class="card">
+    <h4>💊 Próxima Dose (Vermífugo/Pulgas)</h4>
+    <label style="font-size: 12px;">Data da última dose:</label>
+    <input type="date" id="dataDose">
+    <button onclick="calcDose()">Calcular Reforço</button>
+    <div id="resDose" style="margin-top: 10px; font-weight: bold; text-align: center; color: #e67e22;"></div>
+</div>
+    
 <div class="card">
     <h4>🍎 Pode Comer?</h4>
     <div id="foodGameArea" style="text-align: center; padding: 10px;">
@@ -327,17 +348,43 @@ function initMemo() {
         };
         grid.appendChild(card);
     });
+} // <--- Aqui termina o initMemo (sua linha 351)
+
+// --- NOVAS FUNÇÕES DE SAÚDE ---
+function calcIdade() {
+    const idade = document.getElementById('idadeReal').value;
+    const porte = document.getElementById('portePet').value;
+    if(idade > 0) {
+        const idadeHumana = idade * porte;
+        document.getElementById('resIdade').innerHTML = `Seu pet tem o equivalente a <b>${idadeHumana} anos</b> humanos! 👴👵`;
+    }
 }
-    // Ativação de todas as ferramentas e jogos
-setInterval(rotacionarDicas, 7000); 
-rotacionarDicas(); 
-initCP(); 
-initCW(); 
-updateChart(); 
-nextFood(); 
-loadQuiz(); 
+
+function calcDose() {
+    const dataInput = document.getElementById('dataDose').value;
+    if(dataInput) {
+        const data = new Date(dataInput);
+        data.setMonth(data.getMonth() + 3);
+        const dataFormatada = data.toLocaleDateString('pt-BR');
+        document.getElementById('resDose').innerHTML = `⚠️ Próximo reforço sugerido: <b>${dataFormatada}</b>`;
+    }
+}
+
+function verificarSaude() {
+    const marcados = document.querySelectorAll('.alerta-pet:checked').length;
+    const res = document.getElementById('resSaude');
+    if (marcados === 0) res.innerHTML = "✅ Continue observando seu pet com carinho!";
+    else if (marcados < 2) res.innerHTML = "🟡 Fique atento. Se os sintomas persistirem, fale com um vet.";
+    else res.innerHTML = "🔴 Atenção! Recomendamos levar seu pet ao veterinário o quanto antes.";
+}
+
+// --- ATIVAÇÃO DE TODAS AS FERRAMENTAS (Já existe no seu código) ---
+setInterval(rotacionarDicas, 7000);
+rotacionarDicas();
+initCP();
+initCW();
+updateChart();
+nextFood();
+loadQuiz();
 initMemo();
-</script>
-</body>
-</html>
 
