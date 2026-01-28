@@ -136,9 +136,50 @@ const dicasCompletas = [
 const listaPalavras = ["PEIXE", "GATO", "AMOR", "BANHO", "CAO", "RACAO", "VET", "COLEIRA", "BOLA", "OSSO"];
 
 const bancoCW = [
-    { tips: ["1. Amigo Fiel", "2. Faz Miau", "3. No pescoço", "4. Médico"], 
-      data: [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']] }
-];
+    { 
+        tips: ["1. Amigo Fiel", "2. Faz Miau", "3. No pescoço", "4. Médico"], 
+        data: [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']] 
+    },
+    { 
+        tips: ["1. Onde dorme", "2. Ama roer", "3. Som do cão", "4. Limpeza"], 
+        data: [[1,1,'C'],[1,2,'A'],[1,3,'M'],[1,4,'A'],[3,1,'O'],[3,2,'S'],[3,3,'S'],[3,4,'O'],[5,1,'A'],[5,2,'U'],[5,3,'A'],[5,4,'U'],[7,1,'B'],[7,2,'A'],[7,3,'N'],[7,4,'H'],[7,5,'O']] 
+    },
+    { 
+        tips: ["1. Peixe tem", "2. Voa alto", "3. Nome do site", "4. Ouve bem"], 
+        data: [[1,1,'A'],[1,2,'G'],[1,3,'U'],[1,4,'A'],[3,1,'A'],[3,2,'V'],[3,3,'E'],[5,1,'F'],[5,2,'O'],[5,3,'F'],[5,4,'O'],[7,1,'O'],[7,2,'R'],[7,3,'E'],[7,4,'L'],[7,5,'H'],[7,6,'A']] 
+    },
+    { 
+        tips: ["1. Gosta de osso", "2. Tem bico", "3. Animal lento", "4. Vive no gelo"], 
+        data: [[1,1,'P'],[1,2,'E'],[1,3,'T'],[3,1,'A'],[3,2,'V'],[3,3,'E'],[5,1,'T'],[5,2,'A'],[5,3,'R'],[5,4,'T'],[5,5,'A'],[5,6,'R'],[5,7,'U'],[5,8,'G'],[5,9,'A'],[7,1,'P'],[7,2,'I'],[7,3,'N'],[7,4,'G'],[7,5,'U'],[7,6,'I'],[7,7,'M']] 
+    },
+    { 
+        tips: ["1. Peludo", "2. Come cenoura", "3. De estimação", "4. Pequeno roedor"], 
+        data: [[1,1,'U'],[1,2,'R'],[1,3,'S'],[1,4,'O'],[3,1,'C'],[3,2,'O'],[3,3,'E'],[3,4,'L'],[3,5,'H'],[3,6,'O'],[5,1,'A'],[5,2,'N'],[5,3,'I'],[5,4,'M'],[5,5,'A'],[5,6,'L'],[7,1,'H'],[7,2,'A'],[7,3,'M'],[7,4,'S'],[7,5,'T'],[7,6,'E'],[7,7,'R']] 
+    },
+    { 
+        tips: ["1. Tem escamas", "2. Orelha de...", "3. Adestrar", "4. Caminhar"], 
+        data: [[1,1,'P'],[1,2,'E'],[1,3,'I'],[1,4,'X'],[1,5,'E'],[3,1,'A'],[3,2,'B'],[3,3,'A'],[3,4,'N'],[3,5,'O'],[5,1,'E'],[5,2,'D'],[5,3,'U'],[5,4,'C'],[5,5,'A'],[5,6,'R'],[7,1,'P'],[7,2,'A'],[7,3,'S'],[7,4,'S'],[7,5,'E'],[7,6,'I'],[7,7,'A'],[7,8,'R']] 
+    }
+
+function initCW() {
+    // Sorteia um jogo da lista para garantir que mude sempre
+    const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
+    const g = document.getElementById('cwGrid'); 
+    g.innerHTML = '';
+    
+    // Mantém as dicas no estilo original
+    document.getElementById('cwTips').innerHTML = "<b>Dicas:</b> " + game.tips.join(" | ");
+    
+    for(let r=0; r<9; r++) {
+        for(let c=0; c<11; c++) {
+            const d = game.data.find(x => x[0]===r && x[1]===c);
+            const div = document.createElement('div'); 
+            div.className = d ? 'cw-cell' : 'cw-cell black';
+            if(d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}">`;
+            g.appendChild(div);
+        }
+    }
+}
 
 const conteudosRodape = {
     sobre: { 
@@ -241,3 +282,4 @@ rotacionarDicas(); initCP(); initCW(); updateChart();
 </script>
 </body>
 </html>
+
