@@ -94,6 +94,29 @@
         <button onclick="calcAgua()">Calcular Meta</button>
         <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
     </div>
+<div class="card">
+    <h4>🍎 Pode Comer?</h4>
+    <div id="foodGameArea" style="text-align: center; padding: 10px;">
+        <div id="foodName" style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: var(--secondary);">Carregando...</div>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="checkFood(true)" style="background: #2ecc71;">✅ Seguro</button>
+            <button onclick="checkFood(false)" style="background: #e74c3c;">❌ Perigoso</button>
+        </div>
+        <div id="foodScore" style="margin-top: 10px; font-size: 14px; font-weight: bold;">Pontos: 0</div>
+    </div>
+</div>
+
+<div class="card">
+    <h4>🧠 Quiz de Raças</h4>
+    <div id="quizArea" style="text-align: center;">
+        <p id="quizQuestion" style="font-weight: bold; font-size: 14px; min-height: 40px;">Carregando pergunta...</p>
+        <div id="quizOptions"></div>
+        <div id="quizResult" style="margin-top: 10px; font-weight: bold; color: var(--primary);"></div>
+    </div>
+<div class="card">
+    <h4>🧠 Memória Pet</h4>
+    <div id="memoGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: auto; max-width: 200px;"></div>
+    <button onclick="initMemo()" style="margin-top:10px; background:#888; font-size:11px;">Reiniciar Memória</button>
 </div>
 
 <div class="chat-container">
@@ -264,13 +287,54 @@ function sendMsg() {
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
 function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
 
+// --- JOGOS NOVOS (Pode Comer, Quiz e Memória) ---
+const alimentos = [{n:"Chocolate",s:false},{n:"Maçã (sem semente)",s:true},{n:"Uva",s:false},{n:"Banana",s:true},{n:"Cebola",s:false},{n:"Cenoura",s:true}];
+let foodPoints = 0; let currentFood = {};
+function nextFood() { currentFood = alimentos[Math.floor(Math.random()*alimentos.length)]; document.getElementById('foodName').innerText = currentFood.n; }
+function checkFood(choice) {
+    if(choice === currentFood.s) { foodPoints += 10; alert("Correto! 🐾"); }
+    else { foodPoints = Math.max(0, foodPoints - 5); alert("Cuidado! Isso faz mal. ⚠️"); }
+    document.getElementById('foodScore').innerText = "Pontos: " + foodPoints; nextFood();
+}
+const quizData = [{q:"Qual raça é o 'cachorro salsicha'?",a:["Dachshund","Poodle","Beagle"],c:0},{q:"Gato famoso por não ter pelos?",a:["Persa","Sphynx","Siamês"],c:1}];
+function loadQuiz() {
+    const q = quizData[Math.floor(Math.random()*quizData.length)]; document.getElementById('quizQuestion').innerText = q.q;
+    const optDiv = document.getElementById('quizOptions'); optDiv.innerHTML = '';
+    q.a.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.innerText = opt; btn.style.marginBottom = "5px";
+        btn.onclick = () => { if(i === q.c){ alert("Acertou! 🎉"); loadQuiz(); } else { alert("Tente novamente! 🐶"); } };
+        optDiv.appendChild(btn);
+    });
+}
+const icons = ['🐶','🐱','🐹','🐦','🐶','🐱','🐹','🐦']; let flipped = [];
+function initMemo() {
+    const grid = document.getElementById('memoGrid'); grid.innerHTML = ''; flipped = [];
+    icons.sort(() => 0.5 - Math.random()).forEach((icon) => {
+        const card = document.createElement('div'); card.className = 'cell'; // Usa sua classe de célula
+        card.style = "background:#ddd; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:20px; border-radius:5px;";
+        card.dataset.icon = icon;
+        card.onclick = function() {
+            if(flipped.length < 2 && !this.innerText) {
+                this.innerText = this.dataset.icon; this.style.background = 'white'; flipped.push(this);
+                if(flipped.length === 2) {
+                    if(flipped[0].innerText !== flipped[1].innerText) {
+                        setTimeout(() => { flipped.forEach(c => { c.innerText = ''; c.style.background = '#ddd'; }); flipped = []; }, 500);
+                    } else { flipped = []; }
+                }
+            }
+        };
+        grid.appendChild(card);
+    });
+}
+    // Ativação de todas as ferramentas e jogos
 setInterval(rotacionarDicas, 7000); 
-rotacionarDicas(); initCP(); initCW(); updateChart();
+rotacionarDicas(); 
+initCP(); 
+initCW(); 
+updateChart(); 
+nextFood(); 
+loadQuiz(); 
+initMemo();
 </script>
 </body>
 </html>
-
-
-
-
-
