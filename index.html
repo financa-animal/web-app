@@ -44,7 +44,14 @@
       background-size: cover; background-attachment: fixed; background-position: center;">
 
 <header>🐾 FofoPet</header>
-
+<div class="card" style="text-align: center; border-bottom: 4px solid var(--primary); margin: 10px auto; max-width: 90%;">
+    <h3>🐾 Bem-vindo à sua Rede de Carinho!</h3>
+    <p style="font-size: 14px; color: #555; line-height: 1.5; padding: 0 10px;">
+        O <b>FofoPet</b> foi criado para facilitar a rotina de quem ama. 
+        Aqui, unimos tecnologia e cuidado animal em ferramentas simples que 
+        ajudam você a monitorar a saúde do seu pet enquanto se diverte com nossos jogos educativos.
+    </p>
+</div>
 <div class="container">
     <div class="card" style="background: var(--primary); color: white; text-align: center; margin-bottom: 10px;">
         <div id="tipPrincipal" style="font-weight: bold; font-size: 16px;">Dica do Dia: Carregando...</div>
@@ -87,6 +94,9 @@
 
     <div class="card">
         <h4>💧 Calculadora de Água</h4>
+        <p style="font-size: 12px; color: #777; margin-bottom: 15px; text-align: center;">
+    A hidratação correta é vital para prevenir doenças renais e manter a energia do seu pet.
+</p>
         <input type="number" id="pesoPet" placeholder="Peso do Pet (kg)">
         <select id="tipoPet">
             <option value="60">Cão Ativo (60ml/kg)</option>
@@ -99,6 +109,9 @@
 
     <div class="card">
     <h4>🦴 Idade Humana do Pet</h4>
+        <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
+    Entender a fase de vida do seu pet ajuda a adaptar a dieta e o nível de atividades físicas.
+</p>
     <input type="number" id="idadeReal" placeholder="Idade do pet (anos)">
     <select id="portePet">
         <option value="7">Cão Pequeno / Gato</option>
@@ -111,6 +124,9 @@
 
 <div class="card">
     <h4>💊 Próxima Dose (Vermífugo/Pulgas)</h4>
+    <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
+    Manter o reforço de vermífugos e antipulgas em dia protege não só o pet, mas toda a sua família.
+</p>
     <label style="font-size: 12px;">Data da última dose:</label>
     <input type="date" id="dataDose">
     <button onclick="calcDose()">Calcular Reforço</button>
@@ -118,6 +134,20 @@
 </div>
     
 <div class="card">
+    <h4>🩺 Check-up de Sinais de Alerta</h4>
+    
+    <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
+        Este checklist ajuda a identificar sinais sutis que podem indicar a necessidade de uma consulta veterinária.
+    </p>
+
+    <div style="text-align: left; display: inline-block;">
+        <label><input type="checkbox" class="alerta-pet"> Perda de apetite ou peso</label><br>
+        ```
+        <h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
+<p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
+    Aprender brincando é a melhor forma de cuidar! Nossos jogos foram criados para testar seus 
+    conhecimentos sobre alimentação e comportamento pet de forma leve e interativa.
+</p>
     <h4>🍎 Pode Comer?</h4>
     <div id="foodGameArea" style="text-align: center; padding: 10px;">
         <div id="foodName" style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: var(--secondary);">Carregando...</div>
@@ -235,11 +265,17 @@ const conteudosRodape = {
     },
     privacidade: { 
         t: "Carinho com seus Dados 🔒", 
-        d: "Sua confiança é tudo para nós. Não vendemos dados e não rastreamos você. Seus gastos e cálculos são processados apenas no seu navegador para garantir total segurança e privacidade." 
+       "Sua confiança é o nosso maior tesouro! No FofoPet, seguimos as diretrizes da LGPD para garantir que seus dados e os do seu pet estejam seguros. Todos os cálculos de saúde são processados localmente no seu navegador.
+     Além disso, utilizamos cookies para oferecer uma experiência personalizada e viabilizar nosso portal através de parceiros como o Google AdSense,
+    exibindo anúncios relevantes para o universo pet. 
+    Você pode gerenciar suas preferências no seu navegador a qualquer momento. 🐾 
     },
     termos: { 
         t: "Combinados de Amizade 🤝", 
-        d: "Nosso portal é um espaço de apoio e diversão. As dicas e calculadoras são informativas; a saúde do seu pet deve ser sempre acompanhada por um médico veterinário de confiança." 
+        d: "Bem-vindo aos nossos Combinados de Amizade! Ao usar o FofoPet, você concorda que nossas ferramentas e jogos têm caráter informativo e educativo. 
+            Embora busquemos sempre a maior precisão científica, o uso das calculadoras não substitui, em hipótese alguma,
+            a consulta com um médico veterinário de sua confiança. 
+            Nosso objetivo é ser um apoio na sua jornada de cuidado, celebrando sempre a saúde e o bem-estar animal. 🐾"
     },
     contato: { 
         t: "Vamos Conversar? 💌", 
@@ -390,4 +426,5 @@ initMemo();
 </script>
 </body>
 </html>
+
 
