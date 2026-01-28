@@ -8,32 +8,34 @@
     <style>
         :root { --primary: #5FA8A0; --secondary: #e67e22; --soft: #F4F8F7; --card: #ffffff; --text: #2b2b2b; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed; color: var(--text); }
-        .container { max-width: 600px; margin: auto; padding: 20px 20px 100px 20px; }
+        .container { max-width: 600px; margin: auto; padding: 20px 20px 120px 20px; }
         header { text-align: center; padding: 15px 0; font-size: 28px; font-weight: 800; color: var(--primary); }
         .card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
         
         /* JOGOS */
         .game-grid { display: grid; gap: 2px; background: #bbb; padding: 3px; margin: 10px auto; width: fit-content; border-radius: 4px; }
         .cell, .cw-cell { width: 34px; height: 34px; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .cell { cursor: pointer; font-size: 13px; }
+        .cell { cursor: pointer; font-size: 13px; user-select: none; }
         .cell.selected { background: var(--secondary); color: white; }
-        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 18px; outline: none; }
+        .cw-cell.black { background: #333; }
+        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 18px; outline: none; background: transparent; }
         .correct { background: #d4edda !important; }
 
         /* ALERTAS E INPUTS */
         #alertaFinanceiro { display: none; background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin: 10px 0; font-weight: bold; text-align: center; border: 1px solid #ef9a9a; }
-        input, textarea { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
-        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+        input, select { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
 
-        /* CHAT E RODAPÉ */
+        /* CHAT */
         .chat-container { position: fixed; right: 20px; bottom: 0; width: 280px; z-index: 2000; }
         .chat-header { background: var(--primary); color: white; padding: 12px; border-radius: 10px 10px 0 0; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; }
-        .chat-body { background: white; height: 300px; display: none; border: 1px solid #ddd; flex-direction: column; padding: 10px; }
+        .chat-body { background: white; height: 300px; display: none; border: 1px solid #ddd; flex-direction: column; padding: 10px; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
         .chat-body.active { display: flex; }
         .msg-area { flex: 1; overflow-y: auto; background: #f9f9f9; padding: 8px; font-size: 12px; margin-bottom: 8px; border-radius: 5px; }
         
-        footer { padding: 30px; text-align: center; background: rgba(255,255,255,0.9); }
-        .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 10px; font-weight: bold; cursor: pointer; }
+        /* RODAPÉ */
+        footer { padding: 40px 20px; text-align: center; background: rgba(255,255,255,0.9); border-top: 1px solid #eee; }
+        .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 12px; font-weight: bold; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -42,12 +44,12 @@
 
 <div class="container">
     <div class="card" style="background: var(--primary); color: white; text-align: center;">
-        <div id="tipCard" style="font-weight: bold; font-size: 16px;">Carregando carinho...</div>
+        <div style="font-weight: bold;">Sempre deixe água fresca disponível 💧</div>
     </div>
 
     <div class="card">
         <h4>🔍 Caça-Palavras Infinito</h4>
-        <div id="cpList" style="text-align:center; font-weight:bold; color:var(--secondary); margin-bottom:10px;"></div>
+        <div id="cpList" style="text-align:center; font-weight:bold; color:var(--secondary); margin-bottom:10px; font-size: 12px;"></div>
         <div class="game-grid" id="cpGrid" style="grid-template-columns: repeat(10, 1fr);"></div>
         <button onclick="initCP()" style="background:#888;">Novo Jogo</button>
     </div>
@@ -61,85 +63,114 @@
 
     <div class="card">
         <h4>💰 Controle Financeiro</h4>
-        <input type="number" id="vRacao" placeholder="Ração (R$)">
-        <input type="number" id="vVet" placeholder="Veterinário (R$)">
-        <input type="number" id="vMimos" placeholder="Mimos (R$)">
-        <button onclick="updateChart()">Ver Gastos</button>
-        <div id="alertaFinanceiro">⚠️ Atenção: Seus gastos ultrapassaram o limite de segurança!</div>
-        <div style="max-width: 150px; margin: 20px auto;"><canvas id="petChart"></canvas></div>
+        <input type="number" id="vRacao" placeholder="Ração (R$)" oninput="updateChart()">
+        <input type="number" id="vVet" placeholder="Veterinário (R$)" oninput="updateChart()">
+        <input type="number" id="vMimos" placeholder="Mimos (R$)" oninput="updateChart()">
+        <div id="alertaFinanceiro">⚠️ Atenção: Gastos acima do limite!</div>
+        <div style="max-width: 140px; margin: 15px auto;"><canvas id="petChart"></canvas></div>
+    </div>
+
+    <div class="card">
+        <h4>💧 Calculadora de Água</h4>
+        <p style="font-size: 12px; color: #666;">Saiba quanto seu pet deve beber por dia.</p>
+        <input type="number" id="pesoPet" placeholder="Peso do Pet (kg)">
+        <select id="tipoPet">
+            <option value="60">Cão (Ativo)</option>
+            <option value="50">Cão (Calmo)</option>
+            <option value="45">Gato</option>
+        </select>
+        <button onclick="calcAgua()">Calcular Meta Diária</button>
+        <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
     </div>
 </div>
 
 <div class="chat-container">
     <div class="chat-header" onclick="toggleChat()">💬 Chat da Galera <span>+</span></div>
     <div class="chat-body" id="chatBody">
-        <div class="msg-area" id="chatMsgs">Bem-vindo à nossa comunidade pet! ❤️</div>
+        <div class="msg-area" id="chatMsgs"><b>PetBot:</b> Seja educado! Troque experiências com amor. ❤️</div>
         <input type="text" id="chatNick" placeholder="Seu apelido...">
         <div style="display:flex; gap: 5px;">
-            <input type="text" id="chatInput" placeholder="Sua mensagem...">
-            <button onclick="sendMsg()" style="width: auto; padding: 0 15px;">✈️</button>
+            <input type="text" id="chatInput" placeholder="Mensagem...">
+            <button onclick="sendMsg()" style="width: auto; padding: 0 12px;">✈️</button>
         </div>
     </div>
 </div>
 
 <footer>
     <div class="footer-links">
-        <a onclick="openModal('sobre')">Sobre Nós</a> | <a onclick="openModal('privacidade')">Privacidade</a> | <a onclick="openModal('termos')">Termos</a>
+        <a onclick="alert('Sobre Nós: O FofoPet nasceu para unir tutores e trazer diversão e cuidado para o dia a dia dos nossos melhores amigos!')">Sobre Nós</a> | 
+        <a onclick="alert('Privacidade: Respeitamos seus dados. Nenhuma informação financeira é salva em servidores externos.')">Privacidade</a> | 
+        <a onclick="alert('Termos: O uso deste portal é recreativo e informativo. Consulte sempre um veterinário.')">Termos</a> |
+        <a onclick="alert('Contato: Mande um e-mail para carinho@fofopet.com.br')">Contato</a>
     </div>
-    <p>© 2026 FofoPet - Feito com Amor</p>
+    <p style="margin-top: 15px; font-size: 13px; color: #666;">© 2026 FofoPet - Comunidade Animal</p>
 </footer>
 
 <script>
-// FINANCEIRO
+// --- HIDRATAÇÃO ---
+function calcAgua() {
+    const peso = document.getElementById('pesoPet').value;
+    const fator = document.getElementById('tipoPet').value;
+    if(peso > 0) {
+        const total = peso * fator;
+        document.getElementById('resAgua').innerText = `Meta: ${total}ml por dia! 🐾`;
+    }
+}
+
+// --- FINANCEIRO ---
 function updateChart() {
     const r = parseFloat(document.getElementById('vRacao').value) || 0;
     const v = parseFloat(document.getElementById('vVet').value) || 0;
     const m = parseFloat(document.getElementById('vMimos').value) || 0;
-    const total = r + v + m;
-    document.getElementById('alertaFinanceiro').style.display = total > 600 ? 'block' : 'none';
+    document.getElementById('alertaFinanceiro').style.display = (r+v+m) > 600 ? 'block' : 'none';
     if(window.pChart) window.pChart.destroy();
     window.pChart = new Chart(document.getElementById('petChart'), {
         type: 'doughnut', data: { datasets: [{ data: [r, v, m], backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f'] }] }
     });
 }
 
-// CAÇA-PALAVRAS (GARANTINDO AS PALAVRAS)
+// --- JOGOS (ESTABILIZADOS) ---
 function initCP() {
     const words = ["PEIXE", "GATO", "AMOR", "BANHO"];
     document.getElementById('cpList').innerText = "BUSQUE: " + words.join(" • ");
     const g = document.getElementById('cpGrid'); g.innerHTML = '';
-    let grid = Array(100).fill('');
-    
-    // Coloca as palavras manualmente para garantir que existam
-    words.forEach((w, idx) => { for(let i=0; i<w.length; i++) grid[(idx*10)+i] = w[i]; });
-    
+    let grid = Array(100).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)]);
+    words.forEach((w, i) => { for(let j=0; j<w.length; j++) grid[((i+2)*10)+j+2] = w[j]; });
     grid.forEach(l => {
         const c = document.createElement('div'); c.className = 'cell';
-        c.innerText = l || "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)];
-        c.onclick = () => c.classList.toggle('selected');
+        c.innerText = l; c.onclick = () => c.classList.toggle('selected');
         g.appendChild(c);
     });
 }
 
-// CHAT
-function sendMsg() {
-    const nick = document.getElementById('chatNick').value || "PetLover";
-    const input = document.getElementById('chatInput');
-    if(input.value) {
-        document.getElementById('chatMsgs').innerHTML += `<div><b>${nick}:</b> ${input.value}</div>`;
-        input.value = '';
+function initCW() {
+    const g = document.getElementById('cwGrid'); g.innerHTML = '';
+    const d = [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']];
+    document.getElementById('cwTips').innerHTML = "1. Amigo fiel • 2. Miau • 3. No pescoço • 4. Médico";
+    for(let r=0; r<9; r++) {
+        for(let c=0; c<11; c++) {
+            const cellData = d.find(x => x[0]===r && x[1]===c);
+            const div = document.createElement('div'); div.className = cellData ? 'cw-cell' : 'cw-cell black';
+            if(cellData) div.innerHTML = `<input type="text" maxlength="1" data-ans="${cellData[2]}">`;
+            g.appendChild(div);
+        }
     }
 }
 
-// TEXTOS ACOLHEDORES
-const tips = ["Escove os dentes do seu pet com carinho 🦷", "Passeios diários são atos de amor 🐕", "Sempre deixe água fresca disponível 💧"];
-function rotateTips() { document.getElementById('tipCard').innerText = tips[Math.floor(Math.random()*tips.length)]; }
-setInterval(rotateTips, 5000); rotateTips();
+// --- CHAT ---
+function sendMsg() {
+    const n = document.getElementById('chatNick').value || "PetLover";
+    const i = document.getElementById('chatInput');
+    if(i.value) {
+        document.getElementById('chatMsgs').innerHTML += `<div><b>${n}:</b> ${i.value}</div>`;
+        i.value = '';
+    }
+}
 
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
-function initCW() { /* Lógica da cruzadinha mantida como a anterior */ }
+function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
 
-initCP(); updateChart();
+initCP(); initCW(); updateChart();
 </script>
 </body>
 </html>
