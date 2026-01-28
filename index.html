@@ -12,13 +12,11 @@
         header { text-align: center; padding: 15px 0; font-size: 28px; font-weight: 800; color: var(--primary); }
         .card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
         
-        /* GUIAS E DICAS */
         .guia-container { display: flex; gap: 10px; margin-bottom: 20px; }
         .guia-box { flex: 1; background: white; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .guia-box h5 { margin: 0 0 5px 0; color: var(--primary); font-size: 14px; }
         .guia-box p { margin: 0; font-size: 12px; color: #555; line-height: 1.4; }
 
-        /* GRIDS JOGOS */
         .game-grid { display: grid; gap: 2px; background: #bbb; padding: 3px; margin: 10px auto; width: fit-content; border-radius: 4px; }
         .cell, .cw-cell { width: 34px; height: 34px; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .cell { cursor: pointer; font-size: 11px; user-select: none; }
@@ -27,19 +25,16 @@
         .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 16px; outline: none; background: transparent; }
         .correct { background: #d4edda !important; }
 
-        /* INTERFACE */
         #alertaFinanceiro { display: none; background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin: 10px 0; font-weight: bold; text-align: center; border: 1px solid #ef9a9a; font-size: 13px; }
         input, select { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
         button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
 
-        /* CHAT */
         .chat-container { position: fixed; right: 20px; bottom: 0; width: 280px; z-index: 2000; }
         .chat-header { background: var(--primary); color: white; padding: 12px; border-radius: 10px 10px 0 0; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; }
         .chat-body { background: white; height: 300px; display: none; border: 1px solid #ddd; flex-direction: column; padding: 10px; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
         .chat-body.active { display: flex; }
         .msg-area { flex: 1; overflow-y: auto; background: #f9f9f9; padding: 8px; font-size: 12px; margin-bottom: 8px; border-radius: 5px; }
         
-        /* RODAPÉ */
         footer { padding: 40px 20px; text-align: center; background: rgba(255,255,255,0.9); border-top: 1px solid #eee; }
         .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 10px; font-weight: bold; cursor: pointer; font-size: 14px; }
     </style>
@@ -49,7 +44,6 @@
 <header>🐾 FofoPet</header>
 
 <div class="container">
-    
     <div class="card" style="background: var(--primary); color: white; text-align: center; margin-bottom: 10px;">
         <div id="tipPrincipal" style="font-weight: bold; font-size: 16px;">Dica do Dia: Carregando...</div>
     </div>
@@ -116,16 +110,23 @@
 
 <footer>
     <div class="footer-links">
-        <a onclick="alert('Sobre Nós: O FofoPet é sua central de cuidados animal.')">Sobre Nós</a> | 
-        <a onclick="alert('Privacidade: Dados locais e seguros.')">Privacidade</a> | 
-        <a onclick="alert('Termos: Uso informativo.')">Termos</a> |
-        <a onclick="alert('Contato: carinho@fofopet.com.br')">Contato</a>
+        <a onclick="openModal('sobre')">Sobre Nós</a> | 
+        <a onclick="openModal('privacidade')">Privacidade</a> | 
+        <a onclick="openModal('termos')">Termos</a> |
+        <a onclick="openModal('contato')">Contato</a>
     </div>
-    <p style="margin-top: 15px; font-size: 12px; color: #888;">© 2026 FofoPet</p>
+    <p style="margin-top: 15px; font-size: 12px; color: #888;">© 2026 FofoPet - Feito com Amor pela Comunidade Animal</p>
 </footer>
 
+<div id="txtModal" style="display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
+    <div style="background: white; padding: 30px; border-radius: 20px; width: 85%; max-width: 450px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <span style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:24px; color:#999;" onclick="closeModal()">&times;</span>
+        <h3 id="modalTitle" style="color:var(--primary); margin-top:0;"></h3>
+        <div id="modalText" style="line-height:1.6; color:#444; font-size:15px"></div>
+    </div>
+</div>
+
 <script>
-// --- BANCO DE DADOS ATUALIZÁVEL ---
 const dicasCompletas = [
     { principal: "Escove os dentes do seu pet regularmente 🦷", saude: "O tártaro pode causar doenças cardíacas.", dieta: "Evite dar restos de comida temperada." },
     { principal: "Passeios diários combatem a obesidade 🐕", saude: "Mantenha o antipulgas sempre em dia.", dieta: "Frutas como maçã (sem semente) são ótimos petiscos." },
@@ -139,7 +140,35 @@ const bancoCW = [
       data: [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']] }
 ];
 
-// --- FUNÇÕES DE ATUALIZAÇÃO ---
+const conteudosRodape = {
+    sobre: { 
+        t: "Nossa História 🐾", 
+        d: "O FofoPet nasceu de um coração apaixonado por focinhos! Nossa missão é unir tutores em uma rede de carinho, oferecendo ferramentas que tornam a rotina com seu melhor amigo mais leve e divertida." 
+    },
+    privacidade: { 
+        t: "Carinho com seus Dados 🔒", 
+        d: "Sua confiança é tudo para nós. Não vendemos dados e não rastreamos você. Seus gastos e cálculos são processados apenas no seu navegador para garantir total segurança e privacidade." 
+    },
+    termos: { 
+        t: "Combinados de Amizade 🤝", 
+        d: "Nosso portal é um espaço de apoio e diversão. As dicas e calculadoras são informativas; a saúde do seu pet deve ser sempre acompanhada por um médico veterinário de confiança." 
+    },
+    contato: { 
+        t: "Vamos Conversar? 💌", 
+        d: "Dúvidas ou quer apenas contar uma travessura do seu pet? Mande um e-mail para: <b>contato@fofopet.com.br</b>. Respondemos com todo carinho assim que terminarmos o carinho nos nossos pets!" 
+    }
+};
+
+function openModal(id) {
+    document.getElementById('modalTitle').innerText = conteudosRodape[id].t;
+    document.getElementById('modalText').innerHTML = conteudosRodape[id].d;
+    document.getElementById('txtModal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('txtModal').style.display = 'none';
+}
+
 function rotacionarDicas() {
     const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
     document.getElementById('tipPrincipal').innerText = d.principal;
@@ -207,7 +236,6 @@ function sendMsg() {
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
 function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
 
-// --- START ---
 setInterval(rotacionarDicas, 7000); 
 rotacionarDicas(); initCP(); initCW(); updateChart();
 </script>
