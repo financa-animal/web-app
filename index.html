@@ -26,6 +26,31 @@
             color: var(--text); 
         }
 
+cw-cell.black {
+    background-color: #333 !important;
+    border: 1px solid #333;
+}
+
+/* Isso garante que os quadrados com letras fiquem brancos e visíveis */
+.cw-cell {
+    width: 34px;
+    height: 34px;
+    background: #fff;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cw-cell input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+        
         .container { max-width: 600px; margin: auto; padding: 20px 20px 120px 20px; }
         header { text-align: center; padding: 15px 0; font-size: 28px; font-weight: 800; color: var(--primary); text-shadow: 1px 1px 2px white; }
         
@@ -713,14 +738,16 @@ function initCW() {
     const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
     const g = document.getElementById('cwGrid'); if(!g) return; g.innerHTML = '';
     document.getElementById('cwTips').innerHTML = "<b>Dicas:</b> " + game.tips.join(" | ");
-    for(let r=0; r<9; r++) {
-        for(let c=0; c<11; c++) {
-            const d = game.data.find(x => x[0]===r && x[1]===c);
-            const div = document.createElement('div'); 
-            div.className = d ? 'cw-cell' : 'cw-cell black';
-            if(d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}">`;
-            g.appendChild(div);
-        }
+    for(let r = 1; r <= 11; r++) {
+        for(let c = 1; c <= 11; c++) {
+          const d = game.data.find(x => x[0] === r && x[1] === c);
+        
+        const div = document.createElement('div');
+        div.className = d ? 'cw-cell' : 'cw-cell black';
+        
+        if (d) div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}">`;
+        
+        g.appendChild(div);
     }
 }
 
@@ -847,6 +874,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
