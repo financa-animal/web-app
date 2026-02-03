@@ -1,47 +1,68 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1165027343875143" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FofoPet - O Portal do seu Pet</title>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1165027343875143" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        :root { --primary: #5FA8A0; --secondary: #e67e22; --soft: #F4F8F7; --card: #ffffff; --text: #2b2b2b; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat fixed; color: var(--text); }
+        :root { 
+            --primary: #5FA8A0; 
+            --secondary: #e67e22; 
+            --soft: #F4F8F7; 
+            --card: #ffffff; 
+            --text: #2b2b2b; 
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), 
+                        url("https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=2070&auto=format&fit=crop") 
+                        center/cover no-repeat fixed; 
+            color: var(--text); 
+        }
+
         .container { max-width: 600px; margin: auto; padding: 20px 20px 120px 20px; }
-        header { text-align: center; padding: 15px 0; font-size: 28px; font-weight: 800; color: var(--primary); }
-        .card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        header { text-align: center; padding: 15px 0; font-size: 28px; font-weight: 800; color: var(--primary); text-shadow: 1px 1px 2px white; }
         
-        .guia-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .guia-box { flex: 1; background: white; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #eee; }
+        
+        .guia-container { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .guia-box { min-width: 140px; flex: 1; background: white; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .guia-box h5 { margin: 0 0 5px 0; color: var(--primary); font-size: 14px; }
         .guia-box p { margin: 0; font-size: 12px; color: #555; line-height: 1.4; }
 
+        /* Estilo dos Jogos */
         .game-grid { display: grid; gap: 2px; background: #bbb; padding: 3px; margin: 10px auto; width: fit-content; border-radius: 4px; }
         .cell, .cw-cell { width: 34px; height: 34px; background: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .cell { cursor: pointer; font-size: 11px; user-select: none; }
         .cell.selected { background: var(--secondary); color: white; }
-        .cw-cell.black { background: #333; }
-        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 16px; outline: none; background: transparent; }
-        .correct { background: #d4edda !important; }
+        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: 900; text-transform: uppercase; font-size: 16px; outline: none; }
 
+        /* Alertas e Inputs */
         #alertaFinanceiro { display: none; background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin: 10px 0; font-weight: bold; text-align: center; border: 1px solid #ef9a9a; font-size: 13px; }
-        input, select { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
-        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
+        input, select { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
+        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; transition: 0.3s; }
+        button:hover { background: #4d8a82; }
 
+        /* Chat Flutuante */
         .chat-container { position: fixed; right: 20px; bottom: 0; width: 280px; z-index: 2000; }
         .chat-header { background: var(--primary); color: white; padding: 12px; border-radius: 10px 10px 0 0; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; }
         .chat-body { background: white; height: 300px; display: none; border: 1px solid #ddd; flex-direction: column; padding: 10px; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
         .chat-body.active { display: flex; }
-        .msg-area { flex: 1; overflow-y: auto; background: #f9f9f9; padding: 8px; font-size: 12px; margin-bottom: 8px; border-radius: 5px; }
+        .msg-area { flex: 1; overflow-y: auto; background: #f9f9f9; padding: 8px; font-size: 12px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #eee; }
         
-        footer { padding: 40px 20px; text-align: center; background: rgba(255,255,255,0.9); border-top: 1px solid #eee; }
-        .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 10px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        footer { padding: 40px 20px; text-align: center; background: rgba(255,255,255,0.9); border-top: 1px solid #eee; margin-top: 20px; }
+        .footer-links a { color: #2d5a54; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; }
     </style>
 </head>
-<body style="background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=1974&auto=format&fit=crop'); background-size: cover; background-attachment: fixed; background-position: center;">
-
+<body>
+    
+<div class="container">
 <header>🐾 FofoPet</header>
 <div class="card" style="text-align: center; border-bottom: 4px solid var(--primary); margin: 10px auto; max-width: 90%;">
     <h3>🐾 Bem-vindo à sua Rede de Carinho!</h3>
@@ -599,20 +620,34 @@ const listaPalavras = ["PEIXE", "GATO", "AMOR", "BANHO", "CAO", "RACAO", "VET", 
 
 const bancoCW = [
     { 
-        tips: ["1. Amigo Fiel", "2. Faz Miau", "3. No pescoço", "4. Médico"], 
-        data: [[1,1,'C'],[1,2,'A'],[1,3,'O'],[3,1,'G'],[3,2,'A'],[3,3,'T'],[3,4,'O'],[5,1,'C'],[5,2,'O'],[5,3,'L'],[5,4,'E'],[5,5,'I'],[5,6,'R'],[5,7,'A'],[7,1,'V'],[7,2,'E'],[7,3,'T']] 
-    },
-    { 
-        tips: ["1. Onde dorme", "2. Ama roer", "3. Som do cão", "4. Limpeza"], 
-        data: [[1,1,'C'],[1,2,'A'],[1,3,'M'],[1,4,'A'],[3,1,'O'],[3,2,'S'],[3,3,'S'],[3,4,'O'],[5,1,'A'],[5,2,'U'],[5,3,'A'],[5,4,'U'],[7,1,'B'],[7,2,'A'],[7,3,'N'],[7,4,'H'],[7,5,'O']] 
-    },
-    { 
-        tips: ["1. Som do gato (Horiz.)", "2. Fruta (Branca de Neve) (Vert.)", "3. Fruta amarela (Horiz.)", "4. Essencial para vida (Vert.)"], 
+        tips: ["1. Amigo Fiel (Horiz)", "2. Médico (Vert)", "3. No pescoço (Horiz)"], 
         data: [
+            // CAO (Horizontal na linha 1)
+            [1,1,'C'],[1,2,'A'],[1,3,'O'],
+            // VET (Vertical começando no V do CAO - não tem V em CAO, então vamos cruzar no C)
+            [1,1,'C'],[2,1,'V'],[3,1,'E'],[4,1,'T'],
+            // COLEIRA (Horizontal cruzando com o T de VET)
+            [4,1,'T'],[4,2,'O'],[4,3,'L'],[4,4,'E'],[4,5,'I'],[4,6,'R'],[4,7,'A']
+        ] 
+    },
+    { 
+        tips: ["1. Som do cão (Horiz)", "2. Objeto de roer (DIAGONAL)"], 
+        data: [
+            // AUAU (Horizontal)
+            [1,1,'A'],[1,2,'U'],[1,3,'A'],[1,4,'U'],
+            // OSSO (Diagonal - Linha e Coluna aumentam juntas)
+            [1,1,'O'],[2,2,'S'],[3,3,'S'],[4,4,'O']
+        ] 
+    },
+    { 
+        tips: ["1. Som do gato (Horiz)", "2. Fruta (Vertical)", "3. Essencial (Horiz)"], 
+        data: [
+            // MIAU (Horizontal)
             [1,1,'M'],[1,2,'I'],[1,3,'A'],[1,4,'U'],
-            [2,1,'A'],[3,1,'Ç'],[4,1,'Ã'],
-            [4,1,'B'],[4,2,'A'],[4,3,'N'],[4,4,'A'],[4,5,'N'],[4,6,'A'],
-            [2,3,'A'],[3,3,'G'],[5,3,'A'] 
+            // MAÇÃ (Vertical cruzando no M de MIAU)
+            [1,1,'M'],[2,1,'A'],[3,1,'Ç'],[4,1,'Ã'],
+            // AGUA (Horizontal cruzando no A de MAÇÃ)
+            [2,1,'A'],[2,2,'G'],[2,3,'U'],[2,4,'A']
         ] 
     }
 ];
@@ -781,22 +816,6 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
