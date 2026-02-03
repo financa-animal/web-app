@@ -126,18 +126,24 @@
         <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
     </div>
 
-    <div class="card">
-        <h4>🦴 Idade Humana do Pet</h4>
-        <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">Entender a fase de vida do seu pet ajuda a adaptar a dieta e o nível de atividades físicas.</p>
-        <input type="number" id="idadeReal" placeholder="Idade do pet (anos)">
-        <select id="portePet">
-            <option value="7">Cão Pequeno / Gato</option>
-            <option value="8">Cão Médio</option>
-            <option value="9">Cão Grande</option>
-        </select>
-        <button onclick="calcIdade()">Descobrir Idade Real</button>
-        <div id="resIdade" style="margin-top: 10px; font-weight: bold; text-align: center;"></div>
-    </div>
+   <div class="card">
+    <h4>🦴 Idade Humana do Pet</h4>
+    <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
+        Entender a fase de vida do seu pet ajuda a adaptar a dieta e o nível de atividades físicas.
+    </p>
+    
+    <input type="number" id="idadePet" placeholder="Idade do pet (anos)" min="1">
+    
+    <select id="portePet">
+        <option value="pequeno">Cão Pequeno / Gato</option>
+        <option value="medio">Cão Médio</option>
+        <option value="grande">Cão Grande</option>
+    </select>
+    
+    <button onclick="calcularIdadeHumana()">Descobrir Idade Real</button>
+    
+    <div id="resultadoIdade" style="margin-top: 10px; font-weight: bold; text-align: center; color: var(--secondary);"></div>
+</div>
 
     <div class="card">
         <h4>💊 Próxima Dose (Vermífugo/Pulgas)</h4>
@@ -735,12 +741,37 @@ function calcAgua() {
     if(p > 0) document.getElementById('resAgua').innerHTML = `Meta: ${(p * f)}ml diários 💧`;
 }
 
-function calcIdade() {
-    const idade = document.getElementById('idadeReal').value;
-    const porte = document.getElementById('portePet').value;
-    if(idade > 0) document.getElementById('resIdade').innerHTML = `Seu pet tem o equivalente a <b>${idade * porte} anos</b> humanos! 👴👵`;
-}
+function calcularIdadeHumana() {
+    const idadeInput = document.getElementById("idadePet").value;
+    const porte = document.getElementById("portePet").value;
+    const resultado = document.getElementById("resultadoIdade");
 
+    if (!idadeInput || idadeInput <= 0) {
+        resultado.innerText = "Por favor, digite uma idade válida! 🐾";
+        return;
+    }
+
+    const idadePet = parseInt(idadeInput);
+    let idadeHumana = 0;
+
+    // Sua lógica nota 10:
+    if (idadePet === 1) {
+        idadeHumana = 15;
+    } else if (idadePet === 2) {
+        idadeHumana = 24;
+    } else if (idadePet > 2) {
+        let extra = idadePet - 2;
+        if (porte === "pequeno") {
+            idadeHumana = 24 + (extra * 4);
+        } else if (porte === "medio") {
+            idadeHumana = 24 + (extra * 5);
+        } else if (porte === "grande") {
+            idadeHumana = 24 + (extra * 6.5);
+        }
+    }
+
+    resultado.innerHTML = `🦴 Idade humana aproximada: <strong>${Math.round(idadeHumana)} anos</strong>`;
+}
 function calcDose() {
     const dataInput = document.getElementById('dataDose').value;
     if(dataInput) {
@@ -816,6 +847,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
