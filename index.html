@@ -358,12 +358,12 @@
       <div class="pet-food-card warning-eat">
         <h3>⚠️ Atenção / Depende</h3>
         <ul>
-          <li><span>🍿</span> Pipoca (sem sal/manteiga)</li>
-          <li><span>维持</span> Leite (intolerância comum)</li>
-          <li><span>🍞</span> Pão (só um pedacinho)</li>
+          <li><span>🍿</span> Pipoca (sem sal)</li>
+          <li><span>🥛</span> Leite (cuidado)</li>
+          <li><span>🍞</span> Pão (um pouco)</li>
           <li><span>🍉</span> Melancia (sem sementes)</li>
-          <li><span>🥔</span> Batata (cozida apenas)</li>
-          <li><span>🧀</span> Queijo (porção mínima)</li>
+          <li><span>🥔</span> Batata (cozida)</li>
+          <li><span>🧀</span> Queijo (mínimo)</li>
         </ul>
       </div>
 
@@ -372,10 +372,10 @@
         <ul>
           <li><span>🍫</span> Chocolate</li>
           <li><span>🧅</span> Alho e cebola</li>
-          <li><span>🍇</span> Uva / Uva-passa</li>
+          <li><span>🍇</span> Uva / Passas</li>
           <li><span>🥑</span> Abacate</li>
           <li><span>☕</span> Café</li>
-          <li><span>🍬</span> Doces / Xilitol</li>
+          <li><span>🍬</span> Xilitol / Doces</li>
           <li><span>🍟</span> Frituras</li>
           <li><span>🦴</span> Ossos cozidos</li>
         </ul>
@@ -384,13 +384,135 @@
     </div>
   </div>
 
-  <button class="pet-btn" onclick="toggleFoodInfo()">Ver lista completa</button>
-
-  <p id="extraFoodInfo" class="pet-extra">
-    Outros cuidados: nada de temperos, fritura ou sal. Petiscos = máximo 10% da alimentação diária.
-    Se ingerir algo proibido → veterinário imediatamente.
-  </p>
+  <div style="text-align: center;">
+    <button class="pet-btn" onclick="toggleFoodInfo()">Ver lista completa</button>
+    <p id="extraFoodInfo" class="pet-extra">
+      <strong>Outros cuidados:</strong> nada de temperos, fritura ou sal. Petiscos devem ser no máximo 10% da alimentação diária.<br>
+      🚨 <em>Se o seu pet ingerir algo proibido, procure um veterinário imediatamente!</em>
+    </p>
+  </div>
 </section>
+
+<style>
+.pet-food-section {
+  margin: 50px 0;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+.pet-food-title {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.pet-food-wrapper {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 10px;
+}
+
+.pet-food-columns {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  width: max-content;
+  margin: 0 auto;
+}
+
+.pet-food-card {
+  min-width: 280px;
+  flex: 0 0 280px;
+  border-radius: 16px;
+  padding: 22px;
+  background: #fff;
+  border: 3px solid #ddd; /* Aumentei a grossura da borda */
+  scroll-snap-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s ease forwards;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Cores das Bordas Reforçadas */
+.can-eat { border-color: #79c98c !important; }
+.warning-eat { border-color: #f1c40f !important; }
+.no-eat { border-color: #f07b7b !important; }
+
+.pet-food-card:nth-child(2) { animation-delay: 0.2s; }
+.pet-food-card:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pet-food-card h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.pet-food-card ul { list-style: none; padding: 0; }
+.pet-food-card li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.pet-food-card li span {
+  font-size: 24px;
+  width: 32px;
+  text-align: center;
+}
+
+.pet-btn {
+  display: block;
+  margin: 25px auto 15px;
+  padding: 12px 25px;
+  border-radius: 25px;
+  border: none;
+  background: #333;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pet-btn:hover {
+  background: #555;
+  transform: scale(1.05);
+}
+
+.pet-extra {
+  text-align: center;
+  font-size: 15px;
+  color: #444;
+  display: none; 
+  max-width: 600px;
+  margin: 15px auto;
+  padding: 15px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 10px;
+  border: 1px dashed #999;
+}
+</style>
+
+<script>
+function toggleFoodInfo() {
+  const info = document.getElementById("extraFoodInfo");
+  if (info.style.display === "block") {
+    info.style.display = "none";
+  } else {
+    info.style.display = "block";
+    // Desliza a tela para o texto extra aparecer
+    info.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+</script>
     
 <h3 style="text-align: center; color: var(--primary); margin-top: 40px;">📰 Guia do Novo Tutor</h3>
 
@@ -659,6 +781,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
