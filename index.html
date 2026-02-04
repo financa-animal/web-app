@@ -162,18 +162,43 @@
         <div id="resDose" style="margin-top: 10px; font-weight: bold; text-align: center; color: #e67e22;"></div>
     </div>
     
-   <div class="card" id="checkup-area">
-        <h4>🩺 Check-up de Sinais de Alerta</h4>
-        <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">Este checklist ajuda a identificar sinais sutis que podem indicar a necessidade de uma consulta veterinária.</p>
-        <div style="text-align: left; display: inline-block;">
-            <label><input type="checkbox" class="alerta-pet"> Perda de apetite ou peso</label><br>
-            <label><input type="checkbox" class="alerta-pet"> Vômitos ou diarreia frequente</label><br>
-            <label><input type="checkbox" class="alerta-pet"> Coceira excessiva ou feridas</label><br>
-            <label><input type="checkbox" class="alerta-pet"> Cansaço ou desânimo</label><br>
-        </div>
-        <button onclick="verificarSaude()" style="margin-top:10px;">Verificar Checklist</button>
-        <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px;"></div>
+<div class="card" id="checkup-area">
+    <h4>🩺 Check-up de Sinais de Alerta</h4>
+    <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
+        Este checklist ajuda a identificar sinais sutis que podem indicar a necessidade de uma consulta veterinária.
+    </p>
+
+    <div style="text-align: left; display: inline-block;">
+
+        <strong>🐶🐱 Cães e Gatos</strong><br>
+        <label><input type="checkbox" class="alerta-pet"> Perda de apetite ou peso</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Vômitos ou diarreia frequente</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Coceira excessiva, feridas ou queda de pelo</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Cansaço, desânimo ou mudança de comportamento</label><br><br>
+
+        <strong>🐇🐹 Porquinho-da-índia, Hamster e Coelho</strong><br>
+        <label><input type="checkbox" class="alerta-pet"> Parou de comer ou roer</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Fezes muito pequenas, moles ou ausência de fezes</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Dentes muito grandes ou dificuldade para mastigar</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Fica escondido o tempo todo ou menos ativo</label><br><br>
+
+        <strong>🦜 Calopsita, Papagaio e Aves</strong><br>
+        <label><input type="checkbox" class="alerta-pet"> Ave quieta demais ou parou de cantar</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Demonstra dificuldade para respirar (bico aberto)</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Fica com penas arrepiadas por muito tempo</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Mudança nas fezes (muito líquidas ou cor diferente)</label><br><br>
+
+        <strong>🐟 Peixes</strong><br>
+        <label><input type="checkbox" class="alerta-pet"> Nadar de lado, boiar ou ficar no fundo</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Manchas, pontos brancos ou feridas no corpo</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Respiração acelerada ou na superfície</label><br>
+        <label><input type="checkbox" class="alerta-pet"> Falta de apetite</label><br>
+
     </div>
+
+    <button onclick="verificarSaude()" style="margin-top:10px;">Verificar Checklist</button>
+    <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px;"></div>
+</div>
 
     <h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
     <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
@@ -1780,6 +1805,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
