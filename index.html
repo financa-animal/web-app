@@ -25,6 +25,54 @@
             --text: #2b2b2b; 
         }
 
+/* CHECK-UP INTERATIVO */
+.pets-scroll{
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  padding:10px 0;
+}
+
+.pet-card{
+  min-width:120px;
+  border:none;
+  border-radius:12px;
+  padding:10px;
+  background:#e8f5e9;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.pet-card:hover{
+  transform:scale(1.05);
+}
+
+.pergunta{
+  margin:12px 0;
+}
+
+.pergunta button{
+  margin-left:8px;
+  border:none;
+  border-radius:8px;
+  padding:4px 10px;
+  cursor:pointer;
+  background:#f0f0f0;
+  width:auto;
+  font-size:12px;
+
+  transition:0.2s; /* 👈 coloca AQUI */
+}
+/* Cores diferentes */
+.pergunta button:first-of-type { background:#ffeaea; }  /* SIM */
+.pergunta button:last-of-type { background:#eaf7ea; }   /* NÃO */
+
+/* Efeito ao passar o mouse */
+.pergunta button:hover{
+  transform:scale(1.05);
+}
+        
         body { 
             margin: 0; 
             font-family: 'Segoe UI', sans-serif; 
@@ -164,46 +212,36 @@
     
 <div class="card" id="checkup-area">
     <h4>🩺 Check-up de Sinais de Alerta</h4>
-    <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
-        Este checklist ajuda a identificar sinais sutis que podem indicar a necessidade de uma consulta veterinária.
-    </p>
 
-    <div style="text-align: left; display: inline-block;">
-
-        <strong>🐶🐱 Cães e Gatos</strong><br>
-        <label><input type="checkbox" class="alerta-pet"> Perda de apetite ou peso</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Vômitos ou diarreia frequente</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Coceira excessiva, feridas ou queda de pelo</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Cansaço, desânimo ou mudança de comportamento</label><br><br>
-
-        <strong>🐇🐹 Porquinho-da-índia, Hamster e Coelho</strong><br>
-        <label><input type="checkbox" class="alerta-pet"> Parou de comer ou roer</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Fezes muito pequenas, moles ou ausência de fezes</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Dentes muito grandes ou dificuldade para mastigar</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Fica escondido o tempo todo ou menos ativo</label><br><br>
-
-        <strong>🦜 Calopsita, Papagaio e Aves</strong><br>
-        <label><input type="checkbox" class="alerta-pet"> Ave quieta demais ou parou de cantar</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Demonstra dificuldade para respirar (bico aberto)</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Fica com penas arrepiadas por muito tempo</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Mudança nas fezes (muito líquidas ou cor diferente)</label><br><br>
-
-        <strong>🐟 Peixes</strong><br>
-        <label><input type="checkbox" class="alerta-pet"> Nadar de lado, boiar ou ficar no fundo</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Manchas, pontos brancos ou feridas no corpo</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Respiração acelerada ou na superfície</label><br>
-        <label><input type="checkbox" class="alerta-pet"> Falta de apetite</label><br>
-
+    <div class="pets-scroll">
+      <button class="pet-card" onclick="mostrarPet('cao')">🐶 Cão</button>
+      <button class="pet-card" onclick="mostrarPet('gato')">🐱 Gato</button>
+      <button class="pet-card" onclick="mostrarPet('ave')">🦜 Aves</button>
+      <button class="pet-card" onclick="mostrarPet('roedor')">🐹 Pequenos Mamíferos</button>
+      <button class="pet-card" onclick="mostrarPet('peixe')">🐟 Peixes</button>
     </div>
 
-    <button onclick="verificarSaude()" style="margin-top:10px;">Verificar Checklist</button>
-    <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px;"></div>
-</div>
+    <div id="check-cao" class="checklist" style="display:none;">
+      <h4>🐶 Check-up Cães</h4>
+      <div class="pergunta">Perda de apetite?
+        <button onclick="marcar(1)">Sim</button>
+        <button onclick="marcar(0)">Não</button>
+      </div>
+      <div class="pergunta">Vômitos ou diarreia?
+        <button onclick="marcar(1)">Sim</button>
+        <button onclick="marcar(0)">Não</button>
+      </div>
+    </div>
 
-    <h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
-    <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
-        Aprender brincando é a melhor forma de cuidar! Nossos jogos foram criados para testar seus conhecimentos sobre alimentação e comportamento pet de forma leve e interativa.
-    </p>
+    <button onclick="mostrarResultado()" style="margin-top:10px;">Ver Resultado</button>
+    <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px;"></div>
+
+</div> <!-- 🔥 FECHA O CARD AQUI -->
+
+<h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
+<p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
+    Aprender brincando é a melhor forma de cuidar! Nossos jogos foram criados para testar seus conhecimentos sobre alimentação e comportamento pet de forma leve e interativa.
+</p>
 
     <div class="card">
         <h4>🍎 Pode Comer?</h4>
@@ -1739,21 +1777,29 @@ function calcDose() {
     }
 }
 
-function verificarSaude() {
-    const marcados = document.querySelectorAll('.alerta-pet:checked').length;
-    const res = document.getElementById('resSaude');
-    if (marcados === 0) res.innerHTML = "✅ Continue observando seu pet com carinho!";
-    else if (marcados < 2) res.innerHTML = "🟡 Fique atento. Se os sintomas persistirem, fale com um vet.";
-    else res.innerHTML = "🔴 Atenção! Recomendamos levar seu pet ao veterinário o quanto antes.";
+let pontos = 0;
+
+function marcar(valor){
+  pontos += valor;
 }
 
-function sendMsg() {
-    const n = document.getElementById('chatNick').value || "Tutor";
-    const i = document.getElementById('chatInput');
-    if(i.value) {
-        document.getElementById('chatMsgs').innerHTML += `<div><b>${n}:</b> ${i.value}</div>`;
-        i.value = '';
-    }
+function mostrarResultado(){
+  let res = document.getElementById("resSaude");
+
+  if(pontos == 0){
+    res.innerHTML = "🟢 Nenhum sinal preocupante no momento.";
+    res.style.color = "green";
+  }
+  else if(pontos <= 2){
+    res.innerHTML = "🟡 Fique atento e observe mudanças.";
+    res.style.color = "orange";
+  }
+  else{
+    res.innerHTML = "🔴 Procure um veterinário o quanto antes.";
+    res.style.color = "red";
+  }
+
+  pontos = 0;
 }
 
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
@@ -1805,6 +1851,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
