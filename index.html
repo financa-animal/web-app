@@ -1802,6 +1802,24 @@ function mostrarResultado(){
   pontos = 0;
 }
 
+function mostrarPet(tipo) {
+
+  // esconde todos os checklists
+  document.querySelectorAll('.checklist').forEach(el => {
+    el.style.display = "none";
+  });
+
+  // mostra só o escolhido
+  let area = document.getElementById("check-" + tipo);
+  if(area){
+    area.style.display = "block";
+  }
+
+  // efeito visual no botão ativo
+  document.querySelectorAll('.pet-card').forEach(btn => btn.style.opacity = "0.5");
+  event.target.style.opacity = "1";
+}
+    
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
 function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
 
@@ -1851,6 +1869,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
