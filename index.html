@@ -1620,7 +1620,47 @@ function toggleFoodInfo() {
         </div>
     </footer>
 </article>
+    
+<section id="painel-aquarista" style="max-width: 800px; margin: -20px auto 40px; font-family: 'Segoe UI', sans-serif;">
+    
+    <div id="setup-area" style="display: none; background-color: #f0f8ff; border: 1px solid #b3e5fc; border-left: 8px solid #0288d1; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px;">
+        <h3 style="color: #0288d1; margin-top: 0; display: flex; align-items: center; gap: 10px;">🛠️ Passo a Passo da Montagem</h3>
+        <div style="display: grid; gap: 15px;">
+            <p><strong>1. Escolha do Aquário:</strong> Evite menos de 20L. Quanto maior o volume, mais fácil é manter a química da água estável.</p>
+            <p><strong>2. Condicionamento:</strong> Nunca use água da torneira pura. Use condicionadores para remover cloro e metais pesados.</p>
+            <p><strong>3. Filtragem:</strong> O filtro deve circular de 3 a 5 vezes o volume total por hora (ex: aquário de 50L precisa de filtro de 250L/h).</p>
+            <p><strong>4. Ciclagem (ESSENCIAL):</strong> Deixe o aquário ligado com filtro e decorações por 20 a 30 dias <strong>antes</strong> de colocar os peixes para criar bactérias boas.</p>
+            <p><strong>5. Temperatura:</strong> Peixes tropicais exigem termostato configurado entre 24°C e 28°C.</p>
+        </div>
+        <button onclick="fecharGuiasPeixe()" style="margin-top: 15px; background: #0288d1; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Fechar Guia</button>
+    </div>
 
+    <div id="doencas-area" style="display: none; background-color: #fff5f5; border: 1px solid #ffcdd2; border-left: 8px solid #c62828; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <h3 style="color: #c62828; margin-top: 0;">🦠 Identificação de Doenças Comuns</h3>
+        
+        <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 10px; border: 1px solid #eee;">
+            <b style="color: #d84315;">⚪ Íctio:</b> Pontinhos brancos como sal. <br>
+            <small>Causa: Choque térmico. Tratamento: Eleve a temperatura gradualmente.</small>
+        </div>
+
+        <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 10px; border: 1px solid #eee;">
+            <b style="color: #d84315;">🩸 Podridão:</b> Nadadeiras desfiando ou com bordas brancas. <br>
+            <small>Causa: Má qualidade da água. Tratamento: Trocas de água (TPA) imediatas.</small>
+        </div>
+
+        <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 10px; border: 1px solid #eee;">
+            <b style="color: #d84315;">🤢 Hidropsia:</b> Corpo inchado e escamas arrepiadas (parece uma pinha). <br>
+            <small>Causa: Falência de órgãos. Prevenção: Alimentação de qualidade.</small>
+        </div>
+
+        <div style="padding: 10px; background: white; border-radius: 10px; border: 1px solid #eee;">
+            <b style="color: #d84315;">🧫 Amônia/Nitrito:</b> Peixe ofegante na superfície. <br>
+            <small>Causa: Falta de filtragem biológica ou excesso de comida.</small>
+        </div>
+        <button onclick="fecharGuiasPeixe()" style="margin-top: 15px; background: #c62828; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Fechar Guia</button>
+    </div>
+</section>
+    
 <div class="grid-tools" style="margin-top: -20px;">
     <div class="card-tool" style="grid-column: 1 / -1; border-top: 5px solid #0277bd;">
         <h3>🐠 Painel do Aquarista</h3>
@@ -1967,6 +2007,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
