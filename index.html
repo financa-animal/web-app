@@ -119,17 +119,17 @@
 <body>
     
 <div class="container">
-<header>🐾 FofoPet</header>
-<div class="card" style="text-align: center; border-bottom: 4px solid var(--primary); margin: 10px auto; max-width: 90%;">
-    <h3>🐾 Bem-vindo à sua Rede de Carinho!</h3>
-    <p style="font-size: 14px; color: #555; line-height: 1.5; padding: 0 10px;">
-        O <b>FofoPet</b> foi criado para facilitar a rotina de quem ama. 
-        Aqui, unimos tecnologia e cuidado animal em ferramentas simples que 
-        ajudam você a monitorar a saúde do seu pet enquanto se diverte com nossos jogos educativos.
-    </p>
-</div>
+    <header>🐾 FofoPet</header>
+    
+    <div class="card" style="text-align: center; border-bottom: 4px solid var(--primary); margin: 10px auto; max-width: 90%;">
+        <h3>🐾 Bem-vindo à sua Rede de Carinho!</h3>
+        <p style="font-size: 14px; color: #555; line-height: 1.5; padding: 0 10px;">
+            O <b>FofoPet</b> foi criado para facilitar a rotina de quem ama. 
+            Aqui, unimos tecnologia e cuidado animal em ferramentas simples que 
+            ajjudam você a monitorar a saúde do seu pet enquanto se diverte com nossos jogos educativos.
+        </p>
+    </div>
 
-<div class="container">
     <div class="card" style="background: var(--primary); color: white; text-align: center; margin-bottom: 10px;">
         <div id="tipPrincipal" style="font-weight: bold; font-size: 16px;">Dica do Dia: Carregando...</div>
     </div>
@@ -144,7 +144,7 @@
             <p id="guiaDieta">Chocolate é tóxico para cães e gatos.</p>
         </div>
     </div>
-
+    
     <div class="card">
         <h4>🔍 Caça-Palavras Infinito</h4>
         <div id="cpList" style="text-align:center; font-weight:bold; color:var(--secondary); margin-bottom:10px; font-size: 11px; text-transform: uppercase;"></div>
@@ -169,36 +169,66 @@
         <div style="max-width: 140px; margin: 15px auto;"><canvas id="petChart"></canvas></div>
     </div>
 
-    <div class="card" id="calculadora-agua">
-        <h4>💧 Calculadora de Água</h4>
-        <p style="font-size: 12px; color: #777; margin-bottom: 15px; text-align: center;">A hidratação correta é vital para prevenir doenças renais e manter a energia do seu pet.</p>
-        <input type="number" id="pesoPet" placeholder="Peso do Pet (kg)">
-        <select id="tipoPet">
+   <div class="card" id="calculadora-agua">
+    <h4>💧 Calculadora de Água e Aquário</h4>
+    <p style="font-size: 12px; color: #777; margin-bottom: 15px; text-align: center;">
+        A hidratação correta previne doenças renais. Para peixes, calculamos o volume ideal do lar!
+    </p>
+    
+    <input type="number" id="pesoPet" placeholder="Peso (kg) ou Tamanho do peixe (cm)">
+    
+    <select id="tipoPet">
+        <optgroup label="Cães e Gatos">
             <option value="60">Cão Ativo (60ml/kg)</option>
             <option value="50">Cão Caseiro (50ml/kg)</option>
             <option value="45">Gato (45ml/kg)</option>
-        </select>
-        <button onclick="calcAgua()">Calcular Meta</button>
-        <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
-    </div>
+        </optgroup>
+        <optgroup label="Aves">
+            <option value="80">Papagaio (80ml/kg)</option>
+            <option value="50">Calopsita (50ml/kg)</option>
+        </optgroup>
+        <optgroup label="Pequenos Mamíferos">
+            <option value="100">Hamster (100ml/kg)</option>
+            <option value="150">Porquinho-da-índia (150ml/kg)</option>
+            <option value="120">Coelho (120ml/kg)</option>
+        </optgroup>
+        <optgroup label="Aquarismo">
+            <option value="peixe">🐟 Peixe (Cálculo de Aquário)</option>
+        </optgroup>
+    </select>
+    
+    <button onclick="calcAgua()">Calcular Necessidade</button>
+    <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center; min-height: 20px;"></div>
+</div>
 
-  <div class="card" id="idade-area">
-    <h4>🦴 Idade Humana do Pet</h4>
+ <div class="card" id="idade-area">
+    <h4>🦴 Idade Real do seu Pet</h4>
     <p style="font-size: 11px; color: #777; margin-bottom: 10px; text-align: center;">
-        Entender a fase de vida do seu pet ajuda a adaptar a dieta e o nível de atividades físicas.
+        Cada espécie envelhece em um ritmo próprio. Descubra a fase de vida do seu amigo!
     </p>
     
-    <input type="number" id="idadePet" placeholder="Idade do pet (anos)" min="1">
+    <input type="number" id="idadePet" placeholder="Idade do pet (anos)" min="0" step="1">
     
     <select id="portePet">
-        <option value="pequeno">Cão Pequeno / Gato</option>
-        <option value="medio">Cão Médio</option>
-        <option value="grande">Cão Grande</option>
+        <optgroup label="Cães e Gatos">
+            <option value="pequeno">Cão Pequeno / Gato</option>
+            <option value="medio">Cão Médio</option>
+            <option value="grande">Cão Grande</option>
+        </optgroup>
+        <optgroup label="Aves">
+            <option value="papagaio">Papagaio (Vida Longa)</option>
+            <option value="calopsita">Calopsita</option>
+        </optgroup>
+        <optgroup label="Pequenos Pets">
+            <option value="hamster">Hamster</option>
+            <option value="coelho">Coelho</option>
+            <option value="porquinho">Porquinho-da-índia</option>
+        </optgroup>
     </select>
     
     <button onclick="calcularIdadeHumana()">Descobrir Idade Real</button>
     
-    <div id="resultadoIdade" style="margin-top: 10px; font-weight: bold; text-align: center; color: var(--secondary);"></div>
+    <div id="resultadoIdade" style="margin-top: 10px; font-weight: bold; text-align: center; color: var(--secondary); min-height: 20px;"></div>
 </div>
 
     <div class="card" id="vacinas-area">
@@ -217,27 +247,54 @@
       <button class="pet-card" onclick="mostrarPet('cao')">🐶 Cão</button>
       <button class="pet-card" onclick="mostrarPet('gato')">🐱 Gato</button>
       <button class="pet-card" onclick="mostrarPet('ave')">🦜 Aves</button>
-      <button class="pet-card" onclick="mostrarPet('roedor')">🐹 Pequenos Mamíferos</button>
+      <button class="pet-card" onclick="mostrarPet('roedor')">🐹 Roedores</button>
       <button class="pet-card" onclick="mostrarPet('peixe')">🐟 Peixes</button>
     </div>
 
     <div id="check-cao" class="checklist" style="display:none;">
       <h4>🐶 Check-up Cães</h4>
-      <div class="pergunta">Perda de apetite?
-        <button onclick="marcar(1)">Sim</button>
-        <button onclick="marcar(0)">Não</button>
-      </div>
-      <div class="pergunta">Vômitos ou diarreia?
-        <button onclick="marcar(1)">Sim</button>
-        <button onclick="marcar(0)">Não</button>
-      </div>
+      <div class="pergunta">1. Perda de apetite ou muita sede? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">2. Vômitos ou diarreia? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">3. Coceira excessiva ou feridas? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">4. Desânimo ou dificuldade de andar? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
     </div>
 
-    <button onclick="mostrarResultado()" style="margin-top:10px;">Ver Resultado</button>
-    <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px;"></div>
+    <div id="check-gato" class="checklist" style="display:none;">
+      <h4>🐱 Check-up Gatos</h4>
+      <div class="pergunta">1. Está urinando fora da caixa? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">2. Esconde-se mais que o normal? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">3. Tosse (como se estivesse engasgado)? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">4. Gengivas muito vermelhas ou mau hálito? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+    </div>
 
-</div> <!-- 🔥 FECHA O CARD AQUI -->
+    <div id="check-ave" class="checklist" style="display:none;">
+      <h4>🦜 Check-up Aves</h4>
+      <div class="pergunta">1. Penas eriçadas ou muito tempo no fundo? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">2. Olhos fechados ou secreção no bico? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">3. Fezes mudaram de cor ou consistência? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">4. Parou de cantar ou de se exercitar? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+    </div>
 
+    <div id="check-roedor" class="checklist" style="display:none;">
+      <h4>🐹 Check-up Roedores</h4>
+      <div class="pergunta">1. Dentes parecem muito grandes (não rói)? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">2. Chiado ou barulho ao respirar? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">3. Caroços ou inchaços pelo corpo? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">4. Olhos ou nariz com crostas? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+    </div>
+
+    <div id="check-peixe" class="checklist" style="display:none;">
+      <h4>🐟 Check-up Peixes</h4>
+      <div class="pergunta">1. Pontos brancos ou "algodão" no corpo? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">2. Nadadeiras parecem roídas ou desfeitas? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">3. Nada de lado ou com dificuldade? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+      <div class="pergunta">4. Ofegante na superfície da água? <button onclick="marcar(1)">Sim</button><button onclick="marcar(0)">Não</button></div>
+    </div>
+
+    <button onclick="mostrarResultado()" style="margin-top:15px; background: var(--secondary);">Ver Resultado do Diagnóstico</button>
+    <div id="resSaude" style="margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; padding: 10px; border-radius: 8px;"></div>
+</div>
+    
 <h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
 <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
     Aprender brincando é a melhor forma de cuidar! Nossos jogos foram criados para testar seus conhecimentos sobre alimentação e comportamento pet de forma leve e interativa.
@@ -1869,6 +1926,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
