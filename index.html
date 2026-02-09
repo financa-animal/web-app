@@ -403,85 +403,39 @@
     </div>
 </div>
 
-  <section class="cards-section">
-  <h2>🐾 7 Itens Essenciais para Adotar um Pet</h2>
+ <section class="cards-section">
+  <h2>🐠 Painel do Aquarista</h2>
 
   <div class="cards-grid">
-    <a href="#alimentacao" class="card card-link">
-      <h3>🍽️ Alimentação Adequada</h3>
-      <p>Ração de qualidade adequada à idade e porte do pet.</p>
-    </a>
+    <div onclick="mostrarGuiaPeixe('montagem')" class="card card-link" style="cursor: pointer; border-top: 5px solid #0288d1;">
+      <h3>🛠️ Guia de Montagem</h3>
+      <p>Passo a passo para montar seu primeiro aquário do zero.</p>
+    </div>
 
-    <a href="#potes" class="card card-link">
-      <h3>🥣 Potes de Comida e Água</h3>
-      <p>Prefira potes de inox ou cerâmica, mais higiênicos.</p>
-    </a>
-
-    <a href="#descanso" class="card card-link">
-      <h3>🛏️ Local de Descanso</h3>
-      <p>Cama confortável em local tranquilo e seguro.</p>
-    </a>
-
-    <a href="#higiene" class="card card-link">
-      <h3>🧼 Higiene Básica</h3>
-      <p>Itens essenciais para manter a saúde do pet.</p>
-    </a>
-
-    <a href="#brinquedos" class="card card-link">
-      <h3>🧸 Brinquedos e Estímulos</h3>
-      <p>Evite estresse e comportamentos destrutivos.</p>
-    </a>
-
-    <a href="#seguranca" class="card card-link">
-      <h3>🔒 Segurança do Ambiente</h3>
-      <p>Ambiente adaptado evita acidentes.</p>
-    </a>
-
-    <a href="#veterinario" class="card card-link">
-      <h3>🩺 Acompanhamento Veterinário</h3>
-      <p>Consultas, vacinas e cuidados contínuos.</p>
-    </a>
+    <div onclick="mostrarGuiaPeixe('doencas')" class="card card-link" style="cursor: pointer; border-top: 5px solid #e67e22;">
+      <h3>🦠 Guia de Doenças</h3>
+      <p>Como identificar e tratar as doenças mais comuns.</p>
+    </div>
   </div>
-</section>
 
-    <section class="cards-section">
-  <h2>🐱 Guia de Gatificação</h2>
+  <div id="container-guias-peixes" style="margin-top: 20px;">
+    
+    <div id="setup-area" style="display: none; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid #0288d1; text-align: left;">
+        <h3 style="color: #0288d1; margin-top: 0;">🛠️ Guia de Montagem do Aquário</h3>
+        <p>✅ <b>Tamanho:</b> Mínimo de 20 litros.</p>
+        <p>✅ <b>Filtro:</b> Deve girar 3 a 5x o volume da água por hora.</p>
+        <p>✅ <b>Ciclagem:</b> Aguarde 30 dias antes de colocar os peixes.</p>
+        <button onclick="fecharGuiasPeixe()" style="margin-top: 15px; width: 100%; background: #f5f5f5; border: 1px solid #ddd; padding: 10px; border-radius: 10px; cursor: pointer;">收 Fechar Guia</button>
+    </div>
 
-  <div class="cards-grid">
-    <a href="#vertical" class="card card-link">
-      <h3>🧗 Espaços Verticais</h3>
-      <p>Prateleiras e árvores para escalar e observar.</p>
-    </a>
+    <div id="doencas-area" style="display: none; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid #e67e22; text-align: left;">
+        <h3 style="color: #e67e22; margin-top: 0;">🦠 Principais Doenças</h3>
+        <p>⚪ <b>Íctio:</b> Pontos brancos. Aumente a temperatura.</p>
+        <p>🩸 <b>Podridão:</b> Nadadeiras desfiadas. Verifique a amônia.</p>
+        <p>🧫 <b>Amônia:</b> Peixes na superfície. Faça TPA urgente.</p>
+        <button onclick="fecharGuiasPeixe()" style="margin-top: 15px; width: 100%; background: #f5f5f5; border: 1px solid #ddd; padding: 10px; border-radius: 10px; cursor: pointer;">收 Fechar Guia</button>
+    </div>
 
-    <a href="#observacao" class="card card-link">
-      <h3>🪟 Pontos de Observação</h3>
-      <p>Janelas teladas com vista externa.</p>
-    </a>
-
-    <a href="#arranhadores" class="card card-link">
-      <h3>🐾 Arranhadores</h3>
-      <p>Protegem móveis e reduzem estresse.</p>
-    </a>
-
-    <a href="#enriquecimento" class="card card-link">
-      <h3>🧸 Enriquecimento Ambiental</h3>
-      <p>Brinquedos, túneis e desafios diários.</p>
-    </a>
-
-    <a href="#areia" class="card card-link">
-      <h3>🚽 Caixas de Areia</h3>
-      <p>Quantidade e limpeza adequadas.</p>
-    </a>
-
-    <a href="#rotina" class="card card-link">
-      <h3>⏰ Rotina</h3>
-      <p>Previsibilidade gera segurança.</p>
-    </a>
-
-    <a href="#respeito" class="card card-link">
-      <h3>💜 Respeito ao Espaço</h3>
-      <p>Interação no tempo do gato.</p>
-    </a>
   </div>
 </section>
 
@@ -2150,6 +2104,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
