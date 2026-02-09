@@ -1810,10 +1810,22 @@ function rotacionarDicas() {
 }
 
 function mostrarGuiaPeixe(tipo) {
-    document.getElementById('guia-montagem').style.display = 'none';
-    document.getElementById('guia-doencas').style.display = 'none';
-    let guia = document.getElementById('guia-' + tipo);
-    if(guia) guia.style.display = 'block';
+    // Esconde as duas áreas para elas não aparecerem juntas
+    document.getElementById('setup-area').style.display = 'none';
+    document.getElementById('doencas-area').style.display = 'none';
+    
+    // Abre a área correta conforme o botão clicado
+    if (tipo === 'montagem') {
+        document.getElementById('setup-area').style.display = 'block';
+    } else if (tipo === 'doencas') {
+        document.getElementById('doencas-area').style.display = 'block';
+    }
+}
+
+// Essa função faz o botão "Fechar Guia" funcionar
+function fecharGuiasPeixe() {
+    document.getElementById('setup-area').style.display = 'none';
+    document.getElementById('doencas-area').style.display = 'none';
 }
     
 function initCP() {
@@ -2013,6 +2025,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
