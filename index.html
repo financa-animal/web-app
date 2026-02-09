@@ -169,18 +169,23 @@
         <div style="max-width: 140px; margin: 15px auto;"><canvas id="petChart"></canvas></div>
     </div>
 
-    <div class="card" id="calculadora-agua">
-        <h4>💧 Calculadora de Água</h4>
-        <p style="font-size: 12px; color: #777; margin-bottom: 15px; text-align: center;">A hidratação correta é vital para prevenir doenças renais e manter a energia do seu pet.</p>
-        <input type="number" id="pesoPet" placeholder="Peso do Pet (kg)">
-        <select id="tipoPet">
-            <option value="60">Cão Ativo (60ml/kg)</option>
-            <option value="50">Cão Caseiro (50ml/kg)</option>
-            <option value="45">Gato (45ml/kg)</option>
-        </select>
-        <button onclick="calcAgua()">Calcular Meta</button>
-        <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
-    </div>
+  <div class="card" id="calculadora-agua">
+    <h4>💧 Calculadora de Água</h4>
+    <p style="font-size: 12px; color: #777; margin-bottom: 15px; text-align: center;">A hidratação correta é vital para prevenir doenças renais e manter a energia do seu pet.</p>
+    
+    <input type="number" id="pesoPet" placeholder="Peso do Pet (kg)">
+    
+    <select id="tipoPet">
+        <option value="60">Cão Ativo (60ml/kg)</option>
+        <option value="50">Cão Caseiro (50ml/kg)</option>
+        <option value="45">Gato (45ml/kg)</option>
+        <option value="100">Coelho (100ml/kg)</option> <option value="80">Papagaio / Calopsita (80ml/kg)</option>
+        <option value="90">Hamster / Porquinho da Índia (90ml/kg)</option>
+    </select>
+    
+    <button onclick="calcAgua()">Calcular Meta</button>
+    <div id="resAgua" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
+</div>
 
   <div class="card" id="idade-area">
     <h4>🦴 Idade Humana do Pet</h4>
@@ -217,26 +222,38 @@
       <button class="pet-card" onclick="mostrarPet('cao')">🐶 Cão</button>
       <button class="pet-card" onclick="mostrarPet('gato')">🐱 Gato</button>
       <button class="pet-card" onclick="mostrarPet('ave')">🦜 Aves</button>
-      <button class="pet-card" onclick="mostrarPet('roedor')">🐹 Pequenos Mamíferos</button>
+      <button class="pet-card" onclick="mostrarPet('roedor')">🐹 Roedores</button>
       <button class="pet-card" onclick="mostrarPet('peixe')">🐟 Peixes</button>
     </div>
 
-    <div id="check-cao" class="checklist" style="display:none;">
-      <h4>🐶 Check-up Cães</h4>
-      <div class="pergunta">Perda de apetite?
-        <button onclick="marcar(1)">Sim</button>
-        <button onclick="marcar(0)">Não</button>
-      </div>
-      <div class="pergunta">Vômitos ou diarreia?
-        <button onclick="marcar(1)">Sim</button>
-        <button onclick="marcar(0)">Não</button>
-      </div>
+    <div id="check-cao" class="checklist-pet" style="display:block;">
+      <p><strong>Cão:</strong> Perda de apetite ou muita sede?</p>
+      <button onclick="marcar(1)">Sim</button> <button onclick="marcar(0)">Não</button>
     </div>
 
-    <button onclick="mostrarResultado()" style="margin-top:10px;">Ver Resultado</button>
-    <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px;"></div>
+    <div id="check-gato" class="checklist-pet" style="display:none;">
+      <p><strong>Gato:</strong> Dificuldade para urinar ou se escondendo muito?</p>
+      <button onclick="marcar(1)">Sim</button> <button onclick="marcar(0)">Não</button>
+    </div>
 
-</div> <!-- 🔥 FECHA O CARD AQUI -->
+    <div id="check-ave" class="checklist-pet" style="display:none;">
+      <p><strong>Ave:</strong> Penas eriçadas ou ficando no fundo da gaiola?</p>
+      <button onclick="marcar(1)">Sim</button> <button onclick="marcar(0)">Não</button>
+    </div>
+
+    <div id="check-roedor" class="checklist-pet" style="display:none;">
+      <p><strong>Roedor:</strong> Dentes muito grandes ou parado demais?</p>
+      <button onclick="marcar(1)">Sim</button> <button onclick="marcar(0)">Não</button>
+    </div>
+
+    <div id="check-peixe" class="checklist-pet" style="display:none;">
+      <p><strong>Peixe:</strong> Nadando de lado ou manchas brancas no corpo?</p>
+      <button onclick="marcar(1)">Sim</button> <button onclick="marcar(0)">Não</button>
+    </div>
+
+    <button onclick="mostrarResultado()" style="margin-top:15px; background: var(--secondary);">Ver Resultado</button>
+    <div id="resSaude" style="margin-top: 10px; font-weight: bold; text-align: center; color: #d35400;"></div>
+</div>
 
 <h3 style="text-align: center; color: var(--secondary); margin-top: 30px;">🎮 Central de Jogos Educativos</h3>
 <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; padding: 0 10px;">
@@ -1732,11 +1749,25 @@ function updateChart() {
 }
 
 function calcAgua() {
-    const p = document.getElementById('pesoPet').value;
-    const f = document.getElementById('tipoPet').value;
-    if(p > 0) document.getElementById('resAgua').innerHTML = `Meta: ${(p * f)}ml diários 💧`;
-}
+    const p = parseFloat(document.getElementById('pesoPet').value);
+    const f = parseFloat(document.getElementById('tipoPet').value);
+    const resultadoDiv = document.getElementById('resAgua');
 
+    if (p > 0) {
+        const totalMl = p * f;
+        
+        // Se o valor for maior que 1000ml, ele mostra em Litros para ficar mais bonito
+        if (totalMl >= 1000) {
+            const totalL = (totalMl / 1000).toFixed(2);
+            resultadoDiv.innerHTML = `Meta: ${totalL} Litros diários 💧`;
+        } else {
+            resultadoDiv.innerHTML = `Meta: ${Math.round(totalMl)}ml diários 💧`;
+        }
+    } else {
+        alert("Por favor, insira o peso do pet.");
+    }
+}
+    
 function calcularIdadeHumana() {
     const idadeInput = document.getElementById("idadePet").value;
     const porte = document.getElementById("portePet").value;
@@ -1779,45 +1810,54 @@ function calcDose() {
 
 let pontos = 0;
 
-function marcar(valor){
-  pontos += valor;
+function marcar(valor) {
+    // Somamos o valor (1 para sim, 0 para não)
+    pontos += valor;
+    // Feedback visual para o usuário saber que clicou
+    alert("Resposta registrada!");
 }
 
-function mostrarResultado(){
-  let res = document.getElementById("resSaude");
+function mostrarResultado() {
+    let res = document.getElementById("resSaude");
 
-  if(pontos == 0){
-    res.innerHTML = "🟢 Nenhum sinal preocupante no momento.";
-    res.style.color = "green";
-  }
-  else if(pontos <= 2){
-    res.innerHTML = "🟡 Fique atento e observe mudanças.";
-    res.style.color = "orange";
-  }
-  else{
-    res.innerHTML = "🔴 Procure um veterinário o quanto antes.";
-    res.style.color = "red";
-  }
+    if (pontos === 0) {
+        res.innerHTML = "🟢 Nenhum sinal preocupante no momento. Continue cuidando com amor!";
+        res.style.color = "green";
+    } 
+    else if (pontos === 1) {
+        res.innerHTML = "🟡 Atenção: Um sinal de alerta foi detectado. Monitore seu pet de perto.";
+        res.style.color = "orange";
+    } 
+    else {
+        res.innerHTML = "🔴 Alerta Crítico: Procure um médico veterinário o quanto antes!";
+        res.style.color = "red";
+    }
 
-  pontos = 0;
+    // Importante: Reseta os pontos para uma nova consulta
+    pontos = 0;
 }
 
 function mostrarPet(tipo) {
+    // Esconde todos os checklists (usamos a classe .checklist-pet que colocamos no HTML)
+    document.querySelectorAll('.checklist-pet').forEach(el => {
+        el.style.display = "none";
+    });
 
-  // esconde todos os checklists
-  document.querySelectorAll('.checklist').forEach(el => {
-    el.style.display = "none";
-  });
+    // Mostra o animal selecionado
+    let area = document.getElementById("check-" + tipo);
+    if (area) {
+        area.style.display = "block";
+    }
 
-  // mostra só o escolhido
-  let area = document.getElementById("check-" + tipo);
-  if(area){
-    area.style.display = "block";
-  }
+    // Reseta os pontos se ele trocar de animal no meio do processo
+    pontos = 0;
+    document.getElementById("resSaude").innerHTML = "";
 
-  // efeito visual no botão ativo
-  document.querySelectorAll('.pet-card').forEach(btn => btn.style.opacity = "0.5");
-  event.target.style.opacity = "1";
+    // Efeito visual nos botões
+    document.querySelectorAll('.pet-card').forEach(btn => btn.style.border = "none");
+    if (event && event.target) {
+        event.target.style.border = "2px solid var(--secondary)";
+    }
 }
     
 function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
