@@ -1809,6 +1809,13 @@ function rotacionarDicas() {
     document.getElementById('guiaDieta').innerText = d.dieta;
 }
 
+function mostrarGuiaPeixe(tipo) {
+    document.getElementById('guia-montagem').style.display = 'none';
+    document.getElementById('guia-doencas').style.display = 'none';
+    let guia = document.getElementById('guia-' + tipo);
+    if(guia) guia.style.display = 'block';
+}
+    
 function initCP() {
     const cpList = document.getElementById('cpList');
     const g = document.getElementById('cpGrid'); g.innerHTML = '';
@@ -2006,6 +2013,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
