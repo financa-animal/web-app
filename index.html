@@ -1620,6 +1620,47 @@ function toggleFoodInfo() {
         </div>
     </footer>
 </article>
+
+<div class="grid-tools" style="margin-top: -20px;">
+    <div class="card-tool" style="grid-column: 1 / -1; border-top: 5px solid #0277bd;">
+        <h3>🐠 Painel do Aquarista</h3>
+        <p>Explore os guias detalhados para garantir a longevidade dos seus peixes.</p>
+        
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+            <button onclick="mostrarGuiaPeixe('montagem')" style="background-color: #0277bd;">🛠️ Guia de Montagem</button>
+            <button onclick="mostrarGuiaPeixe('doencas')" style="background-color: #e67e22;">🦠 Guia de Doenças</button>
+        </div>
+
+        <div id="guia-montagem" class="checklist" style="text-align: left; background: #f0f8ff;">
+            <h4 style="color: #0277bd; border-bottom: 2px solid #0277bd;">🛠️ Setup do Aquário</h4>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 8px;">✅ <b>Escolha:</b> Mínimo 20L. Quanto maior, mais estável a água.</li>
+                <li style="margin-bottom: 8px;">✅ <b>Água:</b> Use condicionador (Anticloro) e teste o pH.</li>
+                <li style="margin-bottom: 8px;">✅ <b>Filtragem:</b> Deve girar de 3 a 5 vezes o volume total por hora.</li>
+                <li style="margin-bottom: 8px;">✅ <b>Ciclagem:</b> <b>Crucial!</b> Deixe o aquário rodar vazio por 30 dias.</li>
+                <li style="margin-bottom: 8px;">✅ <b>Temperatura:</b> Use termostato para manter entre 24°C e 28°C.</li>
+            </ul>
+        </div>
+
+        <div id="guia-doencas" class="checklist" style="text-align: left; background: #fff5f0;">
+            <h4 style="color: #e67e22; border-bottom: 2px solid #e67e22;">🦠 Tabela de Sintomas</h4>
+            <div style="display: grid; gap: 10px;">
+                <div style="padding: 10px; background: #fff; border-radius: 8px; border-left: 4px solid #fbc02d;">
+                    <b>⚪ Íctio:</b> Pontos brancos (estresse/frio). Suba a temperatura e use remédio.
+                </div>
+                <div style="padding: 10px; background: #fff; border-radius: 8px; border-left: 4px solid #c62828;">
+                    <b>🩸 Podridão:</b> Nadadeiras rasgadas. Indica água suja (Amônia alta).
+                </div>
+                <div style="padding: 10px; background: #fff; border-radius: 8px; border-left: 4px solid #333;">
+                    <b>🤢 Hidropsia:</b> Peixe inchado e escamas arrepiadas. Caso gravíssimo.
+                </div>
+                <div style="padding: 10px; background: #fff; border-radius: 8px; border-left: 4px solid #0277bd;">
+                    <b>🫧 Fungos:</b> Aspecto de algodão no corpo. Melhore a higiene da água.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     
 <footer style="background-color: #333; color: white; padding: 40px 20px; text-align: center; margin-top: 50px;">
     <div style="max-width: 1000px; margin: auto;">
@@ -1926,6 +1967,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
