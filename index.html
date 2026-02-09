@@ -376,6 +376,88 @@
              style="width: 100%; max-width: 550px; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
     </div>
 
+    <section class="cards-section">
+  <h2>🐾 7 Itens Essenciais para Adotar um Pet</h2>
+
+  <div class="cards-grid">
+    <a href="#alimentacao" class="card card-link">
+      <h3>🍽️ Alimentação Adequada</h3>
+      <p>Ração de qualidade adequada à idade e porte do pet.</p>
+    </a>
+
+    <a href="#potes" class="card card-link">
+      <h3>🥣 Potes de Comida e Água</h3>
+      <p>Prefira potes de inox ou cerâmica, mais higiênicos.</p>
+    </a>
+
+    <a href="#descanso" class="card card-link">
+      <h3>🛏️ Local de Descanso</h3>
+      <p>Cama confortável em local tranquilo e seguro.</p>
+    </a>
+
+    <a href="#higiene" class="card card-link">
+      <h3>🧼 Higiene Básica</h3>
+      <p>Itens essenciais para manter a saúde do pet.</p>
+    </a>
+
+    <a href="#brinquedos" class="card card-link">
+      <h3>🧸 Brinquedos e Estímulos</h3>
+      <p>Evite estresse e comportamentos destrutivos.</p>
+    </a>
+
+    <a href="#seguranca" class="card card-link">
+      <h3>🔒 Segurança do Ambiente</h3>
+      <p>Ambiente adaptado evita acidentes.</p>
+    </a>
+
+    <a href="#veterinario" class="card card-link">
+      <h3>🩺 Acompanhamento Veterinário</h3>
+      <p>Consultas, vacinas e cuidados contínuos.</p>
+    </a>
+  </div>
+</section>
+
+    <section class="cards-section">
+  <h2>🐱 Guia de Gatificação</h2>
+
+  <div class="cards-grid">
+    <a href="#vertical" class="card card-link">
+      <h3>🧗 Espaços Verticais</h3>
+      <p>Prateleiras e árvores para escalar e observar.</p>
+    </a>
+
+    <a href="#observacao" class="card card-link">
+      <h3>🪟 Pontos de Observação</h3>
+      <p>Janelas teladas com vista externa.</p>
+    </a>
+
+    <a href="#arranhadores" class="card card-link">
+      <h3>🐾 Arranhadores</h3>
+      <p>Protegem móveis e reduzem estresse.</p>
+    </a>
+
+    <a href="#enriquecimento" class="card card-link">
+      <h3>🧸 Enriquecimento Ambiental</h3>
+      <p>Brinquedos, túneis e desafios diários.</p>
+    </a>
+
+    <a href="#areia" class="card card-link">
+      <h3>🚽 Caixas de Areia</h3>
+      <p>Quantidade e limpeza adequadas.</p>
+    </a>
+
+    <a href="#rotina" class="card card-link">
+      <h3>⏰ Rotina</h3>
+      <p>Previsibilidade gera segurança.</p>
+    </a>
+
+    <a href="#respeito" class="card card-link">
+      <h3>💜 Respeito ao Espaço</h3>
+      <p>Interação no tempo do gato.</p>
+    </a>
+  </div>
+</section>
+    
     <div style="line-height: 1.8; text-align: left; font-size: 18px; color: #333;">
         <p>Você compra um arranhador novinho, cheio de níveis e brinquedos. Coloca no melhor canto da casa... e o gato passa reto. Minutos depois, lá está ele: enfiado dentro da caixa de papelão da embalagem. Se essa cena parece familiar, você não está sozinho! Esse comportamento tem explicações científicas fascinantes que ajudam a entender a natureza do seu pet.</p>
 
@@ -1152,6 +1234,25 @@
   border-radius: 10px;
   border: 1px dashed #999;
 }
+
+    .cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card-link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+    
 </style>
 
 <script>
@@ -1169,6 +1270,32 @@ function toggleFoodInfo() {
     
 <h3 style="text-align: center; color: var(--primary); margin-top: 40px;">📰 Guia do Novo Tutor</h3>
 
+    <section class="cards-section" style="max-width: 900px; margin: 25px auto;">
+  <div class="cards-grid cards-column">
+
+    <a href="#alimentacao" class="card card-link">
+      <h3>🍽️ Alimentação Adequada</h3>
+      <p>Ração correta para idade e porte do pet.</p>
+    </a>
+
+    <a href="#descanso" class="card card-link">
+      <h3>🛏️ Local de Descanso</h3>
+      <p>Cama confortável e local tranquilo.</p>
+    </a>
+
+    <a href="#seguranca" class="card card-link">
+      <h3>🔒 Segurança do Ambiente</h3>
+      <p>Evite acidentes com ambiente adaptado.</p>
+    </a>
+
+    <a href="#veterinario" class="card card-link">
+      <h3>🩺 Acompanhamento Veterinário</h3>
+      <p>Vacinas, consultas e prevenção.</p>
+    </a>
+
+  </div>
+</section>
+    
 <div class="card" style="max-width: 95%; margin: auto; padding: 25px;">
     <h2 style="color: var(--secondary); text-align: center; font-size: 24px;">🐾 7 Itens Essenciais antes de adotar um Pet</h2>
     
@@ -2022,6 +2149,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
