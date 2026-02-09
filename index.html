@@ -1809,20 +1809,6 @@ function rotacionarDicas() {
     document.getElementById('guiaDieta').innerText = d.dieta;
 }
     
-function mostrarGuiaPeixe(t) {
-    var a = document.getElementById('setup-area');
-    var b = document.getElementById('doencas-area');
-    if(a) a.style.display = 'none';
-    if(b) b.style.display = 'none';
-    var x = (t === 'montagem') ? a : b;
-    if(x) x.style.display = 'block';
-}
-
-function fecharGuiasPeixe() {
-    document.getElementById('setup-area').style.display = 'none';
-    document.getElementById('doencas-area').style.display = 'none';
-}
-    
 function initCP() {
     const cpList = document.getElementById('cpList');
     const g = document.getElementById('cpGrid'); g.innerHTML = '';
@@ -2015,11 +2001,27 @@ function initMemo() {
     });
 }
 
+function mostrarGuiaPeixe(t) {
+    var s = document.getElementById('setup-area');
+    var d = document.getElementById('doencas-area');
+    if(s) s.style.display = 'none';
+    if(d) d.style.display = 'none';
+    var alvo = (t === 'montagem') ? s : d;
+    if(alvo) alvo.style.display = 'block';
+}
+
+function fecharGuiasPeixe() {
+    if(document.getElementById('setup-area')) document.getElementById('setup-area').style.display = 'none';
+    if(document.getElementById('doencas-area')) document.getElementById('doencas-area').style.display = 'none';
+}
+// ------------------
+    
 setInterval(rotacionarDicas, 7000);
 rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); initMemo();
 </script>
 </body>
 </html>
+
 
 
 
