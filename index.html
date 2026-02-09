@@ -403,42 +403,78 @@
     </div>
 </div>
 
- <section class="cards-section">
-  <h2>🐠 Painel do Aquarista</h2>
+<section class="pet-food-section">
+  <h2 class="pet-food-title">🐾 7 Itens Essenciais para Adotar um Pet</h2>
 
-  <div class="cards-grid">
-    <div onclick="mostrarGuiaPeixe('montagem')" class="card card-link" style="cursor: pointer; border-top: 5px solid #0288d1;">
-      <h3>🛠️ Guia de Montagem</h3>
-      <p>Passo a passo para montar seu primeiro aquário do zero.</p>
+  <div class="pet-food-wrapper">
+    <div class="pet-food-columns">
+
+      <div class="pet-food-card can-eat">
+        <h3>🏠 Necessidades Básicas</h3>
+        <ul>
+          <li><span>🍽️</span> Alimentação Adequada</li>
+          <li><span>🥣</span> Potes de Inox ou Cerâmica</li>
+          <li><span>🛏️</span> Local de Descanso</li>
+        </ul>
+      </div>
+
+      <div class="pet-food-card warning-eat">
+        <h3>🧼 Higiene e Saúde</h3>
+        <ul>
+          <li><span>🧼</span> Higiene Básica</li>
+          <li><span>🩺</span> Acompanhamento Veterinário</li>
+          <li><span>🔒</span> Segurança do Ambiente</li>
+        </ul>
+      </div>
+
+      <div class="pet-food-card no-eat" style="border-top-color: #0288d1;"> <h3>🧸 Bem-estar</h3>
+        <ul>
+          <li><span>🧸</span> Brinquedos e Estímulos</li>
+          <li><span>🏃</span> Exercícios Diários</li>
+          <li><span>❤️</span> Carinho e Atenção</li>
+        </ul>
+      </div>
+
     </div>
-
-    <div onclick="mostrarGuiaPeixe('doencas')" class="card card-link" style="cursor: pointer; border-top: 5px solid #e67e22;">
-      <h3>🦠 Guia de Doenças</h3>
-      <p>Como identificar e tratar as doenças mais comuns.</p>
-    </div>
-  </div>
-
-  <div id="container-guias-peixes" style="margin-top: 20px;">
-    
-    <div id="setup-area" style="display: none; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid #0288d1; text-align: left;">
-        <h3 style="color: #0288d1; margin-top: 0;">🛠️ Guia de Montagem do Aquário</h3>
-        <p>✅ <b>Tamanho:</b> Mínimo de 20 litros.</p>
-        <p>✅ <b>Filtro:</b> Deve girar 3 a 5x o volume da água por hora.</p>
-        <p>✅ <b>Ciclagem:</b> Aguarde 30 dias antes de colocar os peixes.</p>
-        <button onclick="fecharGuiasPeixe()" style="margin-top: 15px; width: 100%; background: #f5f5f5; border: 1px solid #ddd; padding: 10px; border-radius: 10px; cursor: pointer;">收 Fechar Guia</button>
-    </div>
-
-    <div id="doencas-area" style="display: none; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid #e67e22; text-align: left;">
-        <h3 style="color: #e67e22; margin-top: 0;">🦠 Principais Doenças</h3>
-        <p>⚪ <b>Íctio:</b> Pontos brancos. Aumente a temperatura.</p>
-        <p>🩸 <b>Podridão:</b> Nadadeiras desfiadas. Verifique a amônia.</p>
-        <p>🧫 <b>Amônia:</b> Peixes na superfície. Faça TPA urgente.</p>
-        <button onclick="fecharGuiasPeixe()" style="margin-top: 15px; width: 100%; background: #f5f5f5; border: 1px solid #ddd; padding: 10px; border-radius: 10px; cursor: pointer;">收 Fechar Guia</button>
-    </div>
-
   </div>
 </section>
 
+    <section class="pet-food-section">
+  <h2 class="pet-food-title">🐱 Guia de Gatificação</h2>
+
+  <div class="pet-food-wrapper">
+    <div class="pet-food-columns">
+
+      <div class="pet-food-card can-eat">
+        <h3>🧗 Altura e Visão</h3>
+        <ul>
+          <li><span>🧗</span> Espaços Verticais</li>
+          <li><span>🪟</span> Pontos de Observação</li>
+          <li><span>🛌</span> Prateleiras Altas</li>
+        </ul>
+      </div>
+
+      <div class="pet-food-card warning-eat">
+        <h3>🐾 Instinto Natural</h3>
+        <ul>
+          <li><span>🐾</span> Arranhadores Firmes</li>
+          <li><span>🧸</span> Enriquecimento Ambiental</li>
+          <li><span>🧶</span> Brinquedos de Caça</li>
+        </ul>
+      </div>
+
+      <div class="pet-food-card no-eat" style="border-top-color: #673ab7;"> <h3>🚽 Rotina e Respeito</h3>
+        <ul>
+          <li><span>🚽</span> Caixas de Areia Extras</li>
+          <li><span>⏰</span> Rotina Previsível</li>
+          <li><span>💜</span> Respeito ao Espaço</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+    
 <article style="max-width: 800px; margin: 30px auto; font-family: sans-serif; line-height: 1.6; color: #333; border: 1px solid #eee; padding: 30px; border-radius: 20px; background-color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
     
     <header style="text-align: center; margin-bottom: 30px;">
@@ -2104,6 +2140,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
