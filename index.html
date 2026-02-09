@@ -1808,21 +1808,16 @@ function rotacionarDicas() {
     document.getElementById('guiaSaude').innerText = d.saude;
     document.getElementById('guiaDieta').innerText = d.dieta;
 }
-
-function mostrarGuiaPeixe(tipo) {
-    // Esconde as duas áreas para elas não aparecerem juntas
-    document.getElementById('setup-area').style.display = 'none';
-    document.getElementById('doencas-area').style.display = 'none';
     
-    // Abre a área correta conforme o botão clicado
-    if (tipo === 'montagem') {
-        document.getElementById('setup-area').style.display = 'block';
-    } else if (tipo === 'doencas') {
-        document.getElementById('doencas-area').style.display = 'block';
-    }
+function mostrarGuiaPeixe(t) {
+    var a = document.getElementById('setup-area');
+    var b = document.getElementById('doencas-area');
+    if(a) a.style.display = 'none';
+    if(b) b.style.display = 'none';
+    var x = (t === 'montagem') ? a : b;
+    if(x) x.style.display = 'block';
 }
 
-// Essa função faz o botão "Fechar Guia" funcionar
 function fecharGuiasPeixe() {
     document.getElementById('setup-area').style.display = 'none';
     document.getElementById('doencas-area').style.display = 'none';
@@ -2025,6 +2020,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
