@@ -1969,13 +1969,50 @@ const conteudosRodape = {
     }
 };
 
+/* ================= BANCO DE DADOS (DADOS DOS JOGOS E UI) ================= */
+window.listaPalavras = ["GATO", "CÃO", "PEIXE", "PET", "OSSINHO", "RAÇÃO", "CAVALO", "AVES"];
+
+window.bancoCW = [
+    {
+        tips: ["1. Animal que mia", "2. Som do cão (Au...)"],
+        data: [
+            [1, 1, "G"], [1, 2, "A"], [1, 3, "T"], [1, 4, "O"],
+            [1, 1, "G"], [2, 1, "A"], [3, 1, "U"] 
+        ]
+    }
+];
+
+const dicas = [
+    "Mantenha água fresca sempre disponível.",
+    "Vacinas em dia são prova de amor.",
+    "Escove os dentes do seu pet regularmente.",
+    "Passeios diários ajudam na saúde mental.",
+    "Gatos precisam de locais altos para se sentirem seguros."
+];
+
+const alimentos = [
+    { nome: "Maçã (sem semente)", seguro: true },
+    { nome: "Chocolate", seguro: false },
+    { nome: "Banana", seguro: true },
+    { nome: "Uva", seguro: false },
+    { nome: "Cebola/Alho", seguro: false },
+    { nome: "Cenoura", seguro: true }
+];
+
+const quizRacas = [
+    { p: "Qual raça é conhecida como 'Salsicha'?", r: "Dachshund" },
+    { p: "Qual cão é famoso pela inteligência no pastoreio?", r: "Border Collie" },
+    { p: "Qual gato é conhecido por não ter pelos?", r: "Sphynx" }
+];
+
+const iconsMemo = ['🐶','🐶', '🐱','🐱', '🐹','🐹', '🦜','🦜', '🐢','🐢', '🐠','🐠', '🐎','🐎'];
+
+/* ================= MODAL E UI ================= */
 function openModal(id) {
     if (!window.conteudosRodape || !conteudosRodape[id]) return;
-
     const modalTitle = document.getElementById('modalTitle');
     const modalText = document.getElementById('modalText');
     const txtModal = document.getElementById('txtModal');
-
     if (modalTitle) modalTitle.innerText = conteudosRodape[id].t;
     if (modalText) modalText.innerHTML = conteudosRodape[id].d;
     if (txtModal) txtModal.style.display = 'flex';
@@ -1983,65 +2020,45 @@ function openModal(id) {
 
 function closeModal() {
     const txtModal = document.getElementById('txtModal');
-    if (txtModal) {
-        txtModal.style.display = 'none';
-    }
+    if (txtModal) txtModal.style.display = 'none';
 }
 
-function rotacionarDicas() {
-    if (!window.dicasCompletas || dicasCompletas.length === 0) return;
-    const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
-    
-    const tp = document.getElementById('tipPrincipal');
-    const gs = document.getElementById('guiaSaude');
-    const gd = document.getElementById('guiaDieta');
-
-    if (tp) tp.innerText = d.principal;
-    if (gs) gs.innerText = d.saude;
-    if (gd) gd.innerText = d.dieta;
+function toggleChat() {
+    document.getElementById('chatBody')?.classList.toggle('active');
 }
-    
-/* ================= CAÇA PALAVRAS ================= */
+
+/* ================= JOGOS (CAÇA-PALAVRAS E CRUZADINHA) ================= */
 function initCP() {
     const cpList = document.getElementById('cpList');
     const g = document.getElementById('cpGrid');
-    if (!cpList || !g || !window.listaPalavras) return;
+    if (!cpList || !g) return;
 
     g.innerHTML = '';
-    const selecionadas = [...listaPalavras].sort(() => 0.5 - Math.random()).slice(0, 4);
+    const selecionadas = [...window.listaPalavras].sort(() => 0.5 - Math.random()).slice(0, 4);
     cpList.innerText = "Busque: " + selecionadas.join(" • ");
 
-    let grid = Array(100).fill('').map(() =>
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)]
-    );
-
+    let grid = Array(100).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)]);
     selecionadas.forEach((w, row) => {
         let start = (row + 2) * 10 + 1;
-        for (let i = 0; i < w.length; i++) grid[start + i] = w[i];
+        for (let i = 0; i < w.length; i++) { if(start + i < 100) grid[start + i] = w[i]; }
     });
 
     grid.forEach(l => {
         const c = document.createElement('div');
         c.className = 'cell';
         c.innerText = l;
+        c.style.cssText = "border:1px solid #eee; text-align:center; cursor:pointer; padding:5px; font-weight:bold;";
         c.onclick = () => c.classList.toggle('selected');
         g.appendChild(c);
     });
 }
 
-    // Garante que o jogo comece assim que a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof initCP === 'function') initCP();
-});
-    
-/* ================= PALAVRAS CRUZADAS ================= */
 function initCW() {
     const g = document.getElementById('cwGrid');
     const t = document.getElementById('cwTips');
-    if (!g || !t || !window.bancoCW) return;
-
+    if (!g || !t) return;
     g.innerHTML = '';
-    const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
+    const game = window.bancoCW[0];
     t.innerText = game.tips.join(" | ");
 
     for (let r = 1; r <= 11; r++) {
@@ -2049,12 +2066,11 @@ function initCW() {
             const d = game.data.find(x => x[0] === r && x[1] === c);
             const div = document.createElement('div');
             div.className = d ? 'cw-cell' : 'cw-cell black';
-
             if (d) {
-                div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}"
-                style="width:100%;height:100%;text-align:center;border:none;text-transform:uppercase;">`;
+                div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}" style="width:100%;height:30px;text-align:center;border:1px solid #ddd;text-transform:uppercase;">`;
             } else {
-                div.style.setProperty("background-color", "#000", "important");
+                div.style.backgroundColor = "#333";
+                div.style.height = "30px";
             }
             g.appendChild(div);
         }
@@ -2064,146 +2080,37 @@ function initCW() {
 function checkCW() {
     document.querySelectorAll('.cw-cell input').forEach(i => {
         if (i.value.toUpperCase() === i.dataset.ans) {
-            i.parentElement.classList.add('correct');
+            i.style.backgroundColor = "#d4edda";
+        } else if (i.value !== "") {
+            i.style.backgroundColor = "#f8d7da";
         }
     });
-}
-
-/* ================= GRÁFICO ================= */
-function updateChart() {
-    const canvas = document.getElementById('petChart');
-    if (!canvas || typeof Chart === "undefined") return;
-
-    const r = parseFloat(document.getElementById('vRacao')?.value) || 0;
-    const v = parseFloat(document.getElementById('vVet')?.value) || 0;
-    const m = parseFloat(document.getElementById('vMimos')?.value) || 0;
-
-  const alertaFin = document.getElementById('alertaFinanceiro');
-if (alertaFin) {
-    alertaFin.style.display = (r + v + m) > 600 ? 'block' : 'none';
-}
-
-    if (window.pChart) window.pChart.destroy();
-    window.pChart = new Chart(canvas, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [r, v, m],
-                backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f']
-            }]
-        }
-    });
-}
-
-/* ================= SAÚDE ================= */
-let pontos = 0;
-
-function marcar(elemento, valor) {
-    pontos += valor;
-    const botoes = elemento.parentElement.querySelectorAll('button');
-
-    botoes.forEach(btn => {
-        btn.style.opacity = "0.4";
-        btn.style.setProperty("background-color", "#ccc", "important");
-        btn.style.color = "#333";
-        btn.style.transform = "scale(1)";
-    });
-
-    elemento.style.opacity = "1";
-    elemento.style.color = "#fff";
-    elemento.style.fontWeight = "bold";
-    elemento.style.transform = "scale(1.1)";
-    elemento.style.setProperty(
-        "background-color",
-        valor > 0 ? "#ff0000" : "#008000",
-        "important"
-    );
-}
-
-function mostrarResultado() {
-    const res = document.getElementById("resSaude");
-    if (!res) return;
-
-    res.style.display = "block";
-    res.style.backgroundColor = "#fff";
-    res.style.color = "#333";
-    res.style.padding = "20px";
-    res.style.borderRadius = "10px";
-
-    if (pontos === 0) res.innerHTML = "🟢 <b>Tudo certo!</b>";
-    else if (pontos <= 2) res.innerHTML = "🟡 <b>Fique atento!</b>";
-    else res.innerHTML = "🔴 <b>Procure um veterinário!</b>";
-
-    pontos = 0;
-}
-
-/* ================= PET ================= */
-function mostrarPet(tipo, el) {
-    // 1. Esconde todos os checklists de vacinas/vermífugos
-    document.querySelectorAll('.checklist').forEach(c => {
-        c.style.display = "none";
-    });
-
-    // 2. Mostra o ícone de "check" do pet selecionado
-    const checkEl = document.getElementById("check-" + tipo);
-    if (checkEl) {
-        checkEl.style.display = "block";
-    }
-
-    // 3. Deixa todos os cards de pet apagadinhos (opacidade baixa)
-    document.querySelectorAll('.pet-card').forEach(card => {
-        card.style.opacity = "0.5";
-    });
-
-    // 4. Destaca apenas o card que você clicou (opacidade total)
-    if (el) {
-        el.style.opacity = "1";
-    }
-}
-
-/* ================= CHAT ================= */
-function toggleChat() {
-    document.getElementById('chatBody')?.classList.toggle('active');
 }
 
 /* ================= MEMÓRIA ================= */
-// Lista de ícones (pares) - Adicionado Cavalo, Peixe e Tartaruga
-const icons = [
-    '🐶','🐶', '🐱','🐱', '🐹','🐹', '🦜','🦜', 
-    '🐢','🐢', '🐠','🐠', '🐎','🐎'
-];
-let flipped = []; // Esta variável fica aqui no topo para ser usada pelas funções abaixo
-
+let flipped = [];
 function initMemo() {
     const grid = document.getElementById('memoGrid');
     if (!grid) return;
-
     grid.innerHTML = '';
     flipped = [];
-
-    icons.sort(() => 0.5 - Math.random()).forEach(icon => {
+    [...iconsMemo].sort(() => 0.5 - Math.random()).forEach(icon => {
         const card = document.createElement('div');
         card.className = 'cell';
-        card.style.cssText =
-            "background:#ddd;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;border-radius:5px;";
+        card.style.cssText = "background:#ddd;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;border-radius:5px;";
         card.dataset.icon = icon;
-
         card.onclick = function () {
             if (flipped.length < 2 && !this.innerText) {
                 this.innerText = this.dataset.icon;
                 this.style.background = "#fff";
                 flipped.push(this);
-
-                if (flipped.length === 2 && flipped[0].innerText !== flipped[1].innerText) {
-                    setTimeout(() => {
-                        flipped.forEach(c => {
-                            c.innerText = '';
-                            c.style.background = '#ddd';
-                        });
-                        flipped = [];
-                    }, 500);
-                } else if (flipped.length === 2) {
-                    flipped = [];
+                if (flipped.length === 2) {
+                    if (flipped[0].innerText !== flipped[1].innerText) {
+                        setTimeout(() => {
+                            flipped.forEach(c => { c.innerText = ''; c.style.background = '#ddd'; });
+                            flipped = [];
+                        }, 500);
+                    } else { flipped = []; }
                 }
             }
         };
@@ -2211,109 +2118,82 @@ function initMemo() {
     });
 }
 
+/* ================= FINANCEIRO E SAÚDE ================= */
+function updateChart() {
+    const canvas = document.getElementById('petChart');
+    if (!canvas || typeof Chart === "undefined") return;
+    const r = parseFloat(document.getElementById('vRacao')?.value) || 0;
+    const v = parseFloat(document.getElementById('vVet')?.value) || 0;
+    const m = parseFloat(document.getElementById('vMimos')?.value) || 0;
+    const alerta = document.getElementById('alertaFinanceiro');
+    if (alerta) alerta.style.display = (r + v + m) > 600 ? 'block' : 'none';
+
+    if (window.pChart) window.pChart.destroy();
+    window.pChart = new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+            datasets: [{ data: [r, v, m], backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f'] }]
+        },
+        options: { cutout: '70%', plugins: { legend: { display: false } } }
+    });
+}
+
+let pontos = 0;
+function marcar(elemento, valor) {
+    pontos += valor;
+    const botoes = elemento.parentElement.querySelectorAll('button');
+    botoes.forEach(btn => {
+        btn.style.opacity = "0.4";
+        btn.style.setProperty("background-color", "#ccc", "important");
+    });
+    elemento.style.opacity = "1";
+    elemento.style.setProperty("background-color", valor > 0 ? "#ff0000" : "#008000", "important");
+    elemento.style.color = "#fff";
+}
+
+function mostrarResultado() {
+    const res = document.getElementById("resSaude");
+    if (!res) return;
+    res.style.display = "block";
+    res.innerHTML = pontos === 0 ? "🟢 <b>Tudo certo!</b>" : (pontos <= 2 ? "🟡 <b>Fique atento!</b>" : "🔴 <b>Procure um veterinário!</b>");
+    pontos = 0;
+}
+
+/* ================= OUTRAS FERRAMENTAS ================= */
 function calcularIdadeHumana() {
     const idade = parseFloat(document.getElementById('idadePet').value);
     const especie = document.getElementById('portePet').value;
     const resultado = document.getElementById('resultadoIdade');
-    
-    if (isNaN(idade) || idade < 0) {
-        resultado.innerHTML = "Por favor, insira uma idade válida.";
-        return;
+    if (isNaN(idade) || idade < 0) return;
+    let h = 0;
+    if (especie === 'pequeno') h = idade <= 1 ? 15 : (idade <= 2 ? 24 : 24 + (idade - 2) * 4);
+    else if (especie === 'medio') h = idade * 7;
+    else if (especie === 'grande') h = idade * 8;
+    else h = idade * 5;
+    resultado.innerHTML = `🐾 Equivale a <b>${Math.round(h)} anos</b> humanos!`;
+}
+
+let dicaIndex = 0;
+function rotacionarDicas() {
+    const el = document.getElementById('tipPrincipal') || document.getElementById('dicaTexto');
+    if (el) {
+        el.innerText = dicas[dicaIndex];
+        dicaIndex = (dicaIndex + 1) % dicas.length;
     }
-
-    let idadeHumana = 0;
-
-    switch (especie) {
-        // CÃES E GATOS
-        case 'pequeno': // Cães pequenos e Gatos envelhecem de forma similar
-            idadeHumana = idade <= 1 ? 15 : (idade <= 2 ? 24 : 24 + (idade - 2) * 4);
-            break;
-        case 'medio':
-            idadeHumana = idade <= 1 ? 15 : (idade <= 2 ? 24 : 24 + (idade - 2) * 6);
-            break;
-        case 'grande':
-            idadeHumana = idade <= 1 ? 14 : (idade <= 2 ? 22 : 22 + (idade - 2) * 8);
-            break;
-
-        // AVES
-        case 'papagaio': // Vida longa (~80 anos)
-            idadeHumana = idade * 1.2;
-            break;
-        case 'calopsita': // Vida média (~15-20 anos)
-            idadeHumana = idade <= 1 ? 15 : 15 + (idade - 1) * 4;
-            break;
-
-        // PEQUENOS PETS
-        case 'hamster': // Vida curta (~2-3 anos)
-            idadeHumana = idade * 35; // Um hamster de 2 anos é um idoso de 70
-            break;
-        case 'coelho':
-            idadeHumana = idade <= 1 ? 21 : 21 + (idade - 1) * 6;
-            break;
-        case 'porquinho':
-            idadeHumana = idade * 12;
-            break;
-
-        // OUTROS
-        case 'tartaruga': // Vida longuíssima
-            idadeHumana = idade * 0.7;
-            break;
-        case 'peixe': 
-            idadeHumana = idade <= 1 ? 18 : 18 + (idade - 1) * 7;
-            break;
-        case 'cavalo':
-            idadeHumana = idade <= 1 ? 12 : (idade <= 3 ? 24 : 24 + (idade - 3) * 2.5);
-            break;
-    }
-
-    // Arredonda e exibe
-    const final = Math.round(idadeHumana);
-    
-    // Adiciona um ícone divertido baseado na idade
-    let emoji = "🌱";
-    if (final > 20) emoji = "🐕";
-    if (final > 50) emoji = "👴";
-
-    resultado.innerHTML = `${emoji} Equivale a aproximadamente <span style="font-size: 1.2em; color: #d35400;">${final} anos</span> humanos!`;
-}
-    
-/* ================= GUIA PEIXE ================= */
-function mostrarGuiaPeixe(t) {
-    const setup = document.getElementById('setup-area');
-    const doencas = document.getElementById('doencas-area');
-
-    if (setup) setup.style.display = 'none';
-    if (doencas) doencas.style.display = 'none';
-
-    const alvo = document.getElementById(t === 'montagem' ? 'setup-area' : 'doencas-area');
-    if (alvo) alvo.style.display = 'block';
 }
 
-function fecharGuiasPeixe() {
-    const setup = document.getElementById('setup-area');
-    const doencas = document.getElementById('doencas-area');
-
-    if (setup) setup.style.display = 'none';
-    if (doencas) doencas.style.display = 'none';
-}
-    
-/* ================= INIT GLOBAL REVISADO ================= */
+/* ================= INIT GLOBAL ================= */
 document.addEventListener("DOMContentLoaded", () => {
-    try { rotacionarDicas(); } catch(e) { console.error("Erro Dicas:", e); }
-    try { initCP(); } catch(e) { console.error("Erro Caça-Palavras:", e); }
-    try { initCW(); } catch(e) { console.error("Erro Cruzadinha:", e); }
-    try { updateChart(); } catch(e) { console.error("Erro Gráfico:", e); }
-    try { if (typeof nextFood === 'function') nextFood(); } catch(e) { console.error("Erro Food:", e); }
-    try { if (typeof loadQuiz === 'function') loadQuiz(); } catch(e) { console.error("Erro Quiz:", e); }
-    try { initMemo(); } catch(e) { console.error("Erro Memória:", e); }
-
-    setInterval(() => {
-        try { rotacionarDicas(); } catch(e) {}
-    }, 7000);
+    initCP();
+    initCW();
+    initMemo();
+    rotacionarDicas();
+    setInterval(rotacionarDicas, 7000);
 });
 </script>
 </body>
 </html>
+
 
 
 
