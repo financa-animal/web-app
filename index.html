@@ -2139,11 +2139,26 @@ function mostrarResultado() {
 
 /* ================= PET ================= */
 function mostrarPet(tipo, el) {
-    document.querySelectorAll('.checklist').forEach(c => c.style.display = "none");
-    document.getElementById("check-" + tipo)?.style.display = "block";
+    // 1. Esconde todos os checklists de vacinas/vermífugos
+    document.querySelectorAll('.checklist').forEach(c => {
+        c.style.display = "none";
+    });
 
-    document.querySelectorAll('.pet-card').forEach(b => b.style.opacity = "0.5");
-    if (el) el.style.opacity = "1";
+    // 2. Mostra o ícone de "check" do pet selecionado
+    const checkEl = document.getElementById("check-" + tipo);
+    if (checkEl) {
+        checkEl.style.display = "block";
+    }
+
+    // 3. Deixa todos os cards de pet apagadinhos (opacidade baixa)
+    document.querySelectorAll('.pet-card').forEach(card => {
+        card.style.opacity = "0.5";
+    });
+
+    // 4. Destaca apenas o card que você clicou (opacidade total)
+    if (el) {
+        el.style.opacity = "1";
+    }
 }
 
 /* ================= CHAT ================= */
@@ -2220,6 +2235,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
 
