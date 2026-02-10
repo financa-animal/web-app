@@ -2202,22 +2202,24 @@ function fecharGuiasPeixe() {
     document.getElementById('doencas-area')?.style.display = 'none';
 }
 
-//* ================= INIT GLOBAL ================= */
+/* ================= INIT GLOBAL REVISADO ================= */
 document.addEventListener("DOMContentLoaded", () => {
-    rotacionarDicas();
-    setInterval(rotacionarDicas, 7000);
-    
-    if (typeof initCP === 'function') initCP();
-    if (typeof initCW === 'function') initCW();
-    if (typeof updateChart === 'function') updateChart();
-    if (typeof nextFood === 'function') nextFood();
-    if (typeof loadQuiz === 'function') loadQuiz();
-    if (typeof initMemo === 'function') initMemo();
-});
+    try { rotacionarDicas(); } catch(e) { console.error("Erro Dicas:", e); }
+    try { initCP(); } catch(e) { console.error("Erro Caça-Palavras:", e); }
+    try { initCW(); } catch(e) { console.error("Erro Cruzadinha:", e); }
+    try { updateChart(); } catch(e) { console.error("Erro Gráfico:", e); }
+    try { if (typeof nextFood === 'function') nextFood(); } catch(e) { console.error("Erro Food:", e); }
+    try { if (typeof loadQuiz === 'function') loadQuiz(); } catch(e) { console.error("Erro Quiz:", e); }
+    try { initMemo(); } catch(e) { console.error("Erro Memória:", e); }
+
+    setInterval(() => {
+        try { rotacionarDicas(); } catch(e) {}
+    }, 7000);
 });
 </script>
 </body>
 </html>
+
 
 
 
