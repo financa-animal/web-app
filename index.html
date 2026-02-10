@@ -1990,16 +1990,15 @@ function closeModal() {
 
 function rotacionarDicas() {
     if (!window.dicasCompletas || dicasCompletas.length === 0) return;
-    
     const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
     
-    const tipPrincipal = document.getElementById('tipPrincipal');
-    const guiaSaude = document.getElementById('guiaSaude');
-    const guiaDieta = document.getElementById('guiaDieta');
+    const tp = document.getElementById('tipPrincipal');
+    const gs = document.getElementById('guiaSaude');
+    const gd = document.getElementById('guiaDieta');
 
-    if (tipPrincipal) tipPrincipal.innerText = d.principal;
-    if (guiaSaude) guiaSaude.innerText = d.saude;
-    if (guiaDieta) guiaDieta.innerText = d.dieta;
+    if (tp) tp.innerText = d.principal;
+    if (gs) gs.innerText = d.saude;
+    if (gd) gd.innerText = d.dieta;
 }
     
 /* ================= CAÇA PALAVRAS ================= */
@@ -2079,8 +2078,10 @@ function updateChart() {
     const v = parseFloat(document.getElementById('vVet')?.value) || 0;
     const m = parseFloat(document.getElementById('vMimos')?.value) || 0;
 
-    document.getElementById('alertaFinanceiro')?.style.display =
-        (r + v + m) > 600 ? 'block' : 'none';
+  const alertaFin = document.getElementById('alertaFinanceiro');
+if (alertaFin) {
+    alertaFin.style.display = (r + v + m) > 600 ? 'block' : 'none';
+}
 
     if (window.pChart) window.pChart.destroy();
     window.pChart = new Chart(canvas, {
@@ -2219,6 +2220,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
 
