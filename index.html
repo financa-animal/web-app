@@ -2167,8 +2167,12 @@ function toggleChat() {
 }
 
 /* ================= MEMÓRIA ================= */
-const icons = ['🐶','🐱','🐹','🐦','🐶','🐱','🐹','🐦'];
-let flipped = [];
+// Lista de ícones (pares) - Adicionado Cavalo, Peixe e Tartaruga
+const icons = [
+    '🐶','🐶', '🐱','🐱', '🐹','🐹', '🦜','🦜', 
+    '🐢','🐢', '🐠','🐠', '🐎','🐎'
+];
+let flipped = []; // Esta variável fica aqui no topo para ser usada pelas funções abaixo
 
 function initMemo() {
     const grid = document.getElementById('memoGrid');
@@ -2207,17 +2211,92 @@ function initMemo() {
     });
 }
 
+function calcularIdadeHumana() {
+    const idade = parseFloat(document.getElementById('idadePet').value);
+    const especie = document.getElementById('portePet').value;
+    const resultado = document.getElementById('resultadoIdade');
+    
+    if (isNaN(idade) || idade < 0) {
+        resultado.innerHTML = "Por favor, insira uma idade válida.";
+        return;
+    }
+
+    let idadeHumana = 0;
+
+    switch (especie) {
+        // CÃES E GATOS
+        case 'pequeno': // Cães pequenos e Gatos envelhecem de forma similar
+            idadeHumana = idade <= 1 ? 15 : (idade <= 2 ? 24 : 24 + (idade - 2) * 4);
+            break;
+        case 'medio':
+            idadeHumana = idade <= 1 ? 15 : (idade <= 2 ? 24 : 24 + (idade - 2) * 6);
+            break;
+        case 'grande':
+            idadeHumana = idade <= 1 ? 14 : (idade <= 2 ? 22 : 22 + (idade - 2) * 8);
+            break;
+
+        // AVES
+        case 'papagaio': // Vida longa (~80 anos)
+            idadeHumana = idade * 1.2;
+            break;
+        case 'calopsita': // Vida média (~15-20 anos)
+            idadeHumana = idade <= 1 ? 15 : 15 + (idade - 1) * 4;
+            break;
+
+        // PEQUENOS PETS
+        case 'hamster': // Vida curta (~2-3 anos)
+            idadeHumana = idade * 35; // Um hamster de 2 anos é um idoso de 70
+            break;
+        case 'coelho':
+            idadeHumana = idade <= 1 ? 21 : 21 + (idade - 1) * 6;
+            break;
+        case 'porquinho':
+            idadeHumana = idade * 12;
+            break;
+
+        // OUTROS
+        case 'tartaruga': // Vida longuíssima
+            idadeHumana = idade * 0.7;
+            break;
+        case 'peixe': 
+            idadeHumana = idade <= 1 ? 18 : 18 + (idade - 1) * 7;
+            break;
+        case 'cavalo':
+            idadeHumana = idade <= 1 ? 12 : (idade <= 3 ? 24 : 24 + (idade - 3) * 2.5);
+            break;
+    }
+
+    // Arredonda e exibe
+    const final = Math.round(idadeHumana);
+    
+    // Adiciona um ícone divertido baseado na idade
+    let emoji = "🌱";
+    if (final > 20) emoji = "🐕";
+    if (final > 50) emoji = "👴";
+
+    resultado.innerHTML = `${emoji} Equivale a aproximadamente <span style="font-size: 1.2em; color: #d35400;">${final} anos</span> humanos!`;
+}
+    
 /* ================= GUIA PEIXE ================= */
 function mostrarGuiaPeixe(t) {
-    document.getElementById('setup-area')?.style.display = 'none';
-    document.getElementById('doencas-area')?.style.display = 'none';
-    document.getElementById(t === 'montagem' ? 'setup-area' : 'doencas-area')?.style.display = 'block';
-}
-function fecharGuiasPeixe() {
-    document.getElementById('setup-area')?.style.display = 'none';
-    document.getElementById('doencas-area')?.style.display = 'none';
+    const setup = document.getElementById('setup-area');
+    const doencas = document.getElementById('doencas-area');
+
+    if (setup) setup.style.display = 'none';
+    if (doencas) doencas.style.display = 'none';
+
+    const alvo = document.getElementById(t === 'montagem' ? 'setup-area' : 'doencas-area');
+    if (alvo) alvo.style.display = 'block';
 }
 
+function fecharGuiasPeixe() {
+    const setup = document.getElementById('setup-area');
+    const doencas = document.getElementById('doencas-area');
+
+    if (setup) setup.style.display = 'none';
+    if (doencas) doencas.style.display = 'none';
+}
+    
 /* ================= INIT GLOBAL REVISADO ================= */
 document.addEventListener("DOMContentLoaded", () => {
     try { rotacionarDicas(); } catch(e) { console.error("Erro Dicas:", e); }
@@ -2235,6 +2314,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
 
