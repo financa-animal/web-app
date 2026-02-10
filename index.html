@@ -209,22 +209,27 @@
     
     <input type="number" id="idadePet" placeholder="Idade do pet (anos)" min="0" step="1">
     
-    <select id="portePet">
-        <optgroup label="Cães e Gatos">
-            <option value="pequeno">Cão Pequeno / Gato</option>
-            <option value="medio">Cão Médio</option>
-            <option value="grande">Cão Grande</option>
-        </optgroup>
-        <optgroup label="Aves">
-            <option value="papagaio">Papagaio (Vida Longa)</option>
-            <option value="calopsita">Calopsita</option>
-        </optgroup>
-        <optgroup label="Pequenos Pets">
-            <option value="hamster">Hamster</option>
-            <option value="coelho">Coelho</option>
-            <option value="porquinho">Porquinho-da-índia</option>
-        </optgroup>
-    </select>
+  <select id="portePet">
+    <optgroup label="Cães e Gatos">
+        <option value="pequeno">Cão Pequeno / Gato</option>
+        <option value="medio">Cão Médio</option>
+        <option value="grande">Cão Grande</option>
+    </optgroup>
+    <optgroup label="Aves">
+        <option value="papagaio">Papagaio (Vida Longa)</option>
+        <option value="calopsita">Calopsita</option>
+    </optgroup>
+    <optgroup label="Pequenos Pets">
+        <option value="hamster">Hamster</option>
+        <option value="coelho">Coelho</option>
+        <option value="porquinho">Porquinho-da-índia</option>
+    </optgroup>
+    <optgroup label="Outros Amigos">
+        <option value="tartaruga">Tartaruga (Jabuti)</option>
+        <option value="peixe">Peixe (Betta/Goldfish)</option>
+        <option value="cavalo">Cavalo</option>
+    </optgroup>
+</select>
     
     <button onclick="calcularIdadeHumana()">Descobrir Idade Real</button>
     
@@ -2227,6 +2232,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
