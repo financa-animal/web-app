@@ -2155,27 +2155,57 @@ function calcDose() {
 
 let pontos = 0;
 
-function marcar(valor){
-  pontos += valor;
+function marcar(elemento, valor) {
+    // 1. Soma os pontos
+    pontos += valor;
+
+    // 2. Feedback visual imediato no botão clicado
+    const container = elemento.parentElement;
+    // Remove o destaque de todos os botões daquela pergunta
+    container.querySelectorAll('button').forEach(btn => {
+        btn.style.backgroundColor = "#e0e0e0"; 
+        btn.style.color = "#666";
+        btn.style.transform = "scale(1)";
+        btn.style.boxShadow = "none";
+    });
+
+    // Aplica destaque sólido no botão selecionado
+    elemento.style.backgroundColor = valor > 0 ? "#d32f2f" : "#2e7d32"; // Vermelho se Sim, Verde se Não
+    elemento.style.color = "white";
+    elemento.style.transform = "scale(1.1)";
+    elemento.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+    elemento.style.opacity = "1"; // Garante visibilidade total
 }
 
-function mostrarResultado(){
-  let res = document.getElementById("resSaude");
+function mostrarResultado() {
+    let res = document.getElementById("resSaude");
+    
+    // Estilização do quadro de resultado para não ser transparente
+    res.style.padding = "15px";
+    res.style.borderRadius = "10px";
+    res.style.marginTop = "20px";
+    res.style.fontWeight = "bold";
+    res.style.textAlign = "center";
+    res.style.backgroundColor = "#ffffff"; // Fundo branco sólido
+    res.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+    res.style.display = "block";
 
-  if(pontos == 0){
-    res.innerHTML = "🟢 Nenhum sinal preocupante no momento.";
-    res.style.color = "green";
-  }
-  else if(pontos <= 2){
-    res.innerHTML = "🟡 Fique atento e observe mudanças.";
-    res.style.color = "orange";
-  }
-  else{
-    res.innerHTML = "🔴 Procure um veterinário o quanto antes.";
-    res.style.color = "red";
-  }
+    if (pontos === 0) {
+        res.innerHTML = "🟢 <br> Tudo certo! <br> Nenhum sinal preocupante no momento.";
+        res.style.color = "#2e7d32";
+        res.style.border = "2px solid #2e7d32";
+    } else if (pontos <= 2) {
+        res.innerHTML = "🟡 <br> Atenção! <br> Fique atento e observe mudanças de comportamento.";
+        res.style.color = "#ef6c00"; // Laranja forte
+        res.style.border = "2px solid #ef6c00";
+    } else {
+        res.innerHTML = "🔴 <br> ALERTA! <br> Procure um veterinário o quanto antes para uma avaliação.";
+        res.style.color = "#c62828"; // Vermelho forte
+        res.style.border = "2px solid #c62828";
+    }
 
-  pontos = 0;
+    // Opcional: Reiniciar pontos após mostrar resultado se quiser permitir novo teste
+    // pontos = 0; 
 }
 
 function mostrarPet(tipo) {
@@ -2260,6 +2290,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
