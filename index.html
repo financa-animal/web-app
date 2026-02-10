@@ -2164,61 +2164,56 @@ function marcar(elemento, valor) {
     // 1. Soma os pontos
     pontos += valor;
 
-    // 2. Limpa os botões da mesma pergunta
+    // 2. Localiza os botões do mesmo grupo
     const container = elemento.parentElement;
-    container.querySelectorAll('button').forEach(btn => {
-        btn.style.setProperty('opacity', '0.4', 'important'); // Os não clicados ficam bem apagados
-        btn.style.setProperty('background-color', '#cccccc', 'important');
-        btn.style.setProperty('color', '#333333', 'important');
-        btn.style.setProperty('transform', 'scale(1)', 'important');
-        btn.style.setProperty('box-shadow', 'none', 'important');
+    const botoes = container.querySelectorAll('button');
+
+    // 3. Reseta todos os botões daquela pergunta específica
+    botoes.forEach(btn => {
+        btn.style.opacity = "0.4"; // Ficam apagadinhos
+        btn.style.backgroundColor = "#ccc";
+        btn.style.color = "#333";
+        btn.style.transform = "scale(1)";
+        btn.style.border = "none";
     });
 
-    // 3. Aplica cores FORTES e VIVAS no selecionado
-    elemento.style.setProperty('opacity', '1', 'important'); // Brilho total
-    
-    if (valor > 0) {
-        // SIM: Vermelho bem forte
-        elemento.style.setProperty('background-color', '#e31b23', 'important');
-    } else {
-        // NÃO: Verde bem forte
-        elemento.style.setProperty('background-color', '#00a650', 'important');
-    }
+    // 4. Destaca o selecionado com cores FORTES
+    elemento.style.opacity = "1"; // Brilho total
+    elemento.style.color = "#ffffff"; // Texto branco
+    elemento.style.transform = "scale(1.1)";
+    elemento.style.fontWeight = "bold";
 
-    elemento.style.setProperty('color', '#ffffff', 'important'); // Texto branco puro
-    elemento.style.setProperty('transform', 'scale(1.15)', 'important'); // Aumenta o tamanho
-    elemento.style.setProperty('box-shadow', '0 4px 10px rgba(0,0,0,0.3)', 'important');
-    elemento.style.setProperty('font-weight', '900', 'important'); // Texto bem grosso
+    if (valor > 0) {
+        elemento.style.backgroundColor = "#ff0000"; // Vermelhão Sólido
+    } else {
+        elemento.style.backgroundColor = "#008000"; // Verdão Sólido
+    }
 }
 
 function mostrarResultado() {
-    let res = document.getElementById("resSaude");
-    
-    // Configura o quadro de resposta (Branco sólido, sem transparência)
-    res.style.setProperty('display', 'block', 'important');
-    res.style.setProperty('background-color', '#ffffff', 'important');
-    res.style.setProperty('padding', '20px', 'important');
-    res.style.setProperty('border-radius', '12px', 'important');
-    res.style.setProperty('margin-top', '20px', 'important');
-    res.style.setProperty('box-shadow', '0 8px 20px rgba(0,0,0,0.2)', 'important');
-    res.style.setProperty('text-align', 'center', 'important');
+    const res = document.getElementById("resSaude");
+    if (!res) return;
+
+    // Estilo do quadro de resposta (Branco sólido)
+    res.style.display = "block";
+    res.style.backgroundColor = "#ffffff";
+    res.style.color = "#333";
+    res.style.padding = "20px";
+    res.style.borderRadius = "10px";
+    res.style.marginTop = "20px";
+    res.style.boxShadow = "0 4px 15px rgba(0,0,0,0.3)";
+    res.style.border = "2px solid #ddd";
 
     if (pontos === 0) {
-        res.innerHTML = "<span style='font-size: 30px;'>🟢</span><br><span style='font-size: 18px;'>Tudo certo!</span><br>Nenhum sinal preocupante no momento.";
-        res.style.setProperty('color', '#00a650', 'important');
-        res.style.setProperty('border', '3px solid #00a650', 'important');
+        res.innerHTML = "<b style='color: green; font-size: 18px;'>🟢 Tudo certo!</b><br>Nenhum sinal preocupante no momento.";
     } else if (pontos <= 2) {
-        res.innerHTML = "<span style='font-size: 30px;'>🟡</span><br><span style='font-size: 18px;'>Atenção!</span><br>Fique atento e observe mudanças de comportamento.";
-        res.style.setProperty('color', '#ff8c00', 'important');
-        res.style.setProperty('border', '3px solid #ff8c00', 'important');
+        res.innerHTML = "<b style='color: orange; font-size: 18px;'>🟡 Fique atento!</b><br>Observe mudanças de comportamento nos próximos dias.";
     } else {
-        res.innerHTML = "<span style='font-size: 30px;'>🔴</span><br><span style='font-size: 18px;'>ALERTA!</span><br>Procure um veterinário o quanto antes para uma avaliação.";
-        res.style.setProperty('color', '#e31b23', 'important');
-        res.style.setProperty('border', '3px solid #e31b23', 'important');
+        res.innerHTML = "<b style='color: red; font-size: 18px;'>🔴 ALERTA!</b><br>Procure um veterinário o quanto antes.";
     }
 
-    // Reinicia os pontos para uma nova avaliação se o usuário trocar de pet
-    pontos = 0; 
+    // Reseta os pontos para um novo teste
+    pontos = 0;
 }
 
 function mostrarPet(tipo) {
@@ -2303,6 +2298,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
