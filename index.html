@@ -1970,307 +1970,201 @@ const conteudosRodape = {
 };
 
 function openModal(id) {
-    document.getElementById('modalTitle').innerText = conteudosRodape[id].t;
-    document.getElementById('modalText').innerHTML = conteudosRodape[id].d;
-    document.getElementById('txtModal').style.display = 'flex';
+    if (!window.conteudosRodape || !conteudosRodape[id]) return;
+    document.getElementById('modalTitle')?.innerText = conteudosRodape[id].t;
+    document.getElementById('modalText')?.innerHTML = conteudosRodape[id].d;
+    document.getElementById('txtModal')?.style.display = 'flex';
+}
+function closeModal() {
+    document.getElementById('txtModal')?.style.display = 'none';
 }
 
-function closeModal() { document.getElementById('txtModal').style.display = 'none'; }
-
+/* ================= DICAS ================= */
 function rotacionarDicas() {
+    if (!window.dicasCompletas || dicasCompletas.length === 0) return;
     const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
-    document.getElementById('tipPrincipal').innerText = d.principal;
-    document.getElementById('guiaSaude').innerText = d.saude;
-    document.getElementById('guiaDieta').innerText = d.dieta;
+    document.getElementById('tipPrincipal')?.innerText = d.principal;
+    document.getElementById('guiaSaude')?.innerText = d.saude;
+    document.getElementById('guiaDieta')?.innerText = d.dieta;
 }
-    
+
+/* ================= CAÇA PALAVRAS ================= */
 function initCP() {
     const cpList = document.getElementById('cpList');
-    const g = document.getElementById('cpGrid'); g.innerHTML = '';
+    const g = document.getElementById('cpGrid');
+    if (!cpList || !g || !window.listaPalavras) return;
+
+    g.innerHTML = '';
     const selecionadas = [...listaPalavras].sort(() => 0.5 - Math.random()).slice(0, 4);
     cpList.innerText = "Busque: " + selecionadas.join(" • ");
-    let grid = Array(100).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)]);
+
+    let grid = Array(100).fill('').map(() =>
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)]
+    );
+
     selecionadas.forEach((w, row) => {
         let start = (row + 2) * 10 + 1;
-        for(let i=0; i<w.length; i++) grid[start + i] = w[i];
+        for (let i = 0; i < w.length; i++) grid[start + i] = w[i];
     });
+
     grid.forEach(l => {
-        const c = document.createElement('div'); c.className = 'cell';
-        c.innerText = l; c.onclick = () => c.classList.toggle('selected');
+        const c = document.createElement('div');
+        c.className = 'cell';
+        c.innerText = l;
+        c.onclick = () => c.classList.toggle('selected');
         g.appendChild(c);
     });
 }
 
+/* ================= PALAVRAS CRUZADAS ================= */
 function initCW() {
     const g = document.getElementById('cwGrid');
     const t = document.getElementById('cwTips');
-    if (!g || !t) return;
-    
+    if (!g || !t || !window.bancoCW) return;
+
     g.innerHTML = '';
-    // Sorteia o jogo do seu bancoCW
     const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
     t.innerText = game.tips.join(" | ");
 
-    // Loop de 1 a 11 (conforme seu bancoCW)
     for (let r = 1; r <= 11; r++) {
         for (let c = 1; c <= 11; c++) {
-            // Busca a letra na coordenada exata
             const d = game.data.find(x => x[0] === r && x[1] === c);
-            
             const div = document.createElement('div');
-            // Se 'd' existir, é célula branca, se não, é preta (black)
             div.className = d ? 'cw-cell' : 'cw-cell black';
-            
+
             if (d) {
-                div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}" style="width:100%; height:100%; text-align:center; border:none; text-transform:uppercase;">`;
+                div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}"
+                style="width:100%;height:100%;text-align:center;border:none;text-transform:uppercase;">`;
             } else {
-                // Força a cor preta via JS para garantir que o AdSense veja o layout certo
-                div.style.backgroundColor = "#333";
+                div.style.setProperty("background-color", "#000", "important");
             }
             g.appendChild(div);
         }
     }
 }
 
-function updateChart() {
-    const r = parseFloat(document.getElementById('vRacao').value) || 0;
-    const v = parseFloat(document.getElementById('vVet').value) || 0;
-    const m = parseFloat(document.getElementById('vMimos').value) || 0;
-    document.getElementById('alertaFinanceiro').style.display = (r+v+m) > 600 ? 'block' : 'none';
-    if(window.pChart) window.pChart.destroy();
-    window.pChart = new Chart(document.getElementById('petChart'), {
-        type: 'doughnut', data: { datasets: [{ data: [r, v, m], backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f'] }] }
+function checkCW() {
+    document.querySelectorAll('.cw-cell input').forEach(i => {
+        if (i.value.toUpperCase() === i.dataset.ans) {
+            i.parentElement.classList.add('correct');
+        }
     });
 }
 
-function calcAgua() {
-    const p = document.getElementById('pesoPet').value;
-    const f = document.getElementById('tipoPet').value;
-    if(p > 0) document.getElementById('resAgua').innerHTML = `Meta: ${(p * f)}ml diários 💧`;
-}
+/* ================= GRÁFICO ================= */
+function updateChart() {
+    const canvas = document.getElementById('petChart');
+    if (!canvas || typeof Chart === "undefined") return;
 
-function calcularIdadeHumana() {
-    const idadeInput = document.getElementById("idadePet").value;
-    const porte = document.getElementById("portePet").value;
-    const resultado = document.getElementById("resultadoIdade");
+    const r = parseFloat(document.getElementById('vRacao')?.value) || 0;
+    const v = parseFloat(document.getElementById('vVet')?.value) || 0;
+    const m = parseFloat(document.getElementById('vMimos')?.value) || 0;
 
-    if (!idadeInput || idadeInput <= 0) {
-        resultado.innerText = "Por favor, digite uma idade válida! 🐾";
-        return;
-    }
+    document.getElementById('alertaFinanceiro')?.style.display =
+        (r + v + m) > 600 ? 'block' : 'none';
 
-    const idadePet = parseFloat(idadeInput);
-    let idadeHumana = 0;
-    let faseVida = "";
-
-    // LÓGICA SUAVE (Curva de Envelhecimento)
-    
-    // 1. Cães e Gatos (A regra dos 15 + 9 + extra)
-    if (porte === "pequeno" || porte === "medio" || porte === "grande") {
-        if (idadePet <= 1) {
-            idadeHumana = idadePet * 15;
-        } else if (idadePet <= 2) {
-            idadeHumana = 15 + (idadePet - 1) * 9;
-        } else {
-            let mult = (porte === "pequeno") ? 4 : (porte === "medio" ? 5 : 7);
-            idadeHumana = 24 + (idadePet - 2) * mult;
+    if (window.pChart) window.pChart.destroy();
+    window.pChart = new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [r, v, m],
+                backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f']
+            }]
         }
-    } 
-    
-    // 2. Papagaio (O "suave" aqui é porque ele amadurece MUITO devagar)
-    else if (porte === "papagaio") {
-        if (idadePet <= 10) {
-            idadeHumana = idadePet * 1.5; // Até os 10 anos é um adolescente
-        } else {
-            idadeHumana = 15 + (idadePet - 10) * 0.8; // Depois envelhece bem devagar
-        }
-    }
-
-    // 3. Calopsita (Suavizando para não parecer tão velha tão rápido)
-    else if (porte === "calopsita") {
-        if (idadePet <= 2) {
-            idadeHumana = idadePet * 10; // Cresce rápido no início
-        } else {
-            idadeHumana = 20 + (idadePet - 2) * 3.5; // Depois o ritmo cai
-        }
-    }
-
-    // 4. Pequenos Pets (Ajuste para não explodir a idade)
-    else if (porte === "hamster") {
-        idadeHumana = (idadePet <= 1) ? idadePet * 30 : 30 + (idadePet - 1) * 20;
-    } else if (porte === "coelho") {
-        idadeHumana = (idadePet <= 1) ? 18 : 18 + (idadePet - 1) * 6;
-    } else if (porte === "porquinho") {
-        idadeHumana = (idadePet <= 1) ? 15 : 15 + (idadePet - 1) * 8;
-    }
-
-    // 4. Tartarugas (Podem viver 100 anos ou mais!)
-else if (porte === "tartaruga") {
-    // Elas demoram muito para amadurecer. 
-    // Uma tartaruga de 20 anos é como um jovem de 18 humanos.
-    idadeHumana = idadePet * 0.9; 
+    });
 }
 
-// 5. Peixes (Betta vive 3 anos, Goldfish pode viver 15-20)
-else if (porte === "peixe") {
-    // Usando uma média para peixes ornamentais comuns
-    if (idadePet <= 1) {
-        idadeHumana = 18; // 1 ano de peixe já é um adulto
-    } else {
-        idadeHumana = 18 + (idadePet - 1) * 8;
-    }
-}
-
-// 6. Cavalos (Vivem cerca de 25-30 anos)
-else if (porte === "cavalo") {
-    if (idadePet <= 1) {
-        idadeHumana = 12;
-    } else if (idadePet <= 3) {
-        idadeHumana = 12 + (idadePet - 1) * 4; // Juventude
-    } else {
-        idadeHumana = 20 + (idadePet - 3) * 2.5; // Vida adulta estável
-    }
-}
-
-    // DEFINIÇÃO DA FASE DE VIDA (Baseado na idade humana calculada)
-    if (idadeHumana < 14) faseVida = "Infância / Filhote";
-    else if (idadeHumana < 25) faseVida = "Juventude / Adolescente";
-    else if (idadeHumana < 60) faseVida = "Adulto Pleno";
-    else faseVida = "Sênior (Idoso)";
-
-    resultado.innerHTML = `
-        <div style="margin-bottom: 5px;">🦴 Idade humana: <strong>${Math.round(idadeHumana)} anos</strong></div>
-        <div style="font-size: 14px; color: #555;">Fase de vida: <span style="color: #2e7d32;">${faseVida}</span></div>
-    `;
-}
-    
-function calcDose() {
-    const dataInput = document.getElementById('dataDose').value;
-    if(dataInput) {
-        const data = new Date(dataInput);
-        data.setMonth(data.getMonth() + 3);
-        document.getElementById('resDose').innerHTML = `⚠️ Próximo reforço sugerido: <b>${data.toLocaleDateString('pt-BR')}</b>`;
-    }
-}
-
-Sim, troque toda essa parte por esta versão abaixo.
-
-O segredo para a cor não ficar "fraca" é usar o comando setProperty com o parâmetro 'important'. Isso obriga o navegador a ignorar qualquer outra regra (como transparências do tema ou de outros estilos) e focar na cor que estamos mandando agora.
-JavaScript
-
+/* ================= SAÚDE ================= */
 let pontos = 0;
 
 function marcar(elemento, valor) {
-    // 1. Soma os pontos
     pontos += valor;
+    const botoes = elemento.parentElement.querySelectorAll('button');
 
-    // 2. Localiza os botões do mesmo grupo
-    const container = elemento.parentElement;
-    const botoes = container.querySelectorAll('button');
-
-    // 3. Reseta todos os botões daquela pergunta específica
     botoes.forEach(btn => {
-        btn.style.opacity = "0.4"; // Ficam apagadinhos
-        btn.style.backgroundColor = "#ccc";
+        btn.style.opacity = "0.4";
+        btn.style.setProperty("background-color", "#ccc", "important");
         btn.style.color = "#333";
         btn.style.transform = "scale(1)";
-        btn.style.border = "none";
     });
 
-    // 4. Destaca o selecionado com cores FORTES
-    elemento.style.opacity = "1"; // Brilho total
-    elemento.style.color = "#ffffff"; // Texto branco
-    elemento.style.transform = "scale(1.1)";
+    elemento.style.opacity = "1";
+    elemento.style.color = "#fff";
     elemento.style.fontWeight = "bold";
-
-    if (valor > 0) {
-        elemento.style.backgroundColor = "#ff0000"; // Vermelhão Sólido
-    } else {
-        elemento.style.backgroundColor = "#008000"; // Verdão Sólido
-    }
+    elemento.style.transform = "scale(1.1)";
+    elemento.style.setProperty(
+        "background-color",
+        valor > 0 ? "#ff0000" : "#008000",
+        "important"
+    );
 }
 
 function mostrarResultado() {
     const res = document.getElementById("resSaude");
     if (!res) return;
 
-    // Estilo do quadro de resposta (Branco sólido)
     res.style.display = "block";
-    res.style.backgroundColor = "#ffffff";
+    res.style.backgroundColor = "#fff";
     res.style.color = "#333";
     res.style.padding = "20px";
     res.style.borderRadius = "10px";
-    res.style.marginTop = "20px";
-    res.style.boxShadow = "0 4px 15px rgba(0,0,0,0.3)";
-    res.style.border = "2px solid #ddd";
 
-    if (pontos === 0) {
-        res.innerHTML = "<b style='color: green; font-size: 18px;'>🟢 Tudo certo!</b><br>Nenhum sinal preocupante no momento.";
-    } else if (pontos <= 2) {
-        res.innerHTML = "<b style='color: orange; font-size: 18px;'>🟡 Fique atento!</b><br>Observe mudanças de comportamento nos próximos dias.";
-    } else {
-        res.innerHTML = "<b style='color: red; font-size: 18px;'>🔴 ALERTA!</b><br>Procure um veterinário o quanto antes.";
-    }
+    if (pontos === 0) res.innerHTML = "🟢 <b>Tudo certo!</b>";
+    else if (pontos <= 2) res.innerHTML = "🟡 <b>Fique atento!</b>";
+    else res.innerHTML = "🔴 <b>Procure um veterinário!</b>";
 
-    // Reseta os pontos para um novo teste
     pontos = 0;
 }
 
-function mostrarPet(tipo) {
+/* ================= PET ================= */
+function mostrarPet(tipo, el) {
+    document.querySelectorAll('.checklist').forEach(c => c.style.display = "none");
+    document.getElementById("check-" + tipo)?.style.display = "block";
 
-  // esconde todos os checklists
-  document.querySelectorAll('.checklist').forEach(el => {
-    el.style.display = "none";
-  });
-
-  // mostra só o escolhido
-  let area = document.getElementById("check-" + tipo);
-  if(area){
-    area.style.display = "block";
-  }
-
-  // efeito visual no botão ativo
-  document.querySelectorAll('.pet-card').forEach(btn => btn.style.opacity = "0.5");
-  event.target.style.opacity = "1";
-}
-    
-function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
-function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
-
-const alimentos = [{n:"Chocolate",s:false},{n:"Maçã (sem semente)",s:true},{n:"Uva",s:false},{n:"Banana",s:true},{n:"Cebola",s:false},{n:"Cenoura",s:true}];
-let foodPoints = 0; let currentFood = {};
-function nextFood() { currentFood = alimentos[Math.floor(Math.random()*alimentos.length)]; document.getElementById('foodName').innerText = currentFood.n; }
-function checkFood(choice) {
-    if(choice === currentFood.s) { foodPoints += 10; alert("Correto! 🐾"); }
-    else { foodPoints = Math.max(0, foodPoints - 5); alert("Cuidado! Isso faz mal. ⚠️"); }
-    document.getElementById('foodScore').innerText = "Pontos: " + foodPoints; nextFood();
+    document.querySelectorAll('.pet-card').forEach(b => b.style.opacity = "0.5");
+    if (el) el.style.opacity = "1";
 }
 
-const quizData = [{q:"Qual raça é o 'cachorro salsicha'?",a:["Dachshund","Poodle","Beagle"],c:0},{q:"Gato famoso por não ter pelos?",a:["Persa","Sphynx","Siamês"],c:1}];
-function loadQuiz() {
-    const q = quizData[Math.floor(Math.random()*quizData.length)]; document.getElementById('quizQuestion').innerText = q.q;
-    const optDiv = document.getElementById('quizOptions'); optDiv.innerHTML = '';
-    q.a.forEach((opt, i) => {
-        const btn = document.createElement('button'); btn.innerText = opt; btn.style.marginBottom = "5px";
-        btn.onclick = () => { if(i === q.c){ alert("Acertou! 🎉"); loadQuiz(); } else { alert("Tente novamente! 🐶"); } };
-        optDiv.appendChild(btn);
-    });
+/* ================= CHAT ================= */
+function toggleChat() {
+    document.getElementById('chatBody')?.classList.toggle('active');
 }
 
-const icons = ['🐶','🐱','🐹','🐦','🐶','🐱','🐹','🐦']; let flipped = [];
+/* ================= MEMÓRIA ================= */
+const icons = ['🐶','🐱','🐹','🐦','🐶','🐱','🐹','🐦'];
+let flipped = [];
+
 function initMemo() {
-    const grid = document.getElementById('memoGrid'); grid.innerHTML = ''; flipped = [];
-    icons.sort(() => 0.5 - Math.random()).forEach((icon) => {
-        const card = document.createElement('div'); card.className = 'cell';
-        card.style = "background:#ddd; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:20px; border-radius:5px;";
+    const grid = document.getElementById('memoGrid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+    flipped = [];
+
+    icons.sort(() => 0.5 - Math.random()).forEach(icon => {
+        const card = document.createElement('div');
+        card.className = 'cell';
+        card.style.cssText =
+            "background:#ddd;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;border-radius:5px;";
         card.dataset.icon = icon;
-        card.onclick = function() {
-            if(flipped.length < 2 && !this.innerText) {
-                this.innerText = this.dataset.icon; this.style.background = 'white'; flipped.push(this);
-                if(flipped.length === 2) {
-                    if(flipped[0].innerText !== flipped[1].innerText) {
-                        setTimeout(() => { flipped.forEach(c => { c.innerText = ''; c.style.background = '#ddd'; }); flipped = []; }, 500);
-                    } else { flipped = []; }
+
+        card.onclick = function () {
+            if (flipped.length < 2 && !this.innerText) {
+                this.innerText = this.dataset.icon;
+                this.style.background = "#fff";
+                flipped.push(this);
+
+                if (flipped.length === 2 && flipped[0].innerText !== flipped[1].innerText) {
+                    setTimeout(() => {
+                        flipped.forEach(c => {
+                            c.innerText = '';
+                            c.style.background = '#ddd';
+                        });
+                        flipped = [];
+                    }, 500);
+                } else if (flipped.length === 2) {
+                    flipped = [];
                 }
             }
         };
@@ -2278,23 +2172,28 @@ function initMemo() {
     });
 }
 
+/* ================= GUIA PEIXE ================= */
 function mostrarGuiaPeixe(t) {
-    var s = document.getElementById('setup-area');
-    var d = document.getElementById('doencas-area');
-    if(s) s.style.display = 'none';
-    if(d) d.style.display = 'none';
-    var alvo = (t === 'montagem') ? s : d;
-    if(alvo) alvo.style.display = 'block';
+    document.getElementById('setup-area')?.style.display = 'none';
+    document.getElementById('doencas-area')?.style.display = 'none';
+    document.getElementById(t === 'montagem' ? 'setup-area' : 'doencas-area')?.style.display = 'block';
+}
+function fecharGuiasPeixe() {
+    document.getElementById('setup-area')?.style.display = 'none';
+    document.getElementById('doencas-area')?.style.display = 'none';
 }
 
-function fecharGuiasPeixe() {
-    if(document.getElementById('setup-area')) document.getElementById('setup-area').style.display = 'none';
-    if(document.getElementById('doencas-area')) document.getElementById('doencas-area').style.display = 'none';
-}
-// ------------------
-    
-setInterval(rotacionarDicas, 7000);
-rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); initMemo();
+/* ================= INIT GLOBAL ================= */
+document.addEventListener("DOMContentLoaded", () => {
+    rotacionarDicas();
+    setInterval(rotacionarDicas, 7000);
+    initCP();
+    initCW();
+    updateChart();
+    nextFood?.();
+    loadQuiz?.();
+    initMemo();
+});
 </script>
 </body>
 </html>
