@@ -1969,174 +1969,205 @@ const conteudosRodape = {
     }
 };
 
-/* ================= BANCO DE DADOS (DADOS DOS JOGOS E UI) ================= */
-window.listaPalavras = ["GATO", "CÃO", "PEIXE", "PET", "OSSINHO", "RAÇÃO", "CAVALO", "AVES"];
-
-window.bancoCW = [
-    {
-        tips: ["1. Animal que mia", "2. Som do cão (Au...)"],
-        data: [
-            [1, 1, "G"], [1, 2, "A"], [1, 3, "T"], [1, 4, "O"],
-            [1, 1, "G"], [2, 1, "A"], [3, 1, "U"] 
-        ]
-    }
-];
-
-const dicas = [
-    "Mantenha água fresca sempre disponível.",
-    "Vacinas em dia são prova de amor.",
-    "Escove os dentes do seu pet regularmente.",
-    "Passeios diários ajudam na saúde mental.",
-    "Gatos precisam de locais altos para se sentirem seguros."
-];
-
-const alimentos = [
-    { nome: "Maçã (sem semente)", seguro: true },
-    { nome: "Chocolate", seguro: false },
-    { nome: "Banana", seguro: true },
-    { nome: "Uva", seguro: false },
-    { nome: "Cebola/Alho", seguro: false },
-    { nome: "Cenoura", seguro: true }
-];
-
-const quizRacas = [
-    { p: "Qual raça é conhecida como 'Salsicha'?", r: "Dachshund" },
-    { p: "Qual cão é famoso pela inteligência no pastoreio?", r: "Border Collie" },
-    { p: "Qual gato é conhecido por não ter pelos?", r: "Sphynx" }
-];
-
-const iconsMemo = ['🐶','🐶', '🐱','🐱', '🐹','🐹', '🦜','🦜', '🐢','🐢', '🐠','🐠', '🐎','🐎'];
-
-/* ================= MODAL E UI ================= */
 function openModal(id) {
-    if (!window.conteudosRodape || !conteudosRodape[id]) return;
-    const modalTitle = document.getElementById('modalTitle');
-    const modalText = document.getElementById('modalText');
-    const txtModal = document.getElementById('txtModal');
-    if (modalTitle) modalTitle.innerText = conteudosRodape[id].t;
-    if (modalText) modalText.innerHTML = conteudosRodape[id].d;
-    if (txtModal) txtModal.style.display = 'flex';
+    document.getElementById('modalTitle').innerText = conteudosRodape[id].t;
+    document.getElementById('modalText').innerHTML = conteudosRodape[id].d;
+    document.getElementById('txtModal').style.display = 'flex';
 }
 
-function closeModal() {
-    const txtModal = document.getElementById('txtModal');
-    if (txtModal) txtModal.style.display = 'none';
+function closeModal() { document.getElementById('txtModal').style.display = 'none'; }
+
+function rotacionarDicas() {
+    const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
+    document.getElementById('tipPrincipal').innerText = d.principal;
+    document.getElementById('guiaSaude').innerText = d.saude;
+    document.getElementById('guiaDieta').innerText = d.dieta;
 }
 
-function toggleChat() {
-    document.getElementById('chatBody')?.classList.toggle('active');
+function initCP() {
+    const cpList = document.getElementById('cpList');
+    const g = document.getElementById('cpGrid'); g.innerHTML = '';
+    const selecionadas = [...listaPalavras].sort(() => 0.5 - Math.random()).slice(0, 4);
+    cpList.innerText = "Busque: " + selecionadas.join(" • ");
+    let grid = Array(100).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)]);
+    selecionadas.forEach((w, row) => {
+        let start = (row + 2) * 10 + 1;
+        for(let i=0; i<w.length; i++) grid[start + i] = w[i];
+    });
+    grid.forEach(l => {
+        const c = document.createElement('div'); c.className = 'cell';
+        c.innerText = l; c.onclick = () => c.classList.toggle('selected');
+        g.appendChild(c);
+    });
 }
-
-/* --- BANCO DE DADOS DA CRUZADINHA --- */
-window.bancoCW = [
-    {
-        tips: ["1. Animal que mia", "2. Som do cão (Au...)", "3. Onde o peixe vive"],
-        data: [[1,1,"G"],[1,2,"A"],[1,3,"T"],[1,4,"O"],[1,1,"G"],[2,1,"A"],[3,1,"U"],[1,3,"A"],[2,3,"Q"],[3,3,"U"],[4,3,"A"],[5,3,"R"],[6,3,"I"],[7,3,"O"]]
-    },
-    {
-        tips: ["1. Tem crina", "2. Amigo fiel", "3. Animal que pula e come cenoura"],
-        data: [[1,1,"C"],[1,2,"A"],[1,3,"V"],[1,4,"A"],[1,5,"L"],[1,6,"O"],[1,1,"C"],[2,1,"A"],[3,1,"O"],[4,1,"C"],[4,2,"O"],[4,3,"E"],[4,4,"L"],[4,5,"H"],[4,6,"O"]]
-    },
-    {
-        tips: ["1. Ave que fala", "2. Animal muito lento", "3. Inimigo do rato"],
-        data: [[1,1,"P"],[1,2,"A"],[1,3,"P"],[1,4,"A"],[1,5,"G"],[1,6,"A"],[1,7,"I"],[1,8,"O"],[1,1,"P"],[2,1,"E"],[3,1,"S"],[4,1,"T"],[5,1,"A"],[1,1,"G"],[1,2,"A"],[1,3,"T"],[1,4,"O"]]
-    }
-];
-
-let cwIndice = 0; 
-
-/* ================= FUNÇÕES DA CRUZADINHA ================= */
 
 function initCW() {
     const g = document.getElementById('cwGrid');
     const t = document.getElementById('cwTips');
     if (!g || !t) return;
-
+    
     g.innerHTML = '';
-    const game = window.bancoCW[cwIndice]; // Usa o índice para permitir atualização
+    // Sorteia o jogo do seu bancoCW
+    const game = bancoCW[Math.floor(Math.random() * bancoCW.length)];
     t.innerText = game.tips.join(" | ");
 
+    // Loop de 1 a 11 (conforme seu bancoCW)
     for (let r = 1; r <= 11; r++) {
         for (let c = 1; c <= 11; c++) {
+            // Busca a letra na coordenada exata
             const d = game.data.find(x => x[0] === r && x[1] === c);
+            
             const div = document.createElement('div');
+            // Se 'd' existir, é célula branca, se não, é preta (black)
             div.className = d ? 'cw-cell' : 'cw-cell black';
+            
             if (d) {
-                div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}" style="width:100%;height:30px;text-align:center;border:1px solid #ddd;text-transform:uppercase;">`;
+                div.innerHTML = `<input type="text" maxlength="1" data-ans="${d[2]}" style="width:100%; height:100%; text-align:center; border:none; text-transform:uppercase;">`;
             } else {
+                // Força a cor preta via JS para garantir que o AdSense veja o layout certo
                 div.style.backgroundColor = "#333";
-                div.style.height = "30px";
             }
             g.appendChild(div);
         }
     }
 }
 
-function novoCW() {
-    cwIndice = (cwIndice + 1) % window.bancoCW.length; 
-    initCW();
+function updateChart() {
+    const r = parseFloat(document.getElementById('vRacao').value) || 0;
+    const v = parseFloat(document.getElementById('vVet').value) || 0;
+    const m = parseFloat(document.getElementById('vMimos').value) || 0;
+    document.getElementById('alertaFinanceiro').style.display = (r+v+m) > 600 ? 'block' : 'none';
+    if(window.pChart) window.pChart.destroy();
+    window.pChart = new Chart(document.getElementById('petChart'), {
+        type: 'doughnut', data: { datasets: [{ data: [r, v, m], backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f'] }] }
+    });
 }
 
-function checkCW() {
-    document.querySelectorAll('.cw-cell input').forEach(i => {
-        if (i.value.toUpperCase() === i.dataset.ans) {
-            i.style.backgroundColor = "#d4edda";
-        } else if (i.value !== "") {
-            i.style.backgroundColor = "#f8d7da";
+function calcAgua() {
+    const p = document.getElementById('pesoPet').value;
+    const f = document.getElementById('tipoPet').value;
+    if(p > 0) document.getElementById('resAgua').innerHTML = `Meta: ${(p * f)}ml diários 💧`;
+}
+
+function calcularIdadeHumana() {
+    const idadeInput = document.getElementById("idadePet").value;
+    const porte = document.getElementById("portePet").value;
+    const resultado = document.getElementById("resultadoIdade");
+
+    if (!idadeInput || idadeInput <= 0) {
+        resultado.innerText = "Por favor, digite uma idade válida! 🐾";
+        return;
+    }
+
+    const idadePet = parseInt(idadeInput);
+    let idadeHumana = 0;
+
+    // Sua lógica nota 10:
+    if (idadePet === 1) {
+        idadeHumana = 15;
+    } else if (idadePet === 2) {
+        idadeHumana = 24;
+    } else if (idadePet > 2) {
+        let extra = idadePet - 2;
+        if (porte === "pequeno") {
+            idadeHumana = 24 + (extra * 4);
+        } else if (porte === "medio") {
+            idadeHumana = 24 + (extra * 5);
+        } else if (porte === "grande") {
+            idadeHumana = 24 + (extra * 6.5);
         }
+    }
+
+    resultado.innerHTML = `🦴 Idade humana aproximada: <strong>${Math.round(idadeHumana)} anos</strong>`;
+}
+function calcDose() {
+    const dataInput = document.getElementById('dataDose').value;
+    if(dataInput) {
+        const data = new Date(dataInput);
+        data.setMonth(data.getMonth() + 3);
+        document.getElementById('resDose').innerHTML = `⚠️ Próximo reforço sugerido: <b>${data.toLocaleDateString('pt-BR')}</b>`;
+    }
+}
+
+let pontos = 0;
+
+function marcar(valor){
+  pontos += valor;
+}
+
+function mostrarResultado(){
+  let res = document.getElementById("resSaude");
+
+  if(pontos == 0){
+    res.innerHTML = "🟢 Nenhum sinal preocupante no momento.";
+    res.style.color = "green";
+  }
+  else if(pontos <= 2){
+    res.innerHTML = "🟡 Fique atento e observe mudanças.";
+    res.style.color = "orange";
+  }
+  else{
+    res.innerHTML = "🔴 Procure um veterinário o quanto antes.";
+    res.style.color = "red";
+  }
+
+  pontos = 0;
+}
+
+function mostrarPet(tipo) {
+
+  // esconde todos os checklists
+  document.querySelectorAll('.checklist').forEach(el => {
+    el.style.display = "none";
+  });
+
+  // mostra só o escolhido
+  let area = document.getElementById("check-" + tipo);
+  if(area){
+    area.style.display = "block";
+  }
+
+  // efeito visual no botão ativo
+  document.querySelectorAll('.pet-card').forEach(btn => btn.style.opacity = "0.5");
+  event.target.style.opacity = "1";
+}
+    
+function toggleChat() { document.getElementById('chatBody').classList.toggle('active'); }
+function checkCW() { document.querySelectorAll('.cw-cell input').forEach(i => { if(i.value.toUpperCase() === i.dataset.ans) i.parentElement.classList.add('correct'); }); }
+
+const alimentos = [{n:"Chocolate",s:false},{n:"Maçã (sem semente)",s:true},{n:"Uva",s:false},{n:"Banana",s:true},{n:"Cebola",s:false},{n:"Cenoura",s:true}];
+let foodPoints = 0; let currentFood = {};
+function nextFood() { currentFood = alimentos[Math.floor(Math.random()*alimentos.length)]; document.getElementById('foodName').innerText = currentFood.n; }
+function checkFood(choice) {
+    if(choice === currentFood.s) { foodPoints += 10; alert("Correto! 🐾"); }
+    else { foodPoints = Math.max(0, foodPoints - 5); alert("Cuidado! Isso faz mal. ⚠️"); }
+    document.getElementById('foodScore').innerText = "Pontos: " + foodPoints; nextFood();
+}
+
+const quizData = [{q:"Qual raça é o 'cachorro salsicha'?",a:["Dachshund","Poodle","Beagle"],c:0},{q:"Gato famoso por não ter pelos?",a:["Persa","Sphynx","Siamês"],c:1}];
+function loadQuiz() {
+    const q = quizData[Math.floor(Math.random()*quizData.length)]; document.getElementById('quizQuestion').innerText = q.q;
+    const optDiv = document.getElementById('quizOptions'); optDiv.innerHTML = '';
+    q.a.forEach((opt, i) => {
+        const btn = document.createElement('button'); btn.innerText = opt; btn.style.marginBottom = "5px";
+        btn.onclick = () => { if(i === q.c){ alert("Acertou! 🎉"); loadQuiz(); } else { alert("Tente novamente! 🐶"); } };
+        optDiv.appendChild(btn);
     });
 }
 
-/* ================= FUNÇÃO DO CAÇA-PALAVRAS ================= */
-
-function initCP() {
-    const cpList = document.getElementById('cpList');
-    const g = document.getElementById('cpGrid');
-    if (!cpList || !g) return;
-
-    g.innerHTML = '';
-    const selecionadas = [...window.listaPalavras].sort(() => 0.5 - Math.random()).slice(0, 4);
-    cpList.innerText = "Busque: " + selecionadas.join(" • ");
-
-    let grid = Array(100).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)]);
-    selecionadas.forEach((w, row) => {
-        let start = (row + 2) * 10 + 1;
-        for (let i = 0; i < w.length; i++) { if(start + i < 100) grid[start + i] = w[i]; }
-    });
-
-    grid.forEach(l => {
-        const c = document.createElement('div');
-        c.className = 'cell';
-        c.innerText = l;
-        c.style.cssText = "border:1px solid #eee; text-align:center; cursor:pointer; padding:5px; font-weight:bold;";
-        c.onclick = () => c.classList.toggle('selected');
-        g.appendChild(c);
-    });
-}
-
-/* ================= MEMÓRIA ================= */
-let flipped = [];
+const icons = ['🐶','🐱','🐹','🐦','🐶','🐱','🐹','🐦']; let flipped = [];
 function initMemo() {
-    const grid = document.getElementById('memoGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    flipped = [];
-    [...iconsMemo].sort(() => 0.5 - Math.random()).forEach(icon => {
-        const card = document.createElement('div');
-        card.className = 'cell';
-        card.style.cssText = "background:#ddd;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;border-radius:5px;";
+    const grid = document.getElementById('memoGrid'); grid.innerHTML = ''; flipped = [];
+    icons.sort(() => 0.5 - Math.random()).forEach((icon) => {
+        const card = document.createElement('div'); card.className = 'cell';
+        card.style = "background:#ddd; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:20px; border-radius:5px;";
         card.dataset.icon = icon;
-        card.onclick = function () {
-            if (flipped.length < 2 && !this.innerText) {
-                this.innerText = this.dataset.icon;
-                this.style.background = "#fff";
-                flipped.push(this);
-                if (flipped.length === 2) {
-                    if (flipped[0].innerText !== flipped[1].innerText) {
-                        setTimeout(() => {
-                            flipped.forEach(c => { c.innerText = ''; c.style.background = '#ddd'; });
-                            flipped = [];
-                        }, 500);
+        card.onclick = function() {
+            if(flipped.length < 2 && !this.innerText) {
+                this.innerText = this.dataset.icon; this.style.background = 'white'; flipped.push(this);
+                if(flipped.length === 2) {
+                    if(flipped[0].innerText !== flipped[1].innerText) {
+                        setTimeout(() => { flipped.forEach(c => { c.innerText = ''; c.style.background = '#ddd'; }); flipped = []; }, 500);
                     } else { flipped = []; }
                 }
             }
@@ -2145,214 +2176,16 @@ function initMemo() {
     });
 }
 
-    /* ================= CÁLCULO DE VERMÍFUGO ================= */
-function calcularVermifugo() {
-    const dataInput = document.getElementById('dataVermifugo');
-    const res = document.getElementById('resVermifugo');
-    
-    if (!dataInput || !dataInput.value) {
-        if (res) res.innerHTML = "⚠️ Escolha uma data primeiro.";
-        return;
-    }
-
-    // Cria a data com base no que foi digitado
-    let dataAtual = new Date(dataInput.value);
-    
-    // Adiciona 4 meses para a próxima dose
-    dataAtual.setMonth(dataAtual.getMonth() + 4);
-
-    // Formata a data para o padrão brasileiro (DD/MM/AAAA)
-    const dataFormatada = dataAtual.toLocaleDateString('pt-BR');
-
-    if (res) {
-        res.innerHTML = `🗓️ Próxima dose recomendada: <b>${dataFormatada}</b>`;
-        res.style.display = "block";
-        res.style.marginTop = "10px";
-        res.style.color = "#8e44ad"; // Um tom de roxo para diferenciar da água
-    }
-}
-
-/* ================= FINANCEIRO E SAÚDE ================= */
-function updateChart() {
-    const canvas = document.getElementById('petChart');
-    if (!canvas || typeof Chart === "undefined") return;
-    const r = parseFloat(document.getElementById('vRacao')?.value) || 0;
-    const v = parseFloat(document.getElementById('vVet')?.value) || 0;
-    const m = parseFloat(document.getElementById('vMimos')?.value) || 0;
-    const alerta = document.getElementById('alertaFinanceiro');
-    if (alerta) alerta.style.display = (r + v + m) > 600 ? 'block' : 'none';
-
-    if (window.pChart) window.pChart.destroy();
-    window.pChart = new Chart(canvas, {
-        type: 'doughnut',
-        data: {
-            datasets: [{ data: [r, v, m], backgroundColor: ['#5FA8A0', '#e67e22', '#f1c40f'] }]
-        },
-        options: { cutout: '70%', plugins: { legend: { display: false } } }
-    });
-}
-
-let pontos = 0;
-function marcar(elemento, valor) {
-    pontos += valor;
-    const botoes = elemento.parentElement.querySelectorAll('button');
-    botoes.forEach(btn => {
-        btn.style.opacity = "0.4";
-        btn.style.setProperty("background-color", "#ccc", "important");
-    });
-    elemento.style.opacity = "1";
-    elemento.style.setProperty("background-color", valor > 0 ? "#ff0000" : "#008000", "important");
-    elemento.style.color = "#fff";
-}
-
-function mostrarResultado() {
-    const res = document.getElementById("resSaude");
-    if (!res) return;
-    res.style.display = "block";
-    res.innerHTML = pontos === 0 ? "🟢 <b>Tudo certo!</b>" : (pontos <= 2 ? "🟡 <b>Fique atento!</b>" : "🔴 <b>Procure um veterinário!</b>");
-    pontos = 0;
-}
-
-/* ================= CÁLCULO DE IDADE HUMANA ================= */
-function calcularIdadeHumana() {
-    const idadeInput = document.getElementById('idadePet');
-    const porteInput = document.getElementById('portePet');
-    const resultado = document.getElementById('resultadoIdade');
-
-    if (!idadeInput || !porteInput || !resultado) return;
-
-    const idade = parseFloat(idadeInput.value);
-    const especie = porteInput.value;
-
-    if (isNaN(idade) || idade < 0) {
-        resultado.innerHTML = "⚠️ Insira uma idade válida.";
-        return;
-    }
-
-    let idadeHumana = 0;
-
-    switch (especie) {
-        case 'pequeno': // Cães pequenos e Gatos
-            idadeHumana = idade <= 1 ? 15 : (idade <= 2 ? 24 : 24 + (idade - 2) * 4);
-            break;
-        case 'medio':
-            idadeHumana = idade <= 1 ? 15 : (idade <= 2 ? 24 : 24 + (idade - 2) * 6);
-            break;
-        case 'grande':
-            idadeHumana = idade <= 1 ? 14 : (idade <= 2 ? 22 : 22 + (idade - 2) * 8);
-            break;
-        case 'papagaio':
-            idadeHumana = idade * 1.2;
-            break;
-        case 'hamster':
-            idadeHumana = idade * 35;
-            break;
-        case 'tartaruga':
-            idadeHumana = idade * 0.7;
-            break;
-        case 'cavalo':
-            idadeHumana = idade <= 1 ? 12 : (idade <= 3 ? 24 : 24 + (idade - 3) * 2.5);
-            break;
-        default:
-            idadeHumana = idade * 7; // Padrão genérico
-    }
-
-    const final = Math.round(idadeHumana);
-    resultado.innerHTML = `🐾 Equivale a aprox. <b style="color: #d35400;">${final} anos</b> humanos!`;
-}
-
-/* ================= CÁLCULO DE HIDRATAÇÃO ================= */
-function calcAgua() {
-    const peso = parseFloat(document.getElementById('pesoAgua')?.value);
-    const res = document.getElementById('resAgua');
-    const water = document.getElementById('waterLevel'); // Adicionamos a referência ao visual
-    
-    if (!peso || peso <= 0) {
-        if (res) res.innerHTML = "⚠️ Insira um peso válido.";
-        return;
-    }
-
-    // Cálculo médio: 50ml a 60ml por quilo
-    const totalMl = peso * 50;
-    
-    if (res) {
-        res.innerHTML = `💧 Seu pet deve beber aprox. <b>${totalMl}ml</b> de água por dia.`;
-        res.style.display = "block";
-        res.style.marginTop = "10px";
-        res.style.color = "#2980b9";
-    }
-
-    // --- LINHAS PARA O AQUÁRIO ---
-    if (water) {
-        // Calcula a altura da água (baseado em um limite de 2 litros)
-        let altura = Math.min((totalMl / 2000) * 100, 100); 
-        water.style.height = altura + "%";
-    }
-}
-
-    /* ================= CHECK-UP DE SAÚDE ================= */
-
-// Função para selecionar as opções
-function marcar(btn, valor) {
-    // 1. Desmarca os outros botões do mesmo grupo (pai)
-    const botoesDoGrupo = btn.parentElement.querySelectorAll('button');
-    botoesDoGrupo.forEach(b => {
-        b.style.backgroundColor = "#eee"; // Cor neutra
-        b.style.color = "#333";
-        b.style.border = "1px solid #ccc";
-        b.classList.remove('selecionado');
-    });
-
-    // 2. Marca o botão clicado
-    btn.style.backgroundColor = "#ff4757"; // Cor de destaque
-    btn.style.color = "white";
-    btn.style.border = "2px solid #ff4757";
-    btn.classList.add('selecionado');
-    
-    // 3. Guarda o valor do ponto (0 ou 1) no botão
-    btn.dataset.ponto = valor;
-}
-
-// Função para calcular o resultado final
-function mostrarResultado() {
-    let totalPontos = 0;
-    const botoesSelecionados = document.querySelectorAll('button.selecionado');
-    const res = document.getElementById('resSaude');
-
-    // Soma os pontos de todos os botões que estão marcados como 'selecionado'
-    botoesSelecionados.forEach(b => {
-        totalPontos += parseInt(b.dataset.ponto || 0);
-    });
-
-    if (res) {
-        res.style.display = "block";
-        res.style.marginTop = "15px";
-        res.style.fontWeight = "bold";
-
-        if (totalPontos >= 2) {
-            res.innerHTML = "⚠️ Atenção: Seu pet apresenta vários sinais de alerta. Recomendamos consultar um veterinário em breve.";
-            res.style.color = "#e67e22";
-        } else if (totalPontos === 1) {
-            res.innerHTML = "💡 Observação: Existe um sinal de atenção. Fique de olho no comportamento dele.";
-            res.style.color = "#f1c40f";
-        } else {
-            res.innerHTML = "✅ Tudo certo! Seu pet parece estar bem. Continue cuidando com carinho!";
-            res.style.color = "#27ae60";
-        }
-    }
-}
-    
-/* ================= INIT GLOBAL ================= */
-document.addEventListener("DOMContentLoaded", () => {
-    initCP();
-    initCW();
-    initMemo();
-    rotacionarDicas();
-    setInterval(rotacionarDicas, 7000);
-});
+setInterval(rotacionarDicas, 7000);
+rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); initMemo();
 </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
