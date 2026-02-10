@@ -2054,27 +2054,56 @@ function calcularIdadeHumana() {
         return;
     }
 
-    const idadePet = parseInt(idadeInput);
+    const idadePet = parseFloat(idadeInput);
     let idadeHumana = 0;
+    let faseVida = "";
 
-    // Sua lógica nota 10:
-    if (idadePet === 1) {
-        idadeHumana = 15;
-    } else if (idadePet === 2) {
-        idadeHumana = 24;
-    } else if (idadePet > 2) {
-        let extra = idadePet - 2;
-        if (porte === "pequeno") {
-            idadeHumana = 24 + (extra * 4);
-        } else if (porte === "medio") {
-            idadeHumana = 24 + (extra * 5);
-        } else if (porte === "grande") {
-            idadeHumana = 24 + (extra * 6.5);
+    // 1. CÃES E GATOS
+    if (porte === "pequeno" || porte === "medio" || porte === "grande") {
+        if (idadePet <= 1) {
+            idadeHumana = idadePet * 15;
+            faseVida = "Filhote / Jovem Adulto";
+        } else if (idadePet <= 2) {
+            idadeHumana = 24;
+            faseVida = "Adulto";
+        } else {
+            let extra = idadePet - 2;
+            if (porte === "pequeno") idadeHumana = 24 + (extra * 4);
+            else if (porte === "medio") idadeHumana = 24 + (extra * 5);
+            else if (porte === "grande") idadeHumana = 24 + (extra * 7);
+            
+            faseVida = idadeHumana > 60 ? "Idoso (Sênior)" : "Adulto";
         }
+    } 
+    
+    // 2. AVES
+    else if (porte === "papagaio") {
+        idadeHumana = idadePet * 1.2;
+        faseVida = idadePet < 10 ? "Jovem" : (idadePet > 50 ? "Ancião" : "Adulto");
+    } else if (porte === "calopsita") {
+        idadeHumana = idadePet * 5;
+        faseVida = idadePet > 12 ? "Sênior" : "Adulto";
     }
 
-    resultado.innerHTML = `🦴 Idade humana aproximada: <strong>${Math.round(idadeHumana)} anos</strong>`;
+    // 3. PEQUENOS PETS
+    else if (porte === "hamster") {
+        idadeHumana = idadePet * 35;
+        faseVida = idadePet >= 2 ? "Muito Idoso" : "Adulto";
+    } else if (porte === "coelho") {
+        idadeHumana = idadePet * 9;
+        faseVida = idadePet > 6 ? "Sênior" : "Adulto";
+    } else if (porte === "porquinho") {
+        idadeHumana = idadePet * 12;
+        faseVida = idadePet > 4 ? "Sênior" : "Adulto";
+    }
+
+    // Exibição do Resultado
+    resultado.innerHTML = `
+        <div style="margin-bottom: 5px;">🦴 Idade humana: <strong>${Math.round(idadeHumana)} anos</strong></div>
+        <div style="font-size: 14px; color: #555;">Fase de vida: <span style="color: #2e7d32;">${faseVida}</span></div>
+    `;
 }
+    
 function calcDose() {
     const dataInput = document.getElementById('dataDose').value;
     if(dataInput) {
@@ -2191,6 +2220,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
