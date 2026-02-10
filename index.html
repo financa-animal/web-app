@@ -2104,6 +2104,34 @@ function calcularIdadeHumana() {
         idadeHumana = (idadePet <= 1) ? 15 : 15 + (idadePet - 1) * 8;
     }
 
+    // 4. Tartarugas (Podem viver 100 anos ou mais!)
+else if (porte === "tartaruga") {
+    // Elas demoram muito para amadurecer. 
+    // Uma tartaruga de 20 anos é como um jovem de 18 humanos.
+    idadeHumana = idadePet * 0.9; 
+}
+
+// 5. Peixes (Betta vive 3 anos, Goldfish pode viver 15-20)
+else if (porte === "peixe") {
+    // Usando uma média para peixes ornamentais comuns
+    if (idadePet <= 1) {
+        idadeHumana = 18; // 1 ano de peixe já é um adulto
+    } else {
+        idadeHumana = 18 + (idadePet - 1) * 8;
+    }
+}
+
+// 6. Cavalos (Vivem cerca de 25-30 anos)
+else if (porte === "cavalo") {
+    if (idadePet <= 1) {
+        idadeHumana = 12;
+    } else if (idadePet <= 3) {
+        idadeHumana = 12 + (idadePet - 1) * 4; // Juventude
+    } else {
+        idadeHumana = 20 + (idadePet - 3) * 2.5; // Vida adulta estável
+    }
+}
+
     // DEFINIÇÃO DA FASE DE VIDA (Baseado na idade humana calculada)
     if (idadeHumana < 14) faseVida = "Infância / Filhote";
     else if (idadeHumana < 25) faseVida = "Juventude / Adolescente";
@@ -2232,6 +2260,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
