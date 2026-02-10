@@ -1971,23 +1971,37 @@ const conteudosRodape = {
 
 function openModal(id) {
     if (!window.conteudosRodape || !conteudosRodape[id]) return;
-    document.getElementById('modalTitle')?.innerText = conteudosRodape[id].t;
-    document.getElementById('modalText')?.innerHTML = conteudosRodape[id].d;
-    document.getElementById('txtModal')?.style.display = 'flex';
-}
-function closeModal() {
-    document.getElementById('txtModal')?.style.display = 'none';
+
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const txtModal = document.getElementById('txtModal');
+
+    if (modalTitle) modalTitle.innerText = conteudosRodape[id].t;
+    if (modalText) modalText.innerHTML = conteudosRodape[id].d;
+    if (txtModal) txtModal.style.display = 'flex';
 }
 
-/* ================= DICAS ================= */
+function closeModal() {
+    const txtModal = document.getElementById('txtModal');
+    if (txtModal) {
+        txtModal.style.display = 'none';
+    }
+}
+
 function rotacionarDicas() {
     if (!window.dicasCompletas || dicasCompletas.length === 0) return;
+    
     const d = dicasCompletas[Math.floor(Math.random() * dicasCompletas.length)];
-    document.getElementById('tipPrincipal')?.innerText = d.principal;
-    document.getElementById('guiaSaude')?.innerText = d.saude;
-    document.getElementById('guiaDieta')?.innerText = d.dieta;
-}
+    
+    const tipPrincipal = document.getElementById('tipPrincipal');
+    const guiaSaude = document.getElementById('guiaSaude');
+    const guiaDieta = document.getElementById('guiaDieta');
 
+    if (tipPrincipal) tipPrincipal.innerText = d.principal;
+    if (guiaSaude) guiaSaude.innerText = d.saude;
+    if (guiaDieta) guiaDieta.innerText = d.dieta;
+}
+    
 /* ================= CAÇA PALAVRAS ================= */
 function initCP() {
     const cpList = document.getElementById('cpList');
@@ -2016,6 +2030,11 @@ function initCP() {
     });
 }
 
+    // Garante que o jogo comece assim que a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof initCP === 'function') initCP();
+});
+    
 /* ================= PALAVRAS CRUZADAS ================= */
 function initCW() {
     const g = document.getElementById('cwGrid');
@@ -2183,20 +2202,23 @@ function fecharGuiasPeixe() {
     document.getElementById('doencas-area')?.style.display = 'none';
 }
 
-/* ================= INIT GLOBAL ================= */
+//* ================= INIT GLOBAL ================= */
 document.addEventListener("DOMContentLoaded", () => {
     rotacionarDicas();
     setInterval(rotacionarDicas, 7000);
-    initCP();
-    initCW();
-    updateChart();
-    nextFood?.();
-    loadQuiz?.();
-    initMemo();
+    
+    if (typeof initCP === 'function') initCP();
+    if (typeof initCW === 'function') initCW();
+    if (typeof updateChart === 'function') updateChart();
+    if (typeof nextFood === 'function') nextFood();
+    if (typeof loadQuiz === 'function') loadQuiz();
+    if (typeof initMemo === 'function') initMemo();
+});
 });
 </script>
 </body>
 </html>
+
 
 
 
