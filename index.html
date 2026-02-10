@@ -2058,46 +2058,53 @@ function calcularIdadeHumana() {
     let idadeHumana = 0;
     let faseVida = "";
 
-    // 1. CÃES E GATOS
+    // LÓGICA SUAVE (Curva de Envelhecimento)
+    
+    // 1. Cães e Gatos (A regra dos 15 + 9 + extra)
     if (porte === "pequeno" || porte === "medio" || porte === "grande") {
         if (idadePet <= 1) {
             idadeHumana = idadePet * 15;
-            faseVida = "Filhote / Jovem Adulto";
         } else if (idadePet <= 2) {
-            idadeHumana = 24;
-            faseVida = "Adulto";
+            idadeHumana = 15 + (idadePet - 1) * 9;
         } else {
-            let extra = idadePet - 2;
-            if (porte === "pequeno") idadeHumana = 24 + (extra * 4);
-            else if (porte === "medio") idadeHumana = 24 + (extra * 5);
-            else if (porte === "grande") idadeHumana = 24 + (extra * 7);
-            
-            faseVida = idadeHumana > 60 ? "Idoso (Sênior)" : "Adulto";
+            let mult = (porte === "pequeno") ? 4 : (porte === "medio" ? 5 : 7);
+            idadeHumana = 24 + (idadePet - 2) * mult;
         }
     } 
     
-    // 2. AVES
+    // 2. Papagaio (O "suave" aqui é porque ele amadurece MUITO devagar)
     else if (porte === "papagaio") {
-        idadeHumana = idadePet * 1.2;
-        faseVida = idadePet < 10 ? "Jovem" : (idadePet > 50 ? "Ancião" : "Adulto");
-    } else if (porte === "calopsita") {
-        idadeHumana = idadePet * 5;
-        faseVida = idadePet > 12 ? "Sênior" : "Adulto";
+        if (idadePet <= 10) {
+            idadeHumana = idadePet * 1.5; // Até os 10 anos é um adolescente
+        } else {
+            idadeHumana = 15 + (idadePet - 10) * 0.8; // Depois envelhece bem devagar
+        }
     }
 
-    // 3. PEQUENOS PETS
+    // 3. Calopsita (Suavizando para não parecer tão velha tão rápido)
+    else if (porte === "calopsita") {
+        if (idadePet <= 2) {
+            idadeHumana = idadePet * 10; // Cresce rápido no início
+        } else {
+            idadeHumana = 20 + (idadePet - 2) * 3.5; // Depois o ritmo cai
+        }
+    }
+
+    // 4. Pequenos Pets (Ajuste para não explodir a idade)
     else if (porte === "hamster") {
-        idadeHumana = idadePet * 35;
-        faseVida = idadePet >= 2 ? "Muito Idoso" : "Adulto";
+        idadeHumana = (idadePet <= 1) ? idadePet * 30 : 30 + (idadePet - 1) * 20;
     } else if (porte === "coelho") {
-        idadeHumana = idadePet * 9;
-        faseVida = idadePet > 6 ? "Sênior" : "Adulto";
+        idadeHumana = (idadePet <= 1) ? 18 : 18 + (idadePet - 1) * 6;
     } else if (porte === "porquinho") {
-        idadeHumana = idadePet * 12;
-        faseVida = idadePet > 4 ? "Sênior" : "Adulto";
+        idadeHumana = (idadePet <= 1) ? 15 : 15 + (idadePet - 1) * 8;
     }
 
-    // Exibição do Resultado
+    // DEFINIÇÃO DA FASE DE VIDA (Baseado na idade humana calculada)
+    if (idadeHumana < 14) faseVida = "Infância / Filhote";
+    else if (idadeHumana < 25) faseVida = "Juventude / Adolescente";
+    else if (idadeHumana < 60) faseVida = "Adulto Pleno";
+    else faseVida = "Sênior (Idoso)";
+
     resultado.innerHTML = `
         <div style="margin-bottom: 5px;">🦴 Idade humana: <strong>${Math.round(idadeHumana)} anos</strong></div>
         <div style="font-size: 14px; color: #555;">Fase de vida: <span style="color: #2e7d32;">${faseVida}</span></div>
@@ -2220,6 +2227,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
