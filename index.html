@@ -373,21 +373,26 @@
 
   <h3 style="text-align: center; color: var(--primary); margin-top: 40px;">📰 Destaque da Semana</h3>
     
- <a href="artigos/por-que-gatos-amam-caixas.html" style="text-decoration: none; color: inherit; display: block; max-width: 400px; margin: 20px auto;">
-    <div style="background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; font-family: sans-serif; border: 1px solid #eee;">
+Entendi, Suzany! O "título fantasma" que está aparecendo em cima da imagem é porque o código antigo ainda tinha um texto solto lá. Vamos limpar isso de vez! 🧹
+
+Para a imagem ficar limpa e o card ter uma altura boa (sem cortar nada), substitua o código desse card no seu index.html por este aqui. Eu ajustei a altura da imagem para 280px (para dar aquela sensação de "altura" que você pediu) e deixei o título apenas na parte de baixo.
+HTML
+
+<a href="artigos/por-que-gatos-amam-caixas.html" style="text-decoration: none; color: inherit; display: block; max-width: 400px; margin: 30px auto;">
+    <div style="background: #fff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; font-family: 'Segoe UI', sans-serif; border: 1px solid #eee;">
         
-        <img src="gato-caixa.jpg" style="width: 100%; height: 230px; object-fit: cover; display: block;">
+        <img src="gato-caixa.jpg" style="width: 100%; height: 280px; object-fit: cover; display: block;">
         
-        <div style="padding: 20px; text-align: center;">
-            <h3 style="margin: 0 0 10px 0; color: #333; font-size: 19px; line-height: 1.4;">
+        <div style="padding: 25px; text-align: center;">
+            <h3 style="margin: 0 0 12px 0; color: #333; font-size: 20px; line-height: 1.3; font-weight: bold;">
                 Por que os gatos amam caixas de papelão?
             </h3>
             
-            <p style="color: #e67e22; font-size: 15px; margin: 0 0 15px 0;">
-                Segurança, instinto e conforto térmico explicam tudo. Clique para ler.
+            <p style="color: #e67e22; font-size: 15px; margin: 0 0 20px 0; line-height: 1.5;">
+                A ciência por trás da maior obsessão dos felinos. Descubra os motivos!
             </p>
             
-            <div style="color: #5FA8A0; font-weight: bold; font-size: 13px; text-transform: uppercase; border-top: 1px solid #eee; padding-top: 10px;">
+            <div style="color: #5FA8A0; font-weight: bold; font-size: 13px; text-transform: uppercase; border-top: 1px solid #f0f0f0; padding-top: 15px; letter-spacing: 1px;">
                 LER ARTIGO COMPLETO →
             </div>
         </div>
@@ -2174,6 +2179,7 @@ rotacionarDicas(); initCP(); initCW(); updateChart(); nextFood(); loadQuiz(); in
 </script>
 </body>
 </html>
+
 
 
 
