@@ -5,71 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sinais de Dor em Gatos - FofoPet</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f9f9f9; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-        header { text-align: center; padding: 40px 20px; background-color: #5FA8A0; color: white; border-radius: 0 0 20px 20px; }
-        h1 { margin: 0; font-size: 28px; }
-        .content { padding: 20px; }
-        .destaque-laranja { color: #e67e22; font-weight: bold; font-size: 22px; margin-top: 30px; display: block; }
-        .alerta-vermelho { background: #fff5f5; border-left: 5px solid #e74c3c; padding: 15px; margin: 20px 0; }
-        .dica-fofopet { background: #f0f8f7; border-radius: 10px; padding: 20px; border: 1px dashed #5FA8A0; margin-top: 40px; }
-        img { max-width: 100%; border-radius: 10px; height: auto; display: block; margin: 20px auto; }
-        .btn-voltar { display: inline-block; margin-top: 20px; text-decoration: none; color: #5FA8A0; font-weight: bold; }
-        .ponto-chave { margin-bottom: 20px; padding-left: 10px; border-left: 3px solid #eee; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f7f6; }
+        .container { max-width: 800px; margin: 20px auto; background: #fff; padding: 0; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        header { background-color: #5FA8A0; color: white; padding: 40px 20px; text-align: center; }
+        .content { padding: 30px; }
+        h1 { margin: 0; font-size: 28px; line-height: 1.2; }
+        h2 { color: #e67e22; border-bottom: 2px solid #fdf2e9; padding-bottom: 10px; margin-top: 35px; display: flex; align-items: center; }
+        .intro { font-size: 18px; color: #555; font-style: italic; border-left: 4px solid #5FA8A0; padding-left: 15px; margin: 20px 0; }
+        .topic { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; transition: 0.3s; }
+        .topic:hover { border-color: #e67e22; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .alert-box { background: #fff5f5; border: 1px solid #feb2b2; padding: 20px; border-radius: 12px; margin: 30px 0; }
+        .alert-box h3 { color: #c53030; margin-top: 0; }
+        .highlight { color: #5FA8A0; font-weight: bold; }
+        .footer-note { background: #f0f8f7; padding: 20px; border-radius: 10px; border: 1px dashed #5FA8A0; text-align: center; margin-top: 40px; }
+        img.main-img { width: 100%; height: auto; display: block; }
+        .back-link { display: inline-block; margin: 20px; text-decoration: none; color: #5FA8A0; font-weight: bold; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>🐱 Sinais de Dor em Gatos</h1>
-    <p>Quando o silêncio esconde o desconforto</p>
-</header>
-
 <div class="container">
-    <a href="../index.html" class="btn-voltar">← Voltar para a Home</a>
+    <header>
+        <h1>🐱 Sinais de Dor em Gatos</h1>
+        <p>(Quando o silêncio esconde o desconforto)</p>
+    </header>
+
+    <a href="../index.html" class="back-link">← Voltar para a Home</a>
+
+    <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7" alt="Gato quietinho" class="main-img">
 
     <div class="content">
-        <img src="../pet-dor.jpg" alt="Gato demonstrando sinais de dor">
-
-        <p>Gatos são mestres em esconder dor. Diferente dos cães, os felinos evoluíram como presas e predadores. Na natureza, demonstrar fragilidade pode significar risco real à sobrevivência.</p>
+        <p class="intro">Gatos são mestres em esconder dor. Diferente dos cães, os felinos evoluíram como presas e predadores. Na natureza, demonstrar fragilidade pode significar risco real à sobrevivência.</p>
         
-        <p><strong>O resultado desse instinto?</strong> Um gato com dor frequentemente parece apenas “mais quieto” ou “mais distante”.</p>
+        <p>O resultado desse instinto ainda aparece dentro de casa: Um gato com dor frequentemente parece apenas <strong>“mais quieto”</strong>, <strong>“mais estranho”</strong> ou <strong>“mais distante”</strong>.</p>
 
-        <span class="destaque-laranja">🧠 Por que eles escondem?</span>
-        <p>Não é teimosia, é biologia. Felinos tendem a mascarar vulnerabilidade. Isso significa que a ausência de choro não indica conforto. Pequenas mudanças são os maiores alertas.</p>
+        <h2>🧠 Por que gatos escondem dor?</h2>
+        <p>Não é teimosia. É biologia. Felinos tendem a mascarar sinais evidentes de vulnerabilidade:</p>
+        <ul>
+            <li>A ausência de choro <span class="highlight">não indica conforto</span>.</li>
+            <li>A dor raramente surge como um sinal dramático.</li>
+            <li>Pequenas mudanças são os maiores alertas.</li>
+        </ul>
 
-        <span class="destaque-laranja">💤 1. Mudança no nível de atividade</span>
-        <div class="ponto-chave">
-            <p>Muitos tutores interpretam como preguiça ou idade, mas fique atento se o gato:</p>
+        <h2>⚠️ O comportamento é o principal indicador</h2>
+
+        <div class="topic">
+            <h3>💤 1. Mudança no nível de atividade</h3>
+            <p>Fique atento se o gato dorme muito mais que o habitual, brinca menos ou evita interação. Muitos tutores interpretam isso como “preguiça” ou “idade”, mas pode ser dor.</p>
+        </div>
+
+        <div class="topic">
+            <h3>😾 2. Alterações no temperamento</h3>
+            <p>Um gato desconfortável pode ficar irritado sem motivo aparente, evitar carinho ou reagir agressivamente ao toque. Não é mau humor, é autodefesa.</p>
+        </div>
+
+        <div class="topic">
+            <h3>🚶 3. Mudanças sutis na mobilidade</h3>
+            <p>Observe relutância em pular, evitar locais altos ou rigidez ao se mover. Dor articular é extremamente comum e passa despercebida.</p>
+        </div>
+
+        <div class="topic">
+            <h3>🍽️ 4. Alterações no apetite</h3>
+            <p>Redução alimentar ou dificuldade para mastigar podem indicar problemas dentários ou sistêmicos.</p>
+        </div>
+
+        <h2>🧍 Sinais corporais importantes</h2>
+
+        <div class="topic">
+            <h3>👁️ 5. Expressões faciais (Grimace Scale)</h3>
+            <p>Olhos semicerrados, olhar “apagado”, orelhas levemente retraídas e face tensa são indícios clínicos de dor.</p>
+        </div>
+
+        <div class="topic">
+            <h3>🐈 6. Postura corporal incomum</h3>
+            <p>Corpo encolhido, dorso arqueado ou abdômen contraído são sinais de que algo não vai bem.</p>
+        </div>
+
+        <div class="topic">
+            <h3>👅 7. Lambedura excessiva</h3>
+            <p>Lamber repetidamente uma área específica pode indicar dor localizada ou inflamação.</p>
+        </div>
+
+        <div class="alert-box">
+            <h3>🚨 Quando a situação é urgente?</h3>
             <ul>
-                <li>Dorme muito mais que o habitual</li>
-                <li>Brinca menos ou evita interação</li>
-                <li>Fica retraído ou escondido por muito tempo</li>
+                <li>Dificuldade respiratória</li>
+                <li>Incapacidade de se mover</li>
+                <li>Recusa alimentar prolongada</li>
+                <li>Vocalização incomum persistente</li>
             </ul>
         </div>
 
-        <span class="destaque-laranja">🚶 2. Mudanças na mobilidade</span>
-        <p>Gatos raramente mancam. Note se ele tem relutância em pular em locais altos que antes amava, ou se demonstra rigidez ao subir no sofá.</p>
+        <h2>⏳ Dor crônica: o perigo silencioso</h2>
+        <p>A dor crônica não é dramática, mas tira a qualidade de vida. Se ele "parou de subir nos lugares porque envelheceu", investigue! Pode haver artrite ou problemas dentários tratáveis.</p>
 
-        <span class="destaque-laranja">👁️ 3. Expressões faciais (Grimace Scale)</span>
-        <p>Sim, gatos demonstram dor pelo rosto! Fique alerta para olhos semicerrados, olhar "apagado" e orelhas levemente retraídas ou tensas.</p>
-
-        <span class="destaque-laranja">👅 4. Lambedura excessiva</span>
-        <p>Quando um gato lambe repetidamente uma área específica, ele pode estar tentando "limpar" uma dor localizada ou inflamação articular.</p>
-
-        <div class="alerta-vermelho">
-            <strong>🚨 QUANDO É URGENTE?</strong>
-            <p>Procure um veterinário imediato se houver dificuldade respiratória, incapacidade de se mover, apatia extrema ou recusa total de comida.</p>
-        </div>
-
-        <div class="dica-fofopet">
+        <div class="footer-note">
             <strong>Dica FofoPet ✨</strong>
-            <p>Você conhece seu gato melhor que ninguém. Se o comportamento mudou sem explicação clara, a dor deve sempre ser considerada. Identificar cedo preserva a longevidade do seu amigo.</p>
+            <p>O tutor é o melhor detector precoce. Se o comportamento mudou sem explicação, a dor deve ser a primeira hipótese. Identificar cedo significa preservar a longevidade.</p>
         </div>
 
-        <p style="text-align: center; margin-top: 50px; color: #999;">
-            © 2026 FofoPet - Siga para mais dicas e curiosidades.
-        </p>
+        <p style="text-align:center; color: #999; margin-top: 30px;">© 2026 FofoPet - Dicas e Curiosidades</p>
     </div>
 </div>
 
